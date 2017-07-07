@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:background="@drawable/gradient_1"
+    android:layout_height="match_parent"
+    tools:context="tech.iosd.benefit.SplashActivity">
+
+    <TextView
+        android:id="@+id/splash_appname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="70sp"
+        android:text="beneFIT"
+        android:textAlignment="center"
+        android:textColor="#fff"
+        android:layout_centerInParent="true"/>
+
+    <LinearLayout
+        android:background="#20000000"
+        android:alpha="0.0"
+        android:id="@+id/layout_login"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/splash_login"
+            android:layout_gravity="center_vertical"
+            android:layout_width="0dp"
+            android:layout_weight=".5"
+            android:layout_margin="5dp"
+            android:text="LOGIN"
+            android:fontFamily="serif"
+            android:textSize="18sp"
+            android:textColor="#fff"
+            android:background="@drawable/button"
+            android:layout_height="wrap_content" />
+        <Button
+            android:id="@+id/splash_signup"
+            android:fontFamily="serif"
+            android:layout_width="0dp"
+            android:layout_gravity="center_vertical"
+            android:text="SIGN UP"
+            android:textColor="#fff"
+            android:layout_margin="5dp"
+            android:textSize="18sp"
+            android:layout_weight=".5"
+            android:background="@drawable/button"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+</RelativeLayout>
