@@ -22,14 +22,6 @@
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ProfileActivity"
-            android:label="User Profile"
-            android:parentActivityName=".MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="tech.iosd.benefit.MainActivity" />
-        </activity>
-        <activity
             android:name=".MeasurementActivity"
             android:label="Measurements"
             android:parentActivityName=".MainActivity">
@@ -48,7 +40,8 @@
         <activity
             android:name=".TrackNLogActivity"
             android:label="Track \&apos;N\&apos; Log"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/TrackNLogTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="tech.iosd.benefit.MainActivity" />
@@ -74,6 +67,33 @@
             android:name=".SettingsActivity"
             android:label="Settings"
             android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".WorkoutActivity"
+            android:label="Workout Section"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/WorkoutTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="tech.iosd.benefit.MainActivity" />
+        </activity>
+        <activity
+            android:name=".AbsWorkoutActivity"
+            android:label="Abs Workout"
+            android:parentActivityName=".WorkoutActivity"
+            android:theme="@style/WorkoutTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="tech.iosd.benefit.WorkoutActivity" />
+        </activity>
+        <activity
+            android:name=".ProfileActivity"
+            android:label="@string/title_activity_scrolling"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="tech.iosd.benefit.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

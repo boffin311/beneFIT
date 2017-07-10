@@ -17,6 +17,20 @@
         android:textAlignment="center"
         android:textColor="#fff"
         android:layout_centerInParent="true"/>
+    <TextView
+        android:id="@+id/splash_tag"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="22sp"
+        android:alpha="0.0"
+        android:layout_marginTop="-20dp"
+        android:fontFamily="casual"
+        android:textStyle="bold|italic"
+        android:paddingRight="40dp"
+        android:text="Your Fiteness Partner..."
+        android:textAlignment="textEnd"
+        android:textColor="#fff"
+        android:layout_below="@id/splash_appname"/>
 
     <LinearLayout
         android:background="#20000000"

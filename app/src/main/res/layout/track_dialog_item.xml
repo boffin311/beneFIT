@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/track_dialog_item"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_margin="5dp"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/track_dialog_image"
+        android:layout_width="50dp"
+        android:src="@mipmap/ic_launcher"
+        android:tint="@android:color/holo_red_light"
+        android:layout_height="50dp" />
+
+    <TextView
+        android:id="@+id/track_dialog_text"
+        android:textColor="#444"
+        android:textSize="18sp"
+        android:paddingLeft="10dp"
+        android:text="Sample Text"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_gravity="center"
+        android:layout_height="wrap_content" />
+
+    <Switch
+        android:id="@+id/track_dialog_switch"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_weight=".05"
+        android:paddingRight="10dp"
+        android:splitTrack="false" />
+
+</LinearLayout>

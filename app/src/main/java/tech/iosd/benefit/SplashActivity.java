@@ -14,7 +14,7 @@ import android.widget.Toast;
 
 public class SplashActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private TextView appName;
+    private TextView appName, tag;
     private Button _login, _signup;
     private LinearLayout linearLayout;
 
@@ -24,6 +24,7 @@ public class SplashActivity extends AppCompatActivity implements View.OnClickLis
         setContentView(R.layout.activity_splash);
 
         appName = (TextView)findViewById(R.id.splash_appname);
+        tag = (TextView)findViewById(R.id.splash_tag);
         _login = (Button)findViewById(R.id.splash_login);       _login.setOnClickListener(this);
         _signup = (Button)findViewById(R.id.splash_signup);     _signup.setOnClickListener(this);
         linearLayout = (LinearLayout)findViewById(R.id.layout_login);
@@ -34,6 +35,7 @@ public class SplashActivity extends AppCompatActivity implements View.OnClickLis
         appName.setAnimation(rotate);
         rotate.start();
 
+        tag.animate().alpha(1.0f).setDuration(500).setStartDelay(1000).start();
         appName.animate().translationYBy(-100f).setDuration(1000).setStartDelay(1000).start();
         linearLayout.animate().alpha(1.0f).setDuration(1000).setStartDelay(1000).start();
     }

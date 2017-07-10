@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:id="@+id/abs_layout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:background="#fff"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp">
+
+    <ImageView
+        android:id="@+id/abs_img"
+        android:src="@mipmap/ic_launcher"
+        android:layout_width="50dp"
+        android:layout_height="50dp" />
+
+    <TextView
+        android:id="@+id/abs_text"
+        android:layout_marginLeft="20dp"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:text="Sample"
+        android:fontFamily="serif"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        android:layout_gravity="center"
+        android:textColor="@color/colorPrimaryDarkWorkout"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>
