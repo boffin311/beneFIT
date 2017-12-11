@@ -24,6 +24,8 @@ import tech.iosd.benefit.AbsWorkoutActivity;
 import tech.iosd.benefit.ListItems.WorkoutList;
 import tech.iosd.benefit.R;
 
+import static android.view.View.GONE;
+
 /**
  * Created by anonymous on 7/7/17.
  */
@@ -31,6 +33,7 @@ import tech.iosd.benefit.R;
 public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.ViewHolder> {
 
     private List<WorkoutList> workoutLists;
+    boolean visible = false;
     private Context context;
 
     public WorkoutAdapter(List<WorkoutList> workoutLists, Context context) {
@@ -47,7 +50,7 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.ViewHold
     }
 
     @Override
-    public void onBindViewHolder(WorkoutAdapter.ViewHolder holder, final int position) {
+    public void onBindViewHolder(final WorkoutAdapter.ViewHolder holder, final int position) {
         holder.text.setText(workoutLists.get(position).getText());
         holder.main.setImageBitmap(load_main_img(workoutLists.get(position).getImg_add()));
         holder.achieve.setImageBitmap(load_achieve_img(workoutLists.get(position).getAchiev_img()));
@@ -63,6 +66,23 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.ViewHold
                 }
             }
         });
+        holder.desc.setVisibility(GONE);
+        holder.more.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(!visible){
+                            visible = true;
+                            holder.desc.setVisibility(View.VISIBLE);
+                            holder.more.setText("Less");
+                        }else {
+                            holder.desc.setVisibility(GONE);
+                            visible=false;
+                            holder.more.setText("More");
+                        }
+                    }
+                }
+        );
     }
 
     private Bitmap load_achieve_img(String achiev_img) {
@@ -93,7 +113,7 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.ViewHold
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         private ImageView main, achieve;
-        private TextView text;
+        private TextView text, more, desc;
         private LinearLayout workout;
 
         public ViewHolder(View itemView) {
@@ -102,6 +122,8 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.ViewHold
             main = (ImageView)itemView.findViewById(R.id.workout_image);
             text = (TextView)itemView.findViewById(R.id.workout_name);
             achieve = (ImageView)itemView.findViewById(R.id.workout_achievment_img);
+            more = (TextView)itemView.findViewById(R.id.workout_more);
+            desc = (TextView)itemView.findViewById(R.id.workout_desc);
         }
     }
 }

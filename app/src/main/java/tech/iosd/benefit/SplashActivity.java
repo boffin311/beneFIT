@@ -29,7 +29,7 @@ public class SplashActivity extends AppCompatActivity implements View.OnClickLis
         _signup = (Button)findViewById(R.id.splash_signup);     _signup.setOnClickListener(this);
         linearLayout = (LinearLayout)findViewById(R.id.layout_login);
 
-        appName.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Amarante-Regular.ttf"));
+        appName.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Raleway-Regular.ttf"));
         Animation rotate = AnimationUtils.loadAnimation(SplashActivity.this, R.anim.rotate);
         rotate.setDuration(1000);
         appName.setAnimation(rotate);

@@ -24,6 +24,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import tech.iosd.benefit.MainFragments.Home;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -48,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         View v = inflator.inflate(R.layout.action_bar, null);
         TextView title = (TextView)v.findViewById(R.id.action_bar_title);
                 title.setTypeface(
-                        Typeface.createFromAsset(getAssets(), "fonts/Amarante-Regular.ttf")
+                        Typeface.createFromAsset(getAssets(), "fonts/Raleway-Regular.ttf")
                 );
                 title.setText(getTitle());
         getSupportActionBar().setCustomView(v);
@@ -64,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         nav_header = navigationView.inflateHeaderView(R.layout.activity_main_header);
         TextView txt =(TextView)nav_header.findViewById(R.id.appName);
-        txt.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/LobsterTwo-Regular.ttf"));
+        txt.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Raleway-Regular.ttf"));
 
         navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -82,6 +84,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         display_selected_item(R.id.navigation_home);
                     return true;
                 case R.id.navigation_dashboard:
+                    Toast.makeText(MainActivity.this, "Content To be added", Toast.LENGTH_SHORT).show();
                     return true;
                 case R.id.navigation_profile:
                     startActivity(
@@ -132,6 +135,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.ac_main_settings:
+                startActivity(
+                        new Intent(MainActivity.this, SettingsActivity.class)
+                );
+                break;
+
+            case R.id.ac_main_notif:
+                startActivity(
+                        new Intent(MainActivity.this, UpdatesActivity.class)
+                );
+                break;
+
+            case R.id.ac_main_chat:
+                startActivity(
+                        new Intent(MainActivity.this, ChatActivity.class)
+                );
+                break;
+        }
         return super.onOptionsItemSelected(item);
     }
 

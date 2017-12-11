@@ -1,15 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#fff</color>
-    <color name="colorPrimaryDark">#bebdbd</color>
-    <color name="colorAccent">#351ae7</color>
-    <color name="color_navigation">#08af4b</color>
+    <color name="colorPrimary">#767676</color>
+    <color name="colorPrimaryDark">#545454</color>
+    <color name="colorAccent">#139410</color>
 
     <color name="colorPrimaryGoal">#1987ed</color>
     <color name="colorPrimaryDarkGoal">#09457e</color>
     <color name="colorAccentGoal">#1987ed</color>
 
-    <color name="colorPrimaryWorkout">#0edf50</color>
-    <color name="colorPrimaryDarkWorkout">#0c6e07</color>
-    <color name="colorAccentWorkout">#01ca3a</color>
 </resources>

@@ -5,10 +5,30 @@
     android:gravity="bottom"
     android:orientation="vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
+    android:background="#11000000"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <ImageView
+            android:src="@drawable/user"
+            android:layout_height="50dp"
+            android:layout_width="50dp"/>
+        <TextView
+            android:layout_marginLeft="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:layout_gravity="center"
+            android:text="Anonymous User"
+            android:textColor="#333"
+            android:textSize="18sp"
+            android:fontFamily="serif-monospace"/>
+    </LinearLayout>
     <TextView
         android:id="@+id/appName"
         android:layout_width="match_parent"

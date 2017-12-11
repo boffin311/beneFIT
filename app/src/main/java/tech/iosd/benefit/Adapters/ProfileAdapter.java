@@ -1,10 +1,12 @@
 package tech.iosd.benefit.Adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.List;
@@ -38,6 +40,12 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder._left.setText(profileLists.get(position).getLeft());
         holder._right.setText(profileLists.get(position).getRight());
+        if(position == 4){
+            holder.linearLayout.setBackgroundColor(Color.parseColor("#1100f000"));
+        }
+        if(position == 5){
+            holder.linearLayout.setBackgroundColor(Color.parseColor("#11f00000"));
+        }
     }
 
     @Override
@@ -48,9 +56,10 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         private TextView _left, _right;
-
+        private LinearLayout linearLayout;
         public ViewHolder(View itemView) {
             super(itemView);
+            linearLayout = (LinearLayout)itemView.findViewById(R.id.profile_item);
             _left = (TextView)itemView.findViewById(R.id.profile_left);
             _right = (TextView)itemView.findViewById(R.id.profile_right);
         }

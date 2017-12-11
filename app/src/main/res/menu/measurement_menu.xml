@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:title="What is BMI?"/>
+    <item
+        android:title="What is BMR?"/>
+    <item
+        android:title="View your BMI report"/>
+    <item
+        android:title="Instruction Manual">
+        <menu>
+            <item
+                android:title="BMI"/>
+            <item
+                android:title="BMR"/>
+        </menu>
+    </item>
+
+</menu>

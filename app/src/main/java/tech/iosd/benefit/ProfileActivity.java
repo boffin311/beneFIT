@@ -24,6 +24,7 @@ public class ProfileActivity extends AppCompatActivity {
                     "Date of birth",
                     "Height",
                     "Weight",
+                    "BMI",
                     "Activity Level"
             };
 
@@ -33,6 +34,7 @@ public class ProfileActivity extends AppCompatActivity {
                     "01 Jan 2000",
                     "160.0cm",
                     "60.0kg",
+                    "23.4 - (Normal)",
                     "Little Activity"
             };
 
@@ -77,7 +79,7 @@ public class ProfileActivity extends AppCompatActivity {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.addItemDecoration(new DividerItemDecoration(ProfileActivity.this, DividerItemDecoration.VERTICAL));
         lists = new ArrayList<>();
-        for(int i=0;i<4;i++){
+        for(int i=0;i<6;i++){
             ProfileList list = new ProfileList(leftitems[i], rightitems[i]);
             lists.add(list);
         }

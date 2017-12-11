@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:background="@drawable/back"
+    android:layout_height="match_parent"
+    tools:context="tech.iosd.benefit.ChatActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/chat_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@color/colorPrimary"
+        android:theme="@style/AppTheme.AppBarOverlay2"
+        app:popupTheme="@style/AppTheme.PopupOverlay2" />
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_marginTop="10dp"
+        android:layout_above="@+id/controls_chat"
+        android:layout_below="@id/chat_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_margin="10dp"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_marginLeft="5dp"
+                android:elevation="5dp"
+                android:layout_marginTop="15dp"
+                android:id="@+id/sample_recieved"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#000"
+                android:background="@drawable/recieved"
+                android:textSize="16sp"
+                android:fontFamily="serif"
+                android:text="Sample Recieved Message"/>
+            <LinearLayout
+                android:id="@+id/chats"
+                android:layout_gravity="end"
+                android:layout_width="wrap_content"
+                android:orientation="vertical"
+                android:layout_height="wrap_content">
+
+            </LinearLayout>
+        </LinearLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+    <LinearLayout
+        android:id="@+id/controls_chat"
+        android:layout_marginBottom="10dp"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/message"
+            android:layout_marginLeft="10dp"
+            android:layout_weight=".5"
+            android:padding="10dp"
+            android:textSize="16sp"
+            android:background="@drawable/edittext"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="Message Here"
+            android:layout_marginRight="10dp"
+            android:inputType="textCapSentences|textMultiLine"
+            android:maxLength="2000"
+            android:maxLines="4"/>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_send"
+            android:layout_width="0dp"
+            android:layout_marginBottom="0dp"
+            android:layout_gravity="center"
+            android:layout_weight=".1"
+            android:src="@drawable/ic_send"
+            app:backgroundTint="#fff"
+            android:layout_height="wrap_content"
+            app:fabSize="mini"/>
+    </LinearLayout>
+
+</RelativeLayout>

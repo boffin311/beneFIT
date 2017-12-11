@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#fff"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/c"
     android:orientation="vertical"><!-- android:background="@drawable/gradient_1" -->
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight=".5"
+        android:layout_weight="1"
         android:orientation="horizontal">
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="170dp"
-            android:background="@drawable/a"
+            android:background="@drawable/border"
             android:layout_weight=".5"
             android:clickable="true"
             android:onClick="workout_click">
@@ -25,12 +25,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:fontFamily="serif"
+                android:background="#aa000000"
+                android:fontFamily="serif-monospace"
                 android:text="WORKOUT"
                 android:textAlignment="center"
-                android:background="#60000000"
                 android:textColor="#fff"
-                android:textSize="22sp"
+                android:textSize="24sp"
                 android:textStyle="bold" />
         </LinearLayout>
 
@@ -38,20 +38,20 @@
             android:layout_width="0dp"
             android:layout_height="170dp"
             android:layout_weight=".5"
-            android:background="@drawable/b"
+            android:background="@drawable/border"
             android:clickable="true"
             android:onClick="nutrition_click">
 
             <TextView
-                android:background="#60000000"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:fontFamily="serif"
+                android:background="#aa000000"
+                android:fontFamily="serif-monospace"
                 android:text="NUTRITION"
                 android:textAlignment="center"
                 android:textColor="#fff"
-                android:textSize="22sp"
+                android:textSize="24sp"
                 android:textStyle="bold" />
         </LinearLayout>
 
@@ -59,14 +59,14 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight=".5"
+        android:layout_weight="1"
         android:orientation="horizontal">
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="170dp"
             android:layout_weight=".5"
-            android:background="@drawable/c"
+            android:background="@drawable/border"
             android:clickable="true"
             android:onClick="track_n_log_click">
 
@@ -74,12 +74,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:fontFamily="serif"
+                android:background="#aa000000"
+                android:fontFamily="serif-monospace"
                 android:text="TRACK\n&#38;\nLOG"
                 android:textAlignment="center"
                 android:textColor="#fff"
-                android:background="#60000000"
-                android:textSize="22sp"
+                android:textSize="24sp"
                 android:textStyle="bold" />
         </LinearLayout>
 
@@ -87,7 +87,7 @@
             android:layout_width="0dp"
             android:layout_height="170dp"
             android:layout_weight=".5"
-            android:background="@drawable/d"
+            android:background="@drawable/border"
             android:clickable="true"
             android:onClick="measurement_click">
 
@@ -95,26 +95,26 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:fontFamily="serif"
+                android:background="#aa000000"
+                android:fontFamily="serif-monospace"
                 android:text="MEASUREMENT"
-                android:background="#60000000"
                 android:textAlignment="center"
                 android:textColor="#fff"
-                android:textSize="22sp"
+                android:textSize="24sp"
                 android:textStyle="bold" />
         </LinearLayout>
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight=".5"
+        android:layout_weight="1"
         android:orientation="horizontal">
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="170dp"
             android:layout_weight=".5"
-            android:background="@drawable/e"
+            android:background="@drawable/border"
             android:clickable="true"
             android:onClick="goal_click">
 
@@ -122,12 +122,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:fontFamily="serif"
+                android:background="#aa000000"
+                android:fontFamily="serif-monospace"
                 android:text="GOAL"
                 android:textAlignment="center"
                 android:textColor="#fff"
-                android:background="#60000000"
-                android:textSize="22sp"
+                android:textSize="24sp"
                 android:textStyle="bold" />
         </LinearLayout>
 
@@ -135,7 +135,7 @@
             android:layout_width="0dp"
             android:layout_height="170dp"
             android:layout_weight=".5"
-            android:background="@drawable/f"
+            android:background="@drawable/border"
             android:clickable="true"
             android:onClick="coach_click">
 
@@ -143,12 +143,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:fontFamily="serif"
+                android:background="#aa000000"
+                android:fontFamily="serif-monospace"
                 android:text="COACH"
-                android:background="#60000000"
                 android:textAlignment="center"
                 android:textColor="#fff"
-                android:textSize="22sp"
+                android:textSize="24sp"
                 android:textStyle="bold" />
         </LinearLayout>
     </LinearLayout>
