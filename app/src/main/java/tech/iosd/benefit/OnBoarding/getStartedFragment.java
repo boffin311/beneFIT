@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import agency.tango.materialintroscreen.SlideFragment;
+import tech.iosd.benefit.R;
 
 /**
  * Created by Anubhav on 26-12-2017.
@@ -16,7 +17,9 @@ public class getStartedFragment extends SlideFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return super.onCreateView(inflater, container, savedInstanceState);
+
+        View view=inflater.inflate(R.layout.onboarding_getstarted,container,false);
+        return view;
     }
 
     @Override
