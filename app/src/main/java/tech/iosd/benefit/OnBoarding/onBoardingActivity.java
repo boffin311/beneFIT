@@ -12,7 +12,7 @@ public class onBoardingActivity extends MaterialIntroActivity {
 
         addSlide(new getStartedFragment());
         addSlide(new getGoalFragment());
-
+        addSlide(new basicDetailFragment());
 
         /*TODO: Add custom slides here for onBoarding Fragment*/
     }
