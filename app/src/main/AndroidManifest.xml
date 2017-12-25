@@ -22,10 +22,10 @@
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:theme="@style/AppTheme"
             android:name=".MeasurementActivity"
             android:label="Measurements"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="tech.iosd.benefit.MainActivity" />
@@ -106,12 +106,17 @@
         </activity>
         <activity
             android:name=".ChatActivity"
-            android:theme="@style/AppTheme.NoActionBar"
             android:label="Chat Bot"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="tech.iosd.benefit.MainActivity" />
+        </activity>
+
+        <activity android:name=".OnBoarding.onBoardingActivity"
+            android:theme="@style/Theme.Intro">
+
         </activity>
     </application>
 
