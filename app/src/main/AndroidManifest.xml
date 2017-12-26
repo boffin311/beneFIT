@@ -11,11 +11,14 @@
         <activity
             android:name=".SplashActivity"
             android:theme="@style/AppTheme.NoActionBar">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+
         </activity>
         <activity
             android:name=".MainActivity"
@@ -113,9 +116,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="tech.iosd.benefit.MainActivity" />
         </activity>
-
-        <activity android:name=".OnBoarding.onBoardingActivity"
+        <activity
+            android:name=".OnBoarding.onBoardingActivity"
             android:theme="@style/Theme.Intro">
+
+        </activity>
+        <activity
+            android:name=".OnBoarding.getStartedActivity">
+
 
         </activity>
     </application>

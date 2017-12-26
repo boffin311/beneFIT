@@ -10,7 +10,9 @@ public class onBoardingActivity extends MaterialIntroActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        addSlide(new getStartedFragment());
+
+
+
         addSlide(new getGoalFragment());
         addSlide(new basicDetailFragment());
 

@@ -24,12 +24,12 @@ public class getGoalFragment extends SlideFragment {
 
     @Override
     public int backgroundColor() {
-        return super.backgroundColor();
+        return R.color.colorPrimary;
     }
 
     @Override
     public int buttonsColor() {
-        return super.buttonsColor();
+        return R.color.colorAccent;
     }
 
     @Override
