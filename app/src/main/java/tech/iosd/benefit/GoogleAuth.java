@@ -136,7 +136,7 @@ public class GoogleAuth extends Fragment {
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 firebaseAuthWithGoogle(account);
                 Log.d("TAGGER", "Successful LOGIN");
-                Toast.makeText(getContext(), "Successful Login", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getContext(), "Successful Login", Toast.LENGTH_SHORT).show();
                 Toast.makeText(getContext(), "Hello " + account.getDisplayName(), Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(getContext(), SplashActivity.class));
             } catch (ApiException e) {
