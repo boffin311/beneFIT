@@ -4,6 +4,9 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_scrolling">User Profile</string>
+    <string name="facebook_app_id">1606654286094369</string>
+    <string name="fb_login_protocol_scheme">fb1606654286094369</string>
+
     <string name="desc">
         Lorem Ipsum Dummy Text. Here you will get more inormation about any new update.
         \nLorem Ipsum Dummy Text.

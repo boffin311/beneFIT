@@ -1,8 +1,8 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion '26.0.2'
+    compileSdkVersion 26
+    buildToolsVersion "26.0.0-beta2"
     defaultConfig {
         applicationId "tech.iosd.benefit"
         minSdkVersion 19
@@ -22,6 +22,8 @@ android {
 
 dependencies {
     implementation 'com.google.firebase:firebase-auth:11.8.0'
+    implementation 'com.facebook.android:facebook-login:[4,5)'
+
     compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
@@ -35,6 +37,7 @@ dependencies {
     compile 'agency.tango.android:material-intro-screen:0.0.5'
     compile 'de.hdodenhof:circleimageview:2.2.0'
     compile 'com.google.android.gms:play-services-auth:11.8.0'
+
 
     testCompile 'junit:junit:4.12'
 }

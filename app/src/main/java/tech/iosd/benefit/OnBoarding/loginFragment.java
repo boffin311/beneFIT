@@ -6,9 +6,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.common.SignInButton;
 
 import agency.tango.materialintroscreen.SlideFragment;
+import tech.iosd.benefit.Authentication.FacebookAuth;
 import tech.iosd.benefit.Authentication.GoogleAuth;
 import tech.iosd.benefit.R;
 
@@ -19,6 +21,7 @@ import tech.iosd.benefit.R;
 public class loginFragment extends SlideFragment {
 
     SignInButton mGoogleSignInButton;
+
 
     @Nullable
     @Override
@@ -31,11 +34,25 @@ public class loginFragment extends SlideFragment {
         mGoogleSignInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getFragmentManager().beginTransaction()
-                        .add(R.id.auth_area,new GoogleAuth()).commit();
+                getFragmentManager()
+                        .beginTransaction()
+                        .add(R.id.auth_area, new GoogleAuth())
+                        .commit();
             }
         });
 
+
+        LoginButton mFacebookLogInButton = v.findViewById(R.id.facebook_sign_in_button);
+
+        mFacebookLogInButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getFragmentManager()
+                        .beginTransaction()
+                        .add(R.id.auth_area, new FacebookAuth())
+                        .commit();
+            }
+        });
 
         return v;
 
