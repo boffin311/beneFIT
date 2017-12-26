@@ -22,7 +22,7 @@ public class getStartedActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent i=new Intent(getApplicationContext(),onBoardingActivity.class);
                 startActivity(i);
-
+                finish();
             }
         });
 

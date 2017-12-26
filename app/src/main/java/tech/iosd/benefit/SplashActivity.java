@@ -13,6 +13,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import tech.iosd.benefit.Constants.SharedPreferenceConstants;
+
 public class SplashActivity extends AppCompatActivity implements View.OnClickListener {
 
     private TextView appName, tag;
@@ -24,13 +26,11 @@ public class SplashActivity extends AppCompatActivity implements View.OnClickLis
         super.onCreate(savedInstanceState);
 
 
-         SharedPreferences preferences = getApplicationContext().getSharedPreferences("MyPref", 0);
+        SharedPreferences preferences = getApplicationContext().getSharedPreferences(SharedPreferenceConstants.preferenesName, MODE_PRIVATE);
         SharedPreferences.Editor editor=preferences.edit();
          if(preferences.getBoolean("onBoardingExecuted",true)){
-
              editor.putBoolean("onBoardingExecuted",false);
              editor.commit();
-
 
             Intent i = new Intent(this, tech.iosd.benefit.OnBoarding.getStartedActivity.class);
             startActivity(i);

@@ -5,5 +5,5 @@ package tech.iosd.benefit.Constants;
  */
 
 public class AuthConstants {
-    public final static String googleClientId= "712691277447-dvcnq5ghjvqvg028j93sm64o2pq5lk1g.apps.googleusercontent.com";
+    public final static String googleClientId= "322730905665-0mtaqrkaduf92g55h30h0fs45jt7fpq7.apps.googleusercontent.com";
 }
