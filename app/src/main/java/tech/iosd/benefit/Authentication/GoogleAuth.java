@@ -120,6 +120,8 @@ public class GoogleAuth extends Fragment {
     @Override
     public void onStart() {
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(getContext());
+
+
 //          TODO: if user has signed in previously use account data
 
         super.onStart();

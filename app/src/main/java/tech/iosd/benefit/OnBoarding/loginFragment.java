@@ -1,10 +1,12 @@
 package tech.iosd.benefit.OnBoarding;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.common.SignInButton;
@@ -12,7 +14,12 @@ import com.google.android.gms.common.SignInButton;
 import agency.tango.materialintroscreen.SlideFragment;
 import tech.iosd.benefit.Authentication.FacebookAuth;
 import tech.iosd.benefit.Authentication.GoogleAuth;
+import tech.iosd.benefit.Authentication.OtpActivity;
 import tech.iosd.benefit.R;
+import tech.iosd.benefit.SplashActivity;
+
+import static android.app.Activity.RESULT_CANCELED;
+import static android.app.Activity.RESULT_OK;
 
 /**
  * Created by Anubhav on 26-12-2017.
@@ -21,6 +28,7 @@ import tech.iosd.benefit.R;
 public class loginFragment extends SlideFragment {
 
     SignInButton mGoogleSignInButton;
+    final int REQUEST_PHONE_VERIFICATION = 125;
 
 
     @Nullable
@@ -54,8 +62,30 @@ public class loginFragment extends SlideFragment {
             }
         });
 
+        Button phoneLoginButton = v.findViewById(R.id.phone_sign_in_button);
+
+        phoneLoginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivityForResult(new Intent(getContext(), OtpActivity.class),REQUEST_PHONE_VERIFICATION);
+            }
+        });
+
         return v;
 
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==REQUEST_PHONE_VERIFICATION){
+            if(resultCode==RESULT_OK){
+
+            }
+            else if(resultCode== RESULT_CANCELED){
+
+            }
+        }
     }
 
     @Override

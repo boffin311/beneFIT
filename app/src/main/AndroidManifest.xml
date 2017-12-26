@@ -126,11 +126,14 @@
             android:theme="@style/Theme.Intro">
 
         </activity>
-        <activity
-            android:name=".OnBoarding.getStartedActivity">
 
+        <activity android:name=".OnBoarding.getStartedActivity">
 
         </activity>
+        <activity android:name=".Authentication.OtpActivity">
+
+        </activity>
+
 
         <meta-data android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id"/>

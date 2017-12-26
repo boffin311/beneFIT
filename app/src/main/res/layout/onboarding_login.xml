@@ -3,23 +3,52 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/gradient_dusk">
 
     <FrameLayout
         android:id="@+id/auth_area"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"/>
 
-    </FrameLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:text="One more step to go..."
+        android:textColor="#FFFFFF"
+        android:textSize="25dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/google_sign_in_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        />
+    <TextView
+        android:id="@+id/tv1011"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:gravity="center"
+        android:textSize="60dp"
+        android:textColor="#FFFFFF"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="32dp"
+        android:text="Login"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.gms.common.SignInButton
         android:id="@+id/google_sign_in_button"
         android:layout_width="0dp"
-        android:layout_height="50dp"
+        android:layout_height="60dp"
+        android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="16dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="65dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -30,15 +59,34 @@
 
     <com.facebook.login.widget.LoginButton
         android:id="@+id/facebook_sign_in_button"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:layout_gravity="center_horizontal"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="153dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/rectangle"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/google_sign_in_button" />
+
+    <Button
+        android:id="@+id/phone_sign_in_button"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/rectangle"
+        android:gravity="center"
+        android:drawableLeft="@drawable/phone_icon"
+        android:text="Sign in via Phone"
+        android:drawableStart="@drawable/phone_icon"
+        android:drawablePadding="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/facebook_sign_in_button"/>
+
 
 
 
