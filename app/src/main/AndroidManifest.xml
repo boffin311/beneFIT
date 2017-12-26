@@ -116,8 +116,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="tech.iosd.benefit.MainActivity" />
         </activity>
-        <activity
-            android:name=".OnBoarding.onBoardingActivity"
+
+        <activity android:name=".OnBoarding.onBoardingActivity"
             android:theme="@style/Theme.Intro">
 
         </activity>

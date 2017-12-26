@@ -45,6 +45,7 @@ public class loginFragment extends SlideFragment {
     FirebaseAuth.AuthStateListener mAuthListener;
 
 
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -56,12 +57,13 @@ public class loginFragment extends SlideFragment {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 //TODO: update this method when required
+                Log.d("AUTHCHANGE","Auth state changed : "+ FirebaseAuth.getInstance().getCurrentUser().toString());
             }
         };
         mGoogleSignInButton = (SignInButton) v.findViewById(R.id.google_sign_in_button);
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(AuthConstants.googleClientId)
+//                .requestIdToken(AuthConstants.googleClientId)
                 .requestEmail()
                 .build();
 
@@ -123,6 +125,8 @@ public class loginFragment extends SlideFragment {
                 if(result.isSuccess()){
                 GoogleSignInAccount account = result.getSignInAccount();
                 firebaseAuthWithGoogle(account);
+                Log.d("TAGGER","Successful LOGIN");
+                    Toast.makeText(getContext(), "Successful Login", Toast.LENGTH_SHORT).show();
                 }
             } catch (Exception e) {
                 // Google Sign In failed, update UI appropriately
