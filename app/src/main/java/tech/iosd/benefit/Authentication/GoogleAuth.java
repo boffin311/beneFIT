@@ -1,4 +1,4 @@
-package tech.iosd.benefit;
+package tech.iosd.benefit.Authentication;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -29,6 +29,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 import tech.iosd.benefit.Constants.AuthConstants;
+import tech.iosd.benefit.R;
+import tech.iosd.benefit.SplashActivity;
 
 import static android.content.ContentValues.TAG;
 
