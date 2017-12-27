@@ -37,6 +37,7 @@ dependencies {
     compile 'agency.tango.android:material-intro-screen:0.0.5'
     compile 'de.hdodenhof:circleimageview:2.2.0'
     compile 'com.google.android.gms:play-services-auth:11.8.0'
+    compile 'com.github.d-max:spots-dialog:0.7@aar'
 
 
 
