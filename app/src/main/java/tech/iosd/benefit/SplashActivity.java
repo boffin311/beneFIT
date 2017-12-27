@@ -26,18 +26,14 @@ public class SplashActivity extends AppCompatActivity implements View.OnClickLis
         super.onCreate(savedInstanceState);
 
 
-        SharedPreferences preferences = getApplicationContext().getSharedPreferences(SharedPreferenceConstants.preferenesName, MODE_PRIVATE);
-        SharedPreferences.Editor editor=preferences.edit();
-         if(preferences.getBoolean("onBoardingExecuted",true)){
-             editor.putBoolean("onBoardingExecuted",false);
-             editor.commit();
+        SharedPreferences preferences = getApplicationContext().getSharedPreferences(SharedPreferenceConstants.preferencesName, MODE_PRIVATE);
 
+         if(preferences.getBoolean(SharedPreferenceConstants.firstTimeUser,true)){
             Intent i = new Intent(this, tech.iosd.benefit.OnBoarding.getStartedActivity.class);
             startActivity(i);
         }
 
         else {
-
             setContentView(R.layout.activity_splash);
 
 

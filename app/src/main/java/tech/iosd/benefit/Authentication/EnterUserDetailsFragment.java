@@ -13,11 +13,11 @@ import tech.iosd.benefit.R;
  * Created by Anubhav on 27-12-2017.
  */
 
-public class EnterOtpFragment extends Fragment {
+public class EnterUserDetailsFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.enter_otp_fragment,container,false);
+        View v = inflater.inflate(R.layout.enter_user_details,container,false);
 
 
 
