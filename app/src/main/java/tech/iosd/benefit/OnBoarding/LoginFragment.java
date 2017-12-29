@@ -25,10 +25,11 @@ import static android.app.Activity.RESULT_OK;
  * Created by Anubhav on 26-12-2017.
  */
 
-public class loginFragment extends SlideFragment {
+public class LoginFragment extends SlideFragment {
 
-    SignInButton mGoogleSignInButton;
+//    Button mGoogleSignInButton;
     final int REQUEST_PHONE_VERIFICATION = 125;
+
 
 
     @Nullable
@@ -36,7 +37,8 @@ public class loginFragment extends SlideFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.onboarding_login, container, false);
 
-        mGoogleSignInButton = (SignInButton) v.findViewById(R.id.google_sign_in_button);
+
+        Button mGoogleSignInButton = v.findViewById(R.id.google_login_custom);
 
 
         mGoogleSignInButton.setOnClickListener(new View.OnClickListener() {
@@ -50,7 +52,7 @@ public class loginFragment extends SlideFragment {
         });
 
 
-        LoginButton mFacebookLogInButton = v.findViewById(R.id.facebook_sign_in_button);
+        Button mFacebookLogInButton = v.findViewById(R.id.fb_login_custom);
 
         mFacebookLogInButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,6 +89,9 @@ public class loginFragment extends SlideFragment {
             }
         }
     }
+    public static LoginFragment newInstance() {
+        return new LoginFragment();
+    }
 
     @Override
     public int backgroundColor() {
@@ -100,11 +105,11 @@ public class loginFragment extends SlideFragment {
 
     @Override
     public boolean canMoveFurther() {
-        return super.canMoveFurther();
+        return false;
     }
 
     @Override
     public String cantMoveFurtherErrorMessage() {
-        return super.cantMoveFurtherErrorMessage();
+        return "Please sign in to proceed";
     }
 }

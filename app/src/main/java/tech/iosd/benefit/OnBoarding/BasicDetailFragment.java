@@ -15,7 +15,7 @@ import tech.iosd.benefit.R;
  * Created by Anubhav on 26-12-2017.
  */
 
-public class basicDetailFragment extends SlideFragment {
+public class BasicDetailFragment extends SlideFragment {
     TextView genderTextView;
     RadioButton activeRadioButton,sedentaryRadioButton,veryActiveRadioButton,moderateRadioButton,kgsRadioButton,lbsRadioButton,cmsRadioButton,feetRadioButton;
     @Nullable

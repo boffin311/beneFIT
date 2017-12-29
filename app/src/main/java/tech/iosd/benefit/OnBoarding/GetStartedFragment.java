@@ -1,40 +1,51 @@
 package tech.iosd.benefit.OnBoarding;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+
 import agency.tango.materialintroscreen.SlideFragment;
 import tech.iosd.benefit.R;
 
 /**
- * Created by Anubhav on 26-12-2017.
+ * Created by Anubhav on 28-12-2017.
  */
 
-public class getGoalFragment extends SlideFragment {
+public class GetStartedFragment extends SlideFragment {
+    public GetStartedFragment() {
+    }
+
+    public static GetStartedFragment newInstance() {
+        return new GetStartedFragment();
+    }
+
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view=inflater.inflate(R.layout.onboarding_getgoal,container,false);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.onboarding_getstarted, container, false);
 
-        return view;
+
+        return v;
+
     }
 
     @Override
     public int backgroundColor() {
-        return R.color.colorPrimary;
+        return R.color.colorPrimaryDark;
     }
 
     @Override
     public int buttonsColor() {
-        return R.color.colorAccent;
+        return R.color.colorPrimaryDark;
     }
 
     @Override
     public boolean canMoveFurther() {
-        return super.canMoveFurther();
+        return true;
     }
 
     @Override

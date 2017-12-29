@@ -4,7 +4,7 @@ import android.os.Bundle;
 
 import agency.tango.materialintroscreen.MaterialIntroActivity;
 
-public class onBoardingActivity extends MaterialIntroActivity {
+public class OnBoardingActivity extends MaterialIntroActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -13,9 +13,10 @@ public class onBoardingActivity extends MaterialIntroActivity {
 
 
 
-        addSlide(new getGoalFragment());
-        addSlide(new basicDetailFragment());
-        addSlide(new loginFragment());
+        addSlide(new GetStartedFragment());
+        addSlide(new GetGoalFragment());
+        addSlide(new BasicDetailFragment());
+        addSlide(new LoginFragment());
 
         /*TODO: Add custom slides here for onBoarding Fragment*/
     }

@@ -116,9 +116,8 @@
                 android:value="tech.iosd.benefit.MainActivity" />
         </activity>
         <activity
-            android:name=".OnBoarding.onBoardingActivity"
+            android:name=".OnBoarding.OnBoardingActivity"
             android:theme="@style/Theme.Intro"></activity>
-        <activity android:name=".OnBoarding.getStartedActivity"></activity>
         <activity android:name=".Authentication.OtpActivity"></activity>
 
         <meta-data

@@ -8,4 +8,9 @@
     <color name="colorPrimaryDarkGoal">#09457e</color>
     <color name="colorAccentGoal">#1987ed</color>
 
+    <color name="blueOnBoard">#304ffe</color>
+    <color name="greyOnBoard">#cfd8dc</color>
+    <color name="redOnBoard">#64dd17</color>
+    <color name="tealOnBoard">#26a69a</color>
+
 </resources>
