@@ -6,7 +6,11 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
+
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 
 import agency.tango.materialintroscreen.SlideFragment;
 import tech.iosd.benefit.R;
@@ -27,7 +31,11 @@ public class GetStartedFragment extends SlideFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.onboarding_getstarted, container, false);
+      //YoYo.with(Techniques.FadeIn).delay(1000).playOn(v.findViewById(R.id.logo));
 
+        //Button startBtn=v.findViewById(R.id.startBtn);
+//startBtn.animate().setStartDelay(2000).start();
+  //      YoYo.with(Techniques.BounceInUp).duration(1000).delay(2000).playOn(startBtn);
 
         return v;
 

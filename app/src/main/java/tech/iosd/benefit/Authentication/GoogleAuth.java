@@ -32,6 +32,7 @@ import tech.iosd.benefit.Constants.AuthConstants;
 import tech.iosd.benefit.R;
 import tech.iosd.benefit.SplashActivity;
 
+import static android.app.Activity.RESULT_OK;
 import static android.content.ContentValues.TAG;
 
 /**
@@ -45,6 +46,7 @@ public class GoogleAuth extends Fragment {
     FirebaseAuth.AuthStateListener mAuthListener;
     GoogleSignInClient mGoogleSignInClient;
     private FirebaseAuth mAuth;
+    GoogleSignInOptions gso;
 
     @Nullable
     @Override
@@ -53,7 +55,7 @@ public class GoogleAuth extends Fragment {
 
 
         mAuth = FirebaseAuth.getInstance();
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(AuthConstants.googleClientId)
                 .requestEmail()
                 .build();
@@ -124,6 +126,16 @@ public class GoogleAuth extends Fragment {
 
 //          TODO: if user has signed in previously use account data
 
+       /* mGoogleApiClient = new GoogleApiClient.Builder(getContext().getApplicationContext())
+                .enableAutoManage(getActivity(), new GoogleApiClient.OnConnectionFailedListener() {
+                    @Override
+                    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+                        Toast.makeText(getContext(), "Please check your internet", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();*/
+
         super.onStart();
     }
 
@@ -133,22 +145,23 @@ public class GoogleAuth extends Fragment {
 
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+                Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
 //            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            try {
-                // Google Sign In was successful, authenticate with Firebase
-                GoogleSignInAccount account = task.getResult(ApiException.class);
-                firebaseAuthWithGoogle(account);
-                Log.d("TAGGER", "Successful LOGIN");
+                try {
+                    // Google Sign In was successful, authenticate with Firebase
+                    GoogleSignInAccount account = task.getResult(ApiException.class);
+                    firebaseAuthWithGoogle(account);
+                    Log.d("TAGGER", "Successful LOGIN");
 //                Toast.makeText(getContext(), "Successful Login", Toast.LENGTH_SHORT).show();
-                Toast.makeText(getContext(), "Hello " + account.getDisplayName(), Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(getContext(), SplashActivity.class));
-            } catch (ApiException e) {
-                // Google Sign In failed, update UI appropriately
-                Log.w(TAG, "Google sign in failed", e);
-                Toast.makeText(getContext(), "Sign In Failed", Toast.LENGTH_SHORT).show();
-                // ...
-            }
+                    Toast.makeText(getContext(), "Hello " + account.getDisplayName(), Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(getContext(), SplashActivity.class));
+                } catch (ApiException e) {
+                    // Google Sign In failed, update UI appropriately
+                    Log.w(TAG, "Google sign in failed", e);
+                    Toast.makeText(getContext(), "Sign In Failed", Toast.LENGTH_SHORT).show();
+                    // ...
+                }
+
 
         }
     }

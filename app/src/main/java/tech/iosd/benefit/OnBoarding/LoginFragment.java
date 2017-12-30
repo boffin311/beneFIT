@@ -93,6 +93,8 @@ public class LoginFragment extends SlideFragment {
         return new LoginFragment();
     }
 
+
+
     @Override
     public int backgroundColor() {
         return R.color.colorAccent;
