@@ -16,14 +16,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_below="@+id/slider">
-    <android.support.v7.widget.RecyclerView
-
-        android:id="@+id/coach_activity_option_recycler"
+    <com.cooltechworks.views.shimmer.ShimmerRecyclerView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/shimmer_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent">
-      </android.support.v7.widget.RecyclerView>
+        app:shimmer_demo_child_count="10"
+
+        app:shimmer_demo_grid_child_count="2"
+        app:shimmer_demo_layout="@layout/shimmer_card"
+
+        app:shimmer_demo_angle="20"
+        />
 
 </RelativeLayout>
 </RelativeLayout>

@@ -43,7 +43,7 @@ public class CoachActivityOptionAdapter extends RecyclerView.Adapter<CoachActivi
         String coachActivityOptionList=obList.get(position);
 
         holder.setData(coachActivityOptionList,position);
-        YoYo.with(Techniques.Landing).duration(3000).playOn(holder.cardView);
+      //  YoYo.with(Techniques.Landing).duration(3000).playOn(holder.cardView);
 
 
     }
@@ -55,12 +55,12 @@ public class CoachActivityOptionAdapter extends RecyclerView.Adapter<CoachActivi
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         private TextView tv;
-       private   CardView cardView;
+     //  private   CardView cardView;
         private int position;
         private String coachActivityOptionList;
         public MyViewHolder(final View itemView) {
             super(itemView);
-cardView=itemView.findViewById(R.id.cv);
+//cardView=itemView.findViewById(R.id.cv);
             tv=itemView.findViewById(R.id.tv_coach_card);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
