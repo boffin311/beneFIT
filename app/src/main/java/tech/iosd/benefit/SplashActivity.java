@@ -29,12 +29,12 @@ public class SplashActivity extends AppCompatActivity implements View.OnClickLis
 
         SharedPreferences preferences = getApplicationContext().getSharedPreferences(SharedPreferenceConstants.preferencesName, MODE_PRIVATE);
 
-         if(preferences.getBoolean(SharedPreferenceConstants.firstTimeUser,true)){
-            Intent i = new Intent(this, OnBoardingActivity.class);
-            startActivity(i);
-        }
+//         if(preferences.getBoolean(SharedPreferenceConstants.firstTimeUser,true)){
+//            Intent i = new Intent(this, OnBoardingActivity.class);
+//            startActivity(i);
+//        }
 
-        else {
+//        else {
             setContentView(R.layout.activity_splash);
 
 
@@ -56,7 +56,7 @@ public class SplashActivity extends AppCompatActivity implements View.OnClickLis
         tag.animate().alpha(1.0f).setDuration(500).setStartDelay(1000).start();
         appName.animate().translationYBy(-100f).setDuration(1000).setStartDelay(1000).start();
         linearLayout.animate().alpha(1.0f).setDuration(1000).setStartDelay(1000).start();
-    }
+//    }
 
 }
 

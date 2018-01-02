@@ -2,8 +2,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="tech.iosd.benefit">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.LOCATION_HARDWARE"/>
+
+    <uses-feature android:name="android.hardware.Camera2" android:required="false"/>
 
     <application
         android:allowBackup="true"
@@ -59,11 +66,6 @@
             android:name=".CoachActivity"
 
             android:parentActivityName=".MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="tech.iosd.benefit.MainActivity" />
@@ -119,8 +121,17 @@
         </activity>
         <activity
             android:name=".OnBoarding.OnBoardingActivity"
-            android:theme="@style/Theme.Intro"></activity>
-        <activity android:name=".Authentication.OtpActivity"></activity>
+            android:theme="@style/Theme.Intro">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".Authentication.OtpActivity"
+            android:theme="@style/Theme.Transparent">
+        </activity>
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -142,7 +153,9 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-        <activity android:name=".Authentication.EnterOtpActivity"></activity>
+        <activity android:name=".Authentication.EnterOtpActivity"
+            android:theme="@style/Theme.Transparent">
+        </activity>
     </application>
 
 </manifest>

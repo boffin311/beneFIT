@@ -1,6 +1,5 @@
 package tech.iosd.benefit.Authentication;
 
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
@@ -23,10 +22,10 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.kaopiz.kprogresshud.KProgressHUD;
 
 import java.util.concurrent.TimeUnit;
 
-import dmax.dialog.SpotsDialog;
 import tech.iosd.benefit.Constants.IntentConstants;
 import tech.iosd.benefit.R;
 import tech.iosd.benefit.SplashActivity;
@@ -39,6 +38,7 @@ public class OtpActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private PhoneAuthProvider.ForceResendingToken mResendToken;
+    private boolean userEnteringDetails = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +66,8 @@ public class OtpActivity extends AppCompatActivity {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
 //                    if (mLoginSharedPreferences.getBoolean(ApplicationConstants.firstLogin, true) == true) {
-                        startActivity(new Intent(OtpActivity.this, SplashActivity.class));
+                    startActivity(new Intent(OtpActivity.this, SplashActivity.class));
+                    finish();
 //                    }
 //                    else {
 //                        goToMainAcivity();
@@ -81,19 +82,30 @@ public class OtpActivity extends AppCompatActivity {
     }
 
     private void verifyPhone() {
-        final AlertDialog alertDialog = new SpotsDialog(this, "Detecting Otp");
-        alertDialog.setCancelable(false);
-        alertDialog.show();
+//        final AlertDialog alertDialog = new SpotsDialog(this, "Detecting Otp");
+//        alertDialog.setCancelable(false);
+//        alertDialog.show();
+        final KProgressHUD kProgressHUD = KProgressHUD.create(this)
+                .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
+                .setLabel("Please Wait")
+                .setDetailsLabel("We are trying to detect the OTP automatically")
+                .setDimAmount(0.5f)
+                .setCancellable(false)
+                .setAnimationSpeed(2)
+                .show();
+
 
         PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
             @Override
             public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
+                kProgressHUD.dismiss();
 //                mLoginSharedPreferences.edit().putString(ApplicationConstants.phoneNumber, mPhoneEditText.getText().toString()).apply();
 //                touchEnabled();
 //                startActivity(new Intent(OtpActivity.this, SplashActivity.class));
+                userEnteringDetails=true;
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .add(R.id.container_for_user_details,new EnterUserDetailsFragment())
+                        .add(R.id.container_for_user_details, new EnterUserDetailsFragment())
                         .addToBackStack("Main")
                         .commit();
             }
@@ -108,13 +120,15 @@ public class OtpActivity extends AppCompatActivity {
 
                     @Override
                     public void onTick(long l) {
-
+//                        alertDialog.setTitle("Waiting "+l+"s to detect");
                     }
 
                     public void onFinish() {
-                        alertDialog.dismiss();
-                        Intent i = new Intent(OtpActivity.this, EnterOtpActivity.class);
-                        startActivityForResult(i, OTP_REQUEST);
+                        kProgressHUD.dismiss();
+                        if (!userEnteringDetails) {
+                            Intent i = new Intent(OtpActivity.this, EnterOtpActivity.class);
+                            startActivityForResult(i, OTP_REQUEST);
+                        }
                     }
 
                 }.start();
@@ -130,7 +144,7 @@ public class OtpActivity extends AppCompatActivity {
 
             @Override
             public void onVerificationFailed(FirebaseException e) {
-                alertDialog.dismiss();
+//                alertDialog.dismiss();
                 try {
                     if (e instanceof FirebaseAuthInvalidCredentialsException) {
                         mLoginButton.setText("Try Again");
@@ -190,7 +204,7 @@ public class OtpActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == OTP_REQUEST && RESULT_OK == resultCode) {
 
-            PhoneAuthCredential credential = PhoneAuthProvider.getCredential(mVerificationId, IntentConstants.otpRequest);
+            PhoneAuthCredential credential = PhoneAuthProvider.getCredential(mVerificationId, data.getStringExtra(IntentConstants.otpRequest));
             signInWithPhoneAuthCredential(credential);
 
         }
@@ -213,10 +227,10 @@ public class OtpActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if(getFragmentManager().getBackStackEntryCount()!=0)
+        if (getFragmentManager().getBackStackEntryCount() != 0)
             getFragmentManager().popBackStackImmediate();
 
         else
-        super.onBackPressed();
+            super.onBackPressed();
     }
 }

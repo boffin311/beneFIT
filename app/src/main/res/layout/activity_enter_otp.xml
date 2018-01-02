@@ -5,8 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:theme="@style/Theme.Intro"
-    android:background="@drawable/gradient_background_portrait"
+    android:theme="@style/Theme.AppCompat.NoActionBar"
+    android:background="@drawable/gradient_rainbow_blue"
     tools:context=".Authentication.EnterOtpActivity">
 
     <ImageView

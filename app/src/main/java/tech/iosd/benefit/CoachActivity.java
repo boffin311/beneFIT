@@ -1,9 +1,8 @@
 package tech.iosd.benefit;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.widget.Toast;
 
 import com.cooltechworks.views.shimmer.ShimmerRecyclerView;
@@ -18,10 +17,10 @@ import java.util.HashMap;
 import tech.iosd.benefit.Adapters.CoachActivityOptionAdapter;
 import tech.iosd.benefit.ListItems.CoachActivityOptionList;
 
-public class CoachActivity extends AppCompatActivity implements BaseSliderView.OnSliderClickListener, ViewPagerEx.OnPageChangeListener{
+public class CoachActivity extends AppCompatActivity implements BaseSliderView.OnSliderClickListener, ViewPagerEx.OnPageChangeListener {
 
     private SliderLayout slide;
-   private ShimmerRecyclerView shimmerRecycler;
+    private ShimmerRecyclerView shimmerRecycler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,9 +43,11 @@ public class CoachActivity extends AppCompatActivity implements BaseSliderView.O
                     .image(file_maps.get(name))
                     .setScaleType(BaseSliderView.ScaleType.Fit)
                     .setOnSliderClickListener(this);
+
             textSliderView.bundle(new Bundle());
+
             textSliderView.getBundle()
-                    .putString("extra", name);
+                    .putString("These images will be updated soon", name);
 
             slide.addSlider(textSliderView);
         }
@@ -60,10 +61,10 @@ public class CoachActivity extends AppCompatActivity implements BaseSliderView.O
 
         shimmerRecycler = (ShimmerRecyclerView) findViewById(R.id.shimmer_recycler_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        CoachActivityOptionAdapter coachActivityOptionAdapter=new CoachActivityOptionAdapter(this, CoachActivityOptionList.getList());
+        CoachActivityOptionAdapter coachActivityOptionAdapter = new CoachActivityOptionAdapter(this, CoachActivityOptionList.getList());
 
         shimmerRecycler.setAdapter(coachActivityOptionAdapter);
-shimmerRecycler.setLayoutManager(layoutManager);
+        shimmerRecycler.setLayoutManager(layoutManager);
         shimmerRecycler.showShimmerAdapter();
 
 
@@ -86,20 +87,17 @@ recyclerView.setAdapter(coachActivityOptionAdapter);
     }
 
 
-
-
     @Override
-        protected void onStop() {
-            // To prevent a memory leak on rotation, make sure to call stopAutoCycle() on the slider before activity or fragment is destroyed
-            slide.stopAutoCycle();
-            super.onStop();
-        }
-
+    protected void onStop() {
+        // To prevent a memory leak on rotation, make sure to call stopAutoCycle() on the slider before activity or fragment is destroyed
+        slide.stopAutoCycle();
+        super.onStop();
+    }
 
 
     @Override
     public void onSliderClick(BaseSliderView slider) {
-        Toast.makeText(this,slider.getBundle().get("extra") + "", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, slider.getBundle().get("extra") + "", Toast.LENGTH_SHORT).show();
     }
 
     @Override
