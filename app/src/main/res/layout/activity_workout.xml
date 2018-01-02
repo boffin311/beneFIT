@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ListView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainListView"
     android:layout_width="match_parent"
-    android:background="@drawable/d"
     android:layout_height="match_parent"
-    tools:context="tech.iosd.benefit.WorkoutActivity">
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/workout_recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
-
-</LinearLayout>
+    tools:context=".WorkoutActivity"
+    android:clipChildren="false"
+    android:clipToPadding="false"
+    android:divider="@android:color/transparent"
+    android:dividerHeight="10dp"
+    android:paddingBottom="16dp"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:paddingTop="16dp"
+    android:scrollbars="none"/>
