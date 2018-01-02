@@ -1,8 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#767676</color>
-    <color name="colorPrimaryDark">#545454</color>
-    <color name="colorAccent">#139410</color>
+    <color name="colorPrimaryLight">#E0E0E0</color>
+    <color name="colorPrimaryRegular">#E0E0E0</color>
+    <color name="colorPrimary">#37474F</color>
+    <color name="colorPrimaryDark">#263238</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="colorClear">#ece5e7</color>
+    <color name="colorTransparent">#00ffffff</color>
+    <color name="white">#FFFFFF</color>
+
+    <color name="welcomeStep1">#f4b241</color>
+    <color name="welcomeStep1Dark">#946c27</color>
+    <color name="welcomeStep2">#16bc7d</color>
+    <color name="welcomeStep3">#6D8CA0</color>
+    <color name="facebook">#003366</color>
+    <color name="google">#d72120</color>
 
     <color name="colorPrimaryGoal">#1987ed</color>
     <color name="colorPrimaryDarkGoal">#09457e</color>
@@ -12,5 +24,4 @@
     <color name="greyOnBoard">#869596</color>
     <color name="redOnBoard">#64dd17</color>
     <color name="tealOnBoard">#26a69a</color>
-
 </resources>

@@ -6,6 +6,8 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 
 
@@ -31,14 +33,23 @@ public class GetStartedFragment extends SlideFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.onboarding_getstarted, container, false);
-      //YoYo.with(Techniques.FadeIn).delay(1000).playOn(v.findViewById(R.id.logo));
+        //YoYo.with(Techniques.FadeIn).delay(1000).playOn(v.findViewById(R.id.logo));
 
-        //Button startBtn=v.findViewById(R.id.startBtn);
-//startBtn.animate().setStartDelay(2000).start();
-  //      YoYo.with(Techniques.BounceInUp).duration(1000).delay(2000).playOn(startBtn);
+        Button startBtn=v.findViewById(R.id.startBtn);
+        Animation btm_up = AnimationUtils.loadAnimation(getContext(), R.anim.bottom_up);
+        startBtn.startAnimation(btm_up);
+        //startBtn.animate().setStartDelay(2000).start();
+        //YoYo.with(Techniques.BounceInUp).duration(1000).delay(2000).playOn(startBtn);
+
+        startBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+
+            }
+        });
 
         return v;
-
     }
 
     @Override
@@ -48,7 +59,7 @@ public class GetStartedFragment extends SlideFragment {
 
     @Override
     public int buttonsColor() {
-        return R.color.colorPrimaryDark;
+        return R.color.white;
     }
 
     @Override

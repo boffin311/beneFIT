@@ -24,7 +24,6 @@ public class GetGoalFragment extends SlideFragment {
         View view = inflater.inflate(R.layout.onboarding_getgoal, container, false);
         final ExplosionField explosionField = ExplosionField.attach2Window(getActivity());
 
-
         final TextView fat = view.findViewById(R.id.fat_text);
         final TextView healthy = view.findViewById(R.id.healthy_text);
         final TextView muscle = view.findViewById(R.id.muscle_text);
@@ -90,12 +89,12 @@ public class GetGoalFragment extends SlideFragment {
 
     @Override
     public int backgroundColor() {
-        return R.color.colorPrimary;
+        return R.color.welcomeStep1;
     }
 
     @Override
     public int buttonsColor() {
-        return R.color.colorAccent;
+        return R.color.welcomeStep1Dark;
     }
 
     @Override

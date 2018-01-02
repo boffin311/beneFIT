@@ -23,6 +23,7 @@ public class BasicDetailFragment extends SlideFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.onboarding_getbasicdetails,container,false);
 
+        /*
         final TextView maleTextView = (TextView) view.findViewById(R.id.male_checked_textView);
 
         maleTextView.setOnClickListener(new View.OnClickListener() {
@@ -42,6 +43,7 @@ public class BasicDetailFragment extends SlideFragment {
             }
         });
         genderTextView = (TextView)view.findViewById(R.id.set_gender_text_view_onboarding);
+        */
 
         activeRadioButton =(RadioButton) view.findViewById(R.id.active_radio_button);
         activeRadioButton.setOnClickListener(new View.OnClickListener() {
@@ -131,7 +133,7 @@ public class BasicDetailFragment extends SlideFragment {
 
     @Override
     public int backgroundColor() {
-        return R.color.colorAccent;
+        return R.color.welcomeStep2;
     }
 
     @Override
