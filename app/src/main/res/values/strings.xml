@@ -25,4 +25,9 @@
         \n Lorem Ipsum Dummy Text
         \n Lorem Ipsum Dummy Text
     </string>
+
+    <string-array name="weight_array">
+        <item>lbs</item>
+        <item>Kgs</item>
+    </string-array>
 </resources>

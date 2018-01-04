@@ -1,78 +1,291 @@
-<?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?><!--<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"--><!--xmlns:app="http://schemas.android.com/apk/res-auto"--><!--xmlns:diagonal="http://schemas.android.com/apk/res-auto"--><!--xmlns:tools="http://schemas.android.com/tools"--><!--android:layout_width="match_parent"--><!--android:layout_height="match_parent"--><!--android:orientation="vertical"--><!--tools:context="tech.iosd.benefit.MeasurementActivity">-->
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:diagonal="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:theme="@style/MeasurementsTheme"
     android:orientation="vertical"
-    android:padding="10dp"
     tools:context="tech.iosd.benefit.MeasurementActivity">
-    <LinearLayout
+
+
+    <developer.shivam.library.DiagonalView
+        android:id="@+id/diagonal_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="200dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/de"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        diagonal:angle="10"
+        diagonal:backgroundColor="#00F44336"
+        diagonal:diagonalColor="#FFFFFF"
+        diagonal:diagonalGravity="right" />
 
-        <TextView
-            android:textSize="16sp"
-            android:textColor="#333"
-            android:layout_marginLeft="2dp"
-            android:layout_marginRight="2dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
-            android:textAlignment="center"
-            android:text="@string/tag1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
 
-        <android.support.v7.widget.RecyclerView
-            android:layout_marginTop="15dp"
-            android:id="@+id/measurement_recycler"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/circleimageview_measurement"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:fadingEdge="horizontal"
+        android:src="@drawable/male_icon"
+        app:civ_border_color="@color/blueOnBoard"
+        app:civ_border_width="1dp"
+        app:civ_fill_color="@color/tealOnBoard"
+        app:layout_constraintEnd_toEndOf="@id/diagonal_view"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintHorizontal_bias="0.75"
+        app:layout_constraintBottom_toBottomOf="@id/diagonal_view"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="208dp" />
 
-        </android.support.v7.widget.RecyclerView>
+    <TextView
+        android:id="@+id/name_tv_measurement"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:text="Anubhav Malik"
+        android:fontFamily="sans-serif-condensed"
+        app:layout_constraintTop_toTopOf="@id/circleimageview_measurement"
+        app:layout_constraintStart_toStartOf="@id/diagonal_view"
+        app:layout_constraintEnd_toStartOf="@id/circleimageview_measurement"
+        app:layout_constraintBottom_toBottomOf="@id/circleimageview_measurement"
+        android:gravity="start|center"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"/>
 
-        <TextView
-            android:textSize="16sp"
-            android:textColor="#333"
-            android:layout_marginLeft="2dp"
-            android:layout_marginRight="2dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="5dp"
-            android:text="\tYour BMI as per records:"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        app:layout_constraintTop_toBottomOf="@id/name_tv_measurement"
+        app:layout_constraintBottom_toBottomOf="@id/diagonal_view"
+        android:layout_marginTop="4dp"
+        app:layout_constraintStart_toStartOf="@id/name_tv_measurement"
+        android:text="20 years old"
+        android:textStyle="bold"
+        android:fontFamily="sans-serif-condensed"
+        />
 
-        <TextView
-            android:layout_marginTop="10dp"
-            android:text="\t23.4 | Healthy"
-            android:textSize="40sp"
-            android:textColor="#41ba00"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:src="#000000"
+        app:layout_constraintTop_toBottomOf="@id/diagonal_view"
+        app:layout_constraintStart_toEndOf="parent"
+        android:layout_marginTop="0dp"/>
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:src="#000000"
+        app:layout_constraintTop_toBottomOf="@id/weight_tv_measurements"
+        app:layout_constraintStart_toEndOf="parent"
+        android:layout_marginTop="0dp"/>
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:src="#000000"
+        app:layout_constraintTop_toBottomOf="@id/height_tv_measurement"
+        app:layout_constraintStart_toEndOf="parent"
+        android:layout_marginTop="0dp"/>
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:src="#000000"
+        app:layout_constraintTop_toBottomOf="@id/dob_tv_measurement"
+        app:layout_constraintStart_toEndOf="parent"
+        android:layout_marginTop="0dp"/>
 
-        <CheckBox
-            android:layout_marginTop="30dp"
-            android:layout_marginLeft="10dp"
-            android:textSize="16sp"
-            android:textColor="#555"
-            android:paddingLeft="5dp"
-            android:text="Provide me with necessary information and advices regarding BMI "
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:src="#000000"
+        app:layout_constraintTop_toBottomOf="@id/bmi_tv_measurements"
+        app:layout_constraintStart_toEndOf="parent"
+        android:layout_marginTop="0dp"/>
 
-        <Button
-            android:layout_marginTop="30dp"
-            android:layout_width="match_parent"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="20dp"
-            android:textAllCaps="false"
-            android:text="Generate Report"
-            android:textSize="16sp"
-            android:textColor="#fff"
-            android:background="@color/colorPrimary"
-            android:layout_height="wrap_content"/>
-    </LinearLayout>
-</ScrollView>
+    <TextView
+        android:id="@+id/weight_tv_measurements"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="4dp"
+        android:fontFamily="sans-serif-condensed"
+        android:gravity="center"
+        android:text="Weight :"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/diagonal_view" />
+
+
+    <EditText
+        android:id="@+id/weight_edittext_measurement"
+        android:layout_width="70dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="8dp"
+        style="@style/MeasurementsEditText"
+        android:maxLength="3"
+        android:gravity="center"
+        android:hint="Eg. 60"
+        android:inputType="number"
+        app:layout_constraintBottom_toBottomOf="@id/weight_tv_measurements"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/weight_tv_measurements"
+        app:layout_constraintTop_toTopOf="@+id/weight_tv_measurements" />
+
+    <TextView
+        android:id="@+id/height_tv_measurement"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="16dp"
+        android:fontFamily="sans-serif-condensed"
+        android:gravity="center"
+        android:text="Height :"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintStart_toStartOf="@id/weight_tv_measurements"
+        app:layout_constraintTop_toBottomOf="@id/weight_tv_measurements" />
+
+    <EditText
+        android:id="@+id/feet_edittext_measurement"
+        android:layout_width="70dp"
+        android:layout_height="40dp"
+        style="@style/MeasurementsEditText"
+        android:inputType="number"
+        android:hint="5 feet"
+        android:maxLength="1"
+        android:gravity="center"
+        app:layout_constraintStart_toStartOf="@id/weight_edittext_measurement"
+        app:layout_constraintTop_toTopOf="@id/height_tv_measurement"
+        app:layout_constraintBottom_toBottomOf="@id/height_tv_measurement"/>
+
+    <EditText
+        android:layout_width="70dp"
+        android:layout_height="40dp"
+        style="@style/MeasurementsEditText"
+        android:hint="7 inches"
+        android:gravity="center"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:maxLength="2"
+        android:inputType="number"
+        app:layout_constraintTop_toTopOf="@id/height_tv_measurement"
+        app:layout_constraintBottom_toBottomOf="@id/height_tv_measurement"
+        app:layout_constraintStart_toEndOf="@id/feet_edittext_measurement"
+        />
+
+    <TextView
+        android:id="@+id/dob_tv_measurement"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="16dp"
+        android:fontFamily="sans-serif-condensed"
+        android:gravity="center"
+        android:text="Date of Birth :"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintStart_toStartOf="@id/weight_tv_measurements"
+        app:layout_constraintTop_toBottomOf="@id/height_tv_measurement" />
+
+
+    <Button
+        android:id="@+id/dob_button_measurements"
+        android:layout_width="150dp"
+        android:layout_height="40dp"
+        android:fontFamily="sans-serif-condensed"
+        android:text="02-09-1997"
+        android:textSize="16sp"
+        android:background="@color/blueOnBoard"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@id/weight_edittext_measurement"
+        app:layout_constraintTop_toTopOf="@id/dob_tv_measurement" />
+
+    <Spinner
+        android:layout_width="50dp"
+        android:entries="@array/weight_array"
+        android:layout_height="20dp"
+        app:layout_constraintTop_toTopOf="@id/weight_edittext_measurement"
+        app:layout_constraintStart_toEndOf="@id/weight_edittext_measurement"
+        app:layout_constraintBottom_toBottomOf="@id/weight_edittext_measurement"
+        />
+
+
+    <Button
+        android:id="@+id/calculate_bodyfat_measurement"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/blueOnBoard"
+        android:fontFamily="sans-serif-condensed"
+        android:text="Calculate my body fat"
+        android:textAllCaps="false"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/button2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dob_tv_measurement"
+        app:layout_constraintVertical_bias="1.0" />
+    <TextView
+        android:id="@+id/bmi_tv_measurements"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        app:layout_constraintTop_toBottomOf="@id/dob_tv_measurement"
+        app:layout_constraintStart_toStartOf="@id/dob_tv_measurement"
+        android:text="BMI :"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:fontFamily="sans-serif-condensed"
+        android:textSize="16sp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:textStyle="bold"
+        android:fontFamily="sans-serif-condensed"
+        android:text="25"
+        app:layout_constraintEnd_toEndOf="@id/dob_button_measurements"
+        android:gravity="center"
+        android:textSize="16sp"
+        app:layout_constraintTop_toTopOf="@id/bmi_tv_measurements"
+        app:layout_constraintBottom_toBottomOf="@id/bmi_tv_measurements"
+        app:layout_constraintStart_toStartOf="@id/dob_button_measurements"/>
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="0dp"
+        android:background="@color/blueOnBoard"
+        android:textColor="#FFFFFF"
+        android:fontFamily="sans-serif-condensed"
+        android:text="Generate my report"
+        android:textAllCaps="false"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/calculate_bodyfat_measurement"
+        app:layout_constraintStart_toStartOf="@id/calculate_bodyfat_measurement" />
+
+
+</android.support.constraint.ConstraintLayout><!--</ScrollView>-->

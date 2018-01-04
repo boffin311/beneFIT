@@ -1,5 +1,6 @@
 package tech.iosd.benefit.OnBoarding;
 
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 
 import agency.tango.materialintroscreen.MaterialIntroActivity;
@@ -10,8 +11,7 @@ public class OnBoardingActivity extends MaterialIntroActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
-
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         addSlide(new GetStartedFragment());
         addSlide(new GetGoalFragment());

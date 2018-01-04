@@ -50,4 +50,18 @@
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:windowIsTranslucent">true</item>
     </style>
+
+    <style name="MeasurementsEditText">
+        <item name="android:textStyle">bold</item>
+        <!--<item name="android:textColor">@color/blueOnBoard</item>-->
+        <item name="android:fontFamily">sans-serif-condensed</item>
+        <item name="android:textColorHint">#aac2b6</item>
+    </style>
+
+    <style name="MeasurementsTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/colorPrimaryGoal</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDarkGoal</item>
+        <item name="colorAccent">#978f8f</item>
+    </style>
+
 </resources>
