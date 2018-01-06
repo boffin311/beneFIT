@@ -1,21 +1,17 @@
 package tech.iosd.benefit;
 
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.ogaclejapan.smarttablayout.SmartTabLayout;
+import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItemAdapter;
+import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems;
 
-import tech.iosd.benefit.Adapters.MeasurementAdapter;
-import tech.iosd.benefit.Adapters.ProfileAdapter;
-import tech.iosd.benefit.ListItems.MeasurementList;
-import tech.iosd.benefit.ListItems.ProfileList;
+import tech.iosd.benefit.Fragments.BodyFatFragment;
+import tech.iosd.benefit.Fragments.UserReportFragment;
 
 public class MeasurementActivity extends AppCompatActivity {
 
@@ -40,9 +36,25 @@ public class MeasurementActivity extends AppCompatActivity {
 //    private List<MeasurementList> lists;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_measurement);
+
+
+        FragmentPagerItemAdapter adapter = new FragmentPagerItemAdapter(
+                getSupportFragmentManager(), FragmentPagerItems.with(this)
+                .add("Measurements", BodyFatFragment.class)
+                .add("Reports", UserReportFragment.class)
+                .create());
+
+        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
+        viewPager.setAdapter(adapter);
+
+        SmartTabLayout viewPagerTab = (SmartTabLayout) findViewById(R.id.viewpagertab);
+        viewPagerTab.setViewPager(viewPager);
+
+
+
 
 //        recyclerView = (RecyclerView)findViewById(R.id.measurement_recycler);
 //        recyclerView.setLayoutManager(new LinearLayoutManager(MeasurementActivity.this));

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?><!--<android.support.constraint.ConstraintLayout--><!--xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"--><!--android:layout_height="match_parent">-->
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:isScrollContainer="false"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.CardView
+            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:paddingTop="40dp"
+            android:paddingBottom="40dp"
+            app:cardCornerRadius="4dp"
+            app:cardElevation="5dp"
+            app:cardPreventCornerOverlap="true"
+            app:cardUseCompatPadding="true"
+            android:layout_weight="1">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:textSize="16sp"
+                    android:fontFamily="sans-serif-condensed"
+                    android:text="Generate Report"
+                    android:textStyle="bold"
+                    android:gravity="center"/>
+
+                <ImageView
+                    android:layout_gravity="center"
+                    android:layout_width="match_parent"
+                    android:src="@drawable/gradient_background_clot"
+                    android:layout_height="120dp" />
+
+                <TextView
+                    android:fontFamily="sans-serif-condensed"
+                    android:paddingTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:text="You can choose to generate a report based on your current weight, height , calorie intake and daily workout regime ."/>
+
+
+            </LinearLayout>
+
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:paddingTop="40dp"
+            android:paddingBottom="40dp"
+            app:cardCornerRadius="4dp"
+            app:cardElevation="5dp"
+            app:cardPreventCornerOverlap="true"
+            app:cardUseCompatPadding="true">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:textSize="16sp"
+                    android:fontFamily="sans-serif-condensed"
+                    android:text="Calculate my body fat"
+                    android:textStyle="bold"
+                    android:gravity="center"/>
+
+                <ImageView
+                    android:layout_gravity="center"
+                    android:layout_width="match_parent"
+                    android:src="@drawable/gradient_alihossien"
+                    android:layout_height="120dp" />
+
+                <TextView
+                    android:fontFamily="sans-serif-condensed"
+                    android:paddingTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:text="You can choose to generate a report based on your current weight, height , calorie intake and daily workout regime ."/>
+
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+    </LinearLayout>
+
+
+
+</ScrollView><!--<Button--><!--android:id="@+id/calculate_bodyfat_measurement"--><!--android:layout_width="0dp"--><!--android:layout_height="40dp"--><!--android:layout_marginBottom="8dp"--><!--android:layout_marginTop="8dp"--><!--android:background="@color/greyOnBoard"--><!--android:fontFamily="sans-serif-condensed"--><!--android:text="Calculate my body fat"--><!--android:textAllCaps="false"--><!--android:textColor="#FFFFFF"--><!--android:textSize="16sp"--><!--android:textStyle="bold"--><!--/>--><!--</android.support.constraint.ConstraintLayout>-->
