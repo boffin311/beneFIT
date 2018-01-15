@@ -3,10 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://C:\Projects\beneFIT\app\app.iml" filepath="C:\Projects\beneFIT\app\app.iml" />
       <module fileurl="file://$PROJECT_DIR$/beneFIT.iml" filepath="$PROJECT_DIR$/beneFIT.iml" />
-      <module fileurl="file://C:\Projects\beneFIT\beneFIT.iml" filepath="C:\Projects\beneFIT\beneFIT.iml" />
-      <module fileurl="file://C:\Users\Anubhav\Documents\GitHub\beneFIT\.idea\beneFIT.iml" filepath="C:\Users\Anubhav\Documents\GitHub\beneFIT\.idea\beneFIT.iml" />
     </modules>
   </component>
 </project>

@@ -36,7 +36,6 @@
         <item name="colorAccent">#fff</item>
     </style>
 
-
     <style name="GoalTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/colorPrimaryGoal</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDarkGoal</item>

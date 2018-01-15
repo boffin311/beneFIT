@@ -120,8 +120,8 @@
                 android:value="tech.iosd.benefit.MainActivity" />
         </activity>
         <activity
-            android:name=".OnBoarding.OnBoardingActivity"
-            android:theme="@style/Theme.Intro">
+            android:name=".OnBoardingActivity"
+            android:theme="@style/AppTheme.NoActionBar">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
