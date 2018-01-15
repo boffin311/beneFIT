@@ -14,7 +14,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import tech.iosd.benefit.Constants.SharedPreferenceConstants;
-import tech.iosd.benefit.OnBoarding.OnBoardingActivity;
 
 public class SplashActivity extends AppCompatActivity implements View.OnClickListener {
 

@@ -127,8 +127,8 @@
                 android:value="tech.iosd.benefit.MainActivity" />
         </activity>
         <activity
-            android:name=".OnBoarding.OnBoardingActivity"
-            android:theme="@style/Theme.Intro">
+            android:name=".OnBoardingActivity"
+            android:theme="@style/AppTheme.NoActionBar">
 
 
         </activity>
