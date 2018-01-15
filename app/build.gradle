@@ -23,14 +23,13 @@ android {
 dependencies {
     implementation 'com.github.sharish:ShimmerRecyclerView:v1.1'
     implementation 'com.google.firebase:firebase-auth:11.8.0'
-    implementation 'com.facebook.android:facebook-login:[4,5)'
+    implementation 'com.facebook.android:facebook-login:4.29.0'
 
     compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     //noinspection GradleCompatible
-    compile 'com.android.support:support-compat:25.1.1'
     compile 'com.android.support:appcompat-v7:26.1.0'
     compile 'com.android.support:design:26.1.0'
     compile 'com.android.support:support-vector-drawable:26.1.0'
@@ -43,13 +42,13 @@ dependencies {
     compile 'tyrantgit:explosionfield:1.0.1'
     compile 'com.kaopiz:kprogresshud:1.1.0'
     compile 'com.ramotion.foldingcell:folding-cell:1.2.1'
+    compile 'com.android.support:support-compat:26.1.1'
     compile 'com.daimajia.easing:library:2.0@aar'
     compile 'com.daimajia.androidanimations:library:2.3@aar'
-
     //androidImage Slider/daimaija
 
     compile "com.android.support:support-v4:+"
-    compile 'com.squareup.picasso:picasso:2.3.2'
+    compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.nineoldandroids:library:2.4.0'
     compile 'com.github.franmontiel:FullScreenDialog:1.0.1'
     compile 'com.ogaclejapan.smarttablayout:library:1.6.1@aar'
@@ -60,11 +59,9 @@ dependencies {
     compile 'com.daimajia.slider:library:1.1.5@aar'
     compile 'com.github.developer-shivam:Diagonalify:1.1'
 
+    compile 'com.sdsmdg.harjot:rotatingtext:1.0.2'
 
     testCompile 'junit:junit:4.12'
 }
-
-
-
 
 apply plugin: 'com.google.gms.google-services'
