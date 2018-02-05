@@ -32,6 +32,7 @@
     </style>
 
     <style name="AppTheme.PopupOverlay2" parent="ThemeOverlay.AppCompat.Light" />
+
     <style name="WhiteCheck">
         <item name="colorAccent">#fff</item>
     </style>

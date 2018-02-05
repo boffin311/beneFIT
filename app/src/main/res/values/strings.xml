@@ -30,4 +30,5 @@
         <item>lbs</item>
         <item>Kgs</item>
     </string-array>
+    <string name="title_activity_dashboard">DashboardActivity</string>
 </resources>

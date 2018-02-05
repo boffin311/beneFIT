@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="#ededed">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginStart="-10dp"
+            android:layout_marginEnd="-10dp"
+            android:src="@drawable/fn1"
+            android:scaleType="fitXY"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#f7f7f7"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:textSize="18dp"
+            android:text="Share this article"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="25dp"
+            android:layout_marginEnd="25dp"
+            android:textSize="16sp"
+            android:text="With more than two-thirds of all Americans regularly taking at least one dietary supplement, the industry is booming! Even so, rumors and questions about the industry abound. Are supplements safe? Are they tested? Do they actually do any good? Understanding dietary supplement regulations can help you become an educated and confident consumer."
+            android:fontFamily="@font/proxima_nova"
+            android:textStyle="bold"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="25dp"
+            android:layout_marginEnd="25dp"
+            android:textSize="16sp"
+            android:text="Are Dietary Supplements Regulated?"
+            android:fontFamily="@font/proxima_nova"
+            android:textStyle="bold"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="25dp"
+            android:layout_marginEnd="25dp"
+            android:layout_marginBottom="30dp"
+            android:textSize="16sp"
+            android:text="Despite rumors in many contrary, dietary supplements are regulated. With more than two-thirds of all Americans regularly taking at least one dietary supplement, the industry is booming! Even so, rumors and questions about the industry abound. Are supplements safe? Are they tested? Do they actually do any good? Understanding dietary supplement regulations can help you become an educated and confident consumer."
+            android:fontFamily="@font/proxima_nova"
+            android:textStyle="bold"/>
+    </LinearLayout>
+</ScrollView>
