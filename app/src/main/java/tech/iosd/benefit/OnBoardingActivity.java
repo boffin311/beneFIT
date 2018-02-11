@@ -1,6 +1,8 @@
 package tech.iosd.benefit;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -507,6 +509,10 @@ public class OnBoardingActivity extends AppCompatActivity
                 TextView invalidUsername = findViewById(R.id.get_started_login_invalid);
                 TextView invalidPass = findViewById(R.id.get_started_pass_invalid);
                 //TODO-Login
+
+                Intent myIntent = new Intent(OnBoardingActivity.this, DashboardActivity.class);
+                startActivity(myIntent);
+                finish();
             }
         });
 

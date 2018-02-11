@@ -49,7 +49,18 @@ public class Main extends Fragment implements View.OnTouchListener
         track_and_log.setOnTouchListener(this);
         measurement.setOnTouchListener(this);
         challenges.setOnTouchListener(this);
+
         contactBtn.setVisibility(View.VISIBLE);
+        contactBtn.startAnimation(AnimationUtils.loadAnimation(ctx, R.anim.bottom_up));
+
+        contactBtn.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+
+            }
+        });
 
         return rootView;
     }
@@ -80,30 +91,35 @@ public class Main extends Fragment implements View.OnTouchListener
             case R.id.dashboard_main_workout:
             {
                 fm.beginTransaction().replace(R.id.dashboard_content, new Workout()).addToBackStack("tag1").commit();
+                contactBtn.startAnimation(AnimationUtils.loadAnimation(ctx, R.anim.top_down));
                 contactBtn.setVisibility(View.INVISIBLE);
                 break;
             }
             case R.id.dashboard_main_nutrition:
             {
                 fm.beginTransaction().replace(R.id.dashboard_content, new Nutrition()).addToBackStack("tag1").commit();
+                contactBtn.startAnimation(AnimationUtils.loadAnimation(ctx, R.anim.top_down));
                 contactBtn.setVisibility(View.INVISIBLE);
                 break;
             }
             case R.id.dashboard_main_track_and_log:
             {
                 fm.beginTransaction().replace(R.id.dashboard_content, new TrackAndLog()).addToBackStack("tag1").commit();
+                contactBtn.startAnimation(AnimationUtils.loadAnimation(ctx, R.anim.top_down));
                 contactBtn.setVisibility(View.INVISIBLE);
                 break;
             }
             case R.id.dashboard_main_measurement:
             {
                 fm.beginTransaction().replace(R.id.dashboard_content, new Measurement()).addToBackStack("tag1").commit();
+                contactBtn.startAnimation(AnimationUtils.loadAnimation(ctx, R.anim.top_down));
                 contactBtn.setVisibility(View.INVISIBLE);
                 break;
             }
             case R.id.dashboard_main_challenges:
             {
                 fm.beginTransaction().replace(R.id.dashboard_content, new Challenges()).addToBackStack("tag1").commit();
+                contactBtn.startAnimation(AnimationUtils.loadAnimation(ctx, R.anim.top_down));
                 contactBtn.setVisibility(View.INVISIBLE);
                 break;
             }

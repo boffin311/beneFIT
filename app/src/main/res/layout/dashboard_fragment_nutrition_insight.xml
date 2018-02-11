@@ -31,7 +31,6 @@
             android:textStyle="bold"/>
 
         <Button
-            android:id="@+id/get_started_continue"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/oswald"

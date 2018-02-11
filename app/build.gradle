@@ -24,6 +24,7 @@ dependencies {
     implementation 'com.github.sharish:ShimmerRecyclerView:v1.1'
     implementation 'com.google.firebase:firebase-auth:11.8.0'
     implementation 'com.facebook.android:facebook-login:4.29.0'
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
 
     compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {

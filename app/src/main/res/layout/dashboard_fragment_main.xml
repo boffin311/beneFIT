@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/colorHighlight">
+    android:background="#5f6fec">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -29,7 +29,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:layout_margin="20dp"
+                android:layout_margin="14dp"
                 android:orientation="vertical">
 
                 <TextView
@@ -48,6 +48,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/proxima_nova"
                     android:text="Free workouts inside\ndeveloped by fitness pros"
+                    android:textSize="12sp"
                     android:textColor="@color/colorLightGrey"/>
             </LinearLayout>
         </RelativeLayout>
@@ -66,7 +67,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:layout_margin="20dp"
+                android:layout_margin="14dp"
                 android:orientation="vertical">
 
                 <TextView
@@ -85,6 +86,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/proxima_nova"
                     android:text="Nutrition guidance and facts\nGet your personalized plan"
+                    android:textSize="12sp"
                     android:textColor="@color/colorLightGrey"/>
             </LinearLayout>
         </RelativeLayout>
@@ -111,7 +113,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:layout_margin="20dp"
+                android:layout_margin="14dp"
                 android:orientation="vertical">
 
                 <TextView
@@ -130,6 +132,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/proxima_nova"
                     android:text="Track running and steps\nLog meals and water intake"
+                    android:textSize="12sp"
                     android:textColor="@color/colorLightGrey"/>
             </LinearLayout>
         </RelativeLayout>
@@ -148,7 +151,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:layout_margin="20dp"
+                android:layout_margin="14dp"
                 android:orientation="vertical">
 
                 <TextView
@@ -166,7 +169,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/proxima_nova"
-                    android:text="Update body measurements and montiro your progress"
+                    android:text="Update body measurements and monitor your progress"
+                    android:textSize="12sp"
                     android:textColor="@color/colorLightGrey"/>
             </LinearLayout>
         </RelativeLayout>
@@ -191,7 +195,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:layout_margin="20dp"
+                android:layout_margin="14dp"
                 android:orientation="vertical">
 
                 <TextView
@@ -212,6 +216,7 @@
                     android:fontFamily="@font/proxima_nova"
                     android:textAlignment="center"
                     android:text="Free workouts inside developed by fitness pros"
+                    android:textSize="12sp"
                     android:textColor="@color/colorLightGrey"/>
             </LinearLayout>
         </RelativeLayout>
