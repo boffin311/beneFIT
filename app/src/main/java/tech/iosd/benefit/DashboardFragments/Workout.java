@@ -68,14 +68,12 @@ public class Workout extends Fragment implements View.OnClickListener
             myWorkoutLock.setVisibility(View.INVISIBLE);
             myWorkoutProceed.setVisibility(View.VISIBLE);
             myWorkoutTxt.setTextColor(Color.BLACK);
-            myWorkoutCard.setClickable(true);
         }
         else
         {
             myWorkoutLock.setVisibility(View.VISIBLE);
             myWorkoutProceed.setVisibility(View.INVISIBLE);
             myWorkoutTxt.setTextColor(Color.parseColor("9d9d9d"));
-            myWorkoutCard.setClickable(false);
         }
     }
 
@@ -85,22 +83,27 @@ public class Workout extends Fragment implements View.OnClickListener
         switch (view.getId())
         {
             case R.id.dashboard_workout_my_workouts:
-                fm.beginTransaction().replace(R.id.dashboard_content, new MyWorkout()).addToBackStack("tag1").commit();
+            {
+                if(isMyWorkoutLocked)
+                    fm.beginTransaction().replace(R.id.dashboard_content, new MyWorkoutLocked()).addToBackStack("tag").commit();
+                else
+                    fm.beginTransaction().replace(R.id.dashboard_content, new MyWorkout()).addToBackStack("tag").commit();
                 break;
+            }
             case R.id.dashboard_workout_free_workouts:
-                fm.beginTransaction().replace(R.id.dashboard_content, new FreeWorkout()).addToBackStack("tag1").commit();
+                fm.beginTransaction().replace(R.id.dashboard_content, new FreeWorkout()).addToBackStack("tag").commit();
                 break;
             case R.id.dashboard_workout_high_intensity_interval_training:
-                fm.beginTransaction().replace(R.id.dashboard_content, new HighIntensityTraining()).addToBackStack("tag1").commit();
+                fm.beginTransaction().replace(R.id.dashboard_content, new HighIntensityTraining()).addToBackStack("tag").commit();
                 break;
             case R.id.dashboard_workout_functionally_fit:
-                fm.beginTransaction().replace(R.id.dashboard_content, new FunctionallyFit()).addToBackStack("tag1").commit();
+                fm.beginTransaction().replace(R.id.dashboard_content, new FunctionallyFit()).addToBackStack("tag").commit();
                 break;
             case R.id.dashboard_workout_legedtude:
-                fm.beginTransaction().replace(R.id.dashboard_content, new LegedTube()).addToBackStack("tag1").commit();
+                fm.beginTransaction().replace(R.id.dashboard_content, new LegedTube()).addToBackStack("tag").commit();
                 break;
             case R.id.dashboard_workout_cardio_crunch:
-                fm.beginTransaction().replace(R.id.dashboard_content, new CardioCrunch()).addToBackStack("tag1").commit();
+                fm.beginTransaction().replace(R.id.dashboard_content, new CardioCrunch()).addToBackStack("tag").commit();
                 break;
         }
 

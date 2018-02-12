@@ -63,14 +63,12 @@ public class Nutrition extends Fragment implements View.OnClickListener
             myNutritionLock.setVisibility(View.INVISIBLE);
             myNutritionProceed.setVisibility(View.VISIBLE);
             myNutritionTxt.setTextColor(Color.BLACK);
-            myNutritionCard.setClickable(true);
         }
         else
         {
             myNutritionLock.setVisibility(View.VISIBLE);
             myNutritionProceed.setVisibility(View.INVISIBLE);
-            myNutritionTxt.setTextColor(Color.parseColor("9d9d9d"));
-            myNutritionCard.setClickable(false);
+            myNutritionTxt.setTextColor(Color.parseColor("#9d9d9d"));
         }
     }
 
@@ -80,16 +78,21 @@ public class Nutrition extends Fragment implements View.OnClickListener
         switch (view.getId())
         {
             case R.id.dashboard_nutrition_my_nutrition:
-                fm.beginTransaction().replace(R.id.dashboard_content, new MyNutrition()).addToBackStack("tag1").commit();
+            {
+                if(isMyNutritionLocked)
+                    fm.beginTransaction().replace(R.id.dashboard_content, new MyNutritionLocked()).addToBackStack("tag").commit();
+                else
+                    fm.beginTransaction().replace(R.id.dashboard_content, new MyNutrition()).addToBackStack("tag").commit();
                 break;
+            }
             case R.id.dashboard_nutrition_insight:
-                fm.beginTransaction().replace(R.id.dashboard_content, new NutritionInsight()).addToBackStack("tag1").commit();
+                fm.beginTransaction().replace(R.id.dashboard_content, new NutritionInsight()).addToBackStack("tag").commit();
                 break;
             case R.id.dashboard_nutrition_protein_facts:
-                fm.beginTransaction().replace(R.id.dashboard_content, new ProteinFacts()).addToBackStack("tag1").commit();
+                fm.beginTransaction().replace(R.id.dashboard_content, new ProteinFacts()).addToBackStack("tag").commit();
                 break;
             case R.id.dashboard_nutrition_food_supplements:
-                fm.beginTransaction().replace(R.id.dashboard_content, new FoodSupplements()).addToBackStack("tag1").commit();
+                fm.beginTransaction().replace(R.id.dashboard_content, new FoodSupplements()).addToBackStack("tag").commit();
                 break;
         }
     }
