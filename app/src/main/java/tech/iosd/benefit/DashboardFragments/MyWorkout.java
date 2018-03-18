@@ -54,22 +54,10 @@ public class MyWorkout extends Fragment
                 .datesNumberOnScreen(7)
                 .mode(HorizontalCalendar.Mode.DAYS)
                 .configure()
-                    .formatMiddleText("EEE\n").sizeMiddleText(12)
-                    .formatBottomText("dd").sizeBottomText(26)
-                    .showTopText(false)
-                    .end()
-                .addEvents(new CalendarEventsPredicate()
-                {
-                    Random rnd = new Random();
-                    @Override
-                    public List<CalendarEvent> events(Calendar date)
-                    {
-                        List<CalendarEvent> events = new ArrayList<>();
-                        events.add(new CalendarEvent(Color.TRANSPARENT, "event"));
-                        if(rnd.nextBoolean()) events.add(new CalendarEvent(Color.RED, "event"));
-                        return events;
-                    }
-                })
+                .formatMiddleText("EEE\n").sizeMiddleText(12)
+                .formatBottomText("dd").sizeBottomText(26)
+                .showTopText(false)
+                .end()
                 .build();
 
         final TextView lbl_year = rootView.findViewById(R.id.my_workout_calendar_year);

@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="#ededed">
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-2dp"
+            app:cardElevation="2dp"
+            app:cardBackgroundColor="#f1f1f1">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="25dp"
+                android:layout_marginEnd="25dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="12dp">
+
+                <ImageView
+                    android:id="@+id/track_icon"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_track_activity_24dp"/>
+
+                <TextView
+                    android:layout_toEndOf="@id/track_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:text="Track My Activity"
+                    android:textAllCaps="true"
+                    android:layout_centerVertical="true"
+                    android:fontFamily="@font/oswald"
+                    android:textStyle="bold"
+                    android:textColor="#181818"
+                    android:layout_marginStart="10dp"/>
+            </RelativeLayout>
+        </android.support.v7.widget.CardView>
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            app:cardElevation="2dp"
+            app:cardBackgroundColor="#eaeaea">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:text="Most Popular"
+                android:layout_centerVertical="true"
+                android:fontFamily="@font/proxima_nova"
+                android:textStyle="bold"
+                android:textColor="#232323"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="25dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="12dp"/>
+        </android.support.v7.widget.CardView>
+        <android.support.v7.widget.CardView
+            android:id="@+id/dashboard_track_my_activity_running"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            app:cardElevation="2dp"
+            app:cardBackgroundColor="#f7f7f7">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="25dp"
+                android:layout_marginEnd="25dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="12dp">
+
+                <ImageView
+                    android:id="@+id/running_icon"
+                    android:layout_width="42dp"
+                    android:layout_height="42dp"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_running_24dp"/>
+
+                <TextView
+                    android:layout_toEndOf="@id/running_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:text="Running"
+                    android:layout_centerVertical="true"
+                    android:fontFamily="@font/proxima_nova"
+                    android:textStyle="bold"
+                    android:textColor="#2d2d2d"
+                    android:layout_marginStart="10dp"/>
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentEnd="true"
+                    android:src="@drawable/ic_next_24dp"/>
+            </RelativeLayout>
+        </android.support.v7.widget.CardView>
+        <android.support.v7.widget.CardView
+            android:id="@+id/dashboard_track_my_activity_walking"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            app:cardElevation="2dp"
+            app:cardBackgroundColor="#f7f7f7">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="25dp"
+                android:layout_marginEnd="25dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="12dp">
+
+                <ImageView
+                    android:id="@+id/walking_icon"
+                    android:layout_width="42dp"
+                    android:layout_height="42dp"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_walking_24dp"/>
+
+                <TextView
+                    android:layout_toEndOf="@id/walking_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:text="Walking"
+                    android:layout_centerVertical="true"
+                    android:fontFamily="@font/proxima_nova"
+                    android:textStyle="bold"
+                    android:textColor="#2d2d2d"
+                    android:layout_marginStart="10dp"/>
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentEnd="true"
+                    android:src="@drawable/ic_next_24dp"/>
+            </RelativeLayout>
+        </android.support.v7.widget.CardView>
+        <android.support.v7.widget.CardView
+            android:id="@+id/dashboard_track_my_activity_ride"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            app:cardElevation="2dp"
+            app:cardBackgroundColor="#f7f7f7">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="25dp"
+                android:layout_marginEnd="25dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="12dp">
+
+                <ImageView
+                    android:id="@+id/ride_icon"
+                    android:layout_width="42dp"
+                    android:layout_height="42dp"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_cycling_24dp"/>
+
+                <TextView
+                    android:layout_toEndOf="@id/ride_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:text="Ride"
+                    android:layout_centerVertical="true"
+                    android:fontFamily="@font/proxima_nova"
+                    android:textStyle="bold"
+                    android:textColor="#2d2d2d"
+                    android:layout_marginStart="10dp"/>
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentEnd="true"
+                    android:src="@drawable/ic_next_24dp"/>
+            </RelativeLayout>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            app:cardElevation="2dp"
+            app:cardBackgroundColor="#eaeaea">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:text="Cardiovascular activities"
+                android:layout_centerVertical="true"
+                android:fontFamily="@font/proxima_nova"
+                android:textStyle="bold"
+                android:textColor="#232323"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="25dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="12dp"/>
+        </android.support.v7.widget.CardView>
+        <android.support.v7.widget.CardView
+            android:id="@+id/dashboard_track_my_activity_aerobics"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            app:cardElevation="2dp"
+            app:cardBackgroundColor="#f7f7f7">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="25dp"
+                android:layout_marginEnd="25dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="12dp">
+
+                <ImageView
+                    android:id="@+id/aerobics_icon"
+                    android:layout_width="42dp"
+                    android:layout_height="42dp"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_running_24dp"/>
+
+                <TextView
+                    android:layout_toEndOf="@id/aerobics_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:text="Aerobics"
+                    android:layout_centerVertical="true"
+                    android:fontFamily="@font/proxima_nova"
+                    android:textStyle="bold"
+                    android:textColor="#2d2d2d"
+                    android:layout_marginStart="10dp"/>
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentEnd="true"
+                    android:src="@drawable/ic_next_24dp"/>
+            </RelativeLayout>
+        </android.support.v7.widget.CardView>
+        <android.support.v7.widget.CardView
+            android:id="@+id/dashboard_track_my_activity_swimming"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            app:cardElevation="2dp"
+            app:cardBackgroundColor="#f7f7f7">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="25dp"
+                android:layout_marginEnd="25dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="12dp">
+
+                <ImageView
+                    android:id="@+id/swimming_icon"
+                    android:layout_width="42dp"
+                    android:layout_height="42dp"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_walking_24dp"/>
+
+                <TextView
+                    android:layout_toEndOf="@id/swimming_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:text="Swimming"
+                    android:layout_centerVertical="true"
+                    android:fontFamily="@font/proxima_nova"
+                    android:textStyle="bold"
+                    android:textColor="#2d2d2d"
+                    android:layout_marginStart="10dp"/>
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentEnd="true"
+                    android:src="@drawable/ic_next_24dp"/>
+            </RelativeLayout>
+        </android.support.v7.widget.CardView>
+        <android.support.v7.widget.CardView
+            android:id="@+id/dashboard_track_my_activity_skipping"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            app:cardElevation="2dp"
+            app:cardBackgroundColor="#f7f7f7">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="25dp"
+                android:layout_marginEnd="25dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="12dp">
+
+                <ImageView
+                    android:id="@+id/skipping_icon"
+                    android:layout_width="42dp"
+                    android:layout_height="42dp"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_cycling_24dp"/>
+
+                <TextView
+                    android:layout_toEndOf="@id/skipping_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:text="Skipping"
+                    android:layout_centerVertical="true"
+                    android:fontFamily="@font/proxima_nova"
+                    android:textStyle="bold"
+                    android:textColor="#2d2d2d"
+                    android:layout_marginStart="10dp"/>
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentEnd="true"
+                    android:src="@drawable/ic_next_24dp"/>
+            </RelativeLayout>
+        </android.support.v7.widget.CardView>
+    </LinearLayout>
+</ScrollView>

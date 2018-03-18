@@ -1,12 +1,12 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion "26.0.2"
+    compileSdkVersion 27
+    buildToolsVersion "27.0.2"
     defaultConfig {
         applicationId "tech.iosd.benefit"
         minSdkVersion 19
-        targetSdkVersion 26
+        targetSdkVersion 27
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -24,47 +24,50 @@ dependencies {
     implementation 'com.github.sharish:ShimmerRecyclerView:v1.1'
     implementation 'com.google.firebase:firebase-auth:11.8.0'
     implementation 'com.facebook.android:facebook-login:4.29.0'
+    implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
 
+    implementation 'com.google.android.gms:play-services-maps:11.8.0'
     compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     //noinspection GradleCompatible
+    compile 'com.android.support:appcompat-v7:27.1.0'
     compile 'devs.mulham.horizontalcalendar:horizontalcalendar:1.3.4'
-    compile 'com.android.support:appcompat-v7:26.1.0'
-    compile 'com.android.support:design:26.1.0'
-    compile 'com.android.support:support-vector-drawable:26.1.0'
+    compile 'com.android.support:design:27.1.0'
+    compile 'com.android.support:support-vector-drawable:27.1.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile 'com.android.support:recyclerview-v7:26.1.0'
-    compile 'com.android.support:cardview-v7:26.1.0'
+    compile 'com.android.support:recyclerview-v7:27.1.0'
+    compile 'com.android.support:cardview-v7:27.1.0'
     compile 'agency.tango.android:material-intro-screen:0.0.5'
     compile 'de.hdodenhof:circleimageview:2.2.0'
     compile 'com.google.android.gms:play-services-auth:11.8.0'
     compile 'tyrantgit:explosionfield:1.0.1'
     compile 'com.kaopiz:kprogresshud:1.1.0'
     compile 'com.ramotion.foldingcell:folding-cell:1.2.1'
-    compile 'com.android.support:support-compat:26.1.1'
+    compile 'com.android.support:support-compat:27.1.0'
     compile 'com.daimajia.easing:library:2.0@aar'
     compile 'com.daimajia.androidanimations:library:2.3@aar'
-    //androidImage Slider/daimaija
 
     compile 'com.github.lecho:hellocharts-android:v1.5.8'
-    compile "com.android.support:support-v4:+"
+    compile 'com.android.support:support-v4:27.1.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.nineoldandroids:library:2.4.0'
     compile 'com.github.franmontiel:FullScreenDialog:1.0.1'
     compile 'com.ogaclejapan.smarttablayout:library:1.6.1@aar'
     compile 'com.ogaclejapan.smarttablayout:library:1.6.1@aar'
 
-    //Optional: see how to use the utility.
     compile 'com.ogaclejapan.smarttablayout:utils-v4:1.6.1@aar'
     compile 'com.daimajia.slider:library:1.1.5@aar'
     compile 'com.github.developer-shivam:Diagonalify:1.1'
 
     compile 'com.sdsmdg.harjot:rotatingtext:1.0.2'
+    compile 'com.github.stfalcon:chatkit:0.2.2'
+    compile 'com.gelitenight.waveview:waveview:1.0.0'
 
     testCompile 'junit:junit:4.12'
 }
+
 
 
 apply plugin: 'com.google.gms.google-services'

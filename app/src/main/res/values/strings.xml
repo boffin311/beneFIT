@@ -31,4 +31,7 @@
         <item>Kgs</item>
     </string-array>
     <string name="title_activity_dashboard">DashboardActivity</string>
+    <string name="title_activity_steps_water_intake_fragment">StepsWaterIntakeFragment</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="title_activity_maps">Map</string>
 </resources>

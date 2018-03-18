@@ -1,6 +1,7 @@
 package tech.iosd.benefit;
 
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -45,6 +46,18 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         navigationView.getMenu().getItem(0).setChecked(true);
         fm = getFragmentManager();
         fm.beginTransaction().replace(R.id.dashboard_content, new Main()).commit();
+
+        ImageView msgBtn = findViewById(R.id.navigation_dashboard_notification);
+        msgBtn.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                Intent intent = new Intent(DashboardActivity.this, MessagesActivity.class);
+                startActivity(intent);
+            }
+        });
+
     }
 
     @Override
@@ -64,7 +77,6 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
     @Override
     public boolean onNavigationItemSelected(MenuItem item)
     {
-        // Handle navigation view item clicks here.
 //        int id = item.getItemId();
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);

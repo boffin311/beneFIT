@@ -68,18 +68,6 @@ public class MyNutrition extends Fragment implements View.OnClickListener
                 .formatBottomText("dd").sizeBottomText(26)
                 .showTopText(false)
                 .end()
-                .addEvents(new CalendarEventsPredicate()
-                {
-                    Random rnd = new Random();
-                    @Override
-                    public List<CalendarEvent> events(Calendar date)
-                    {
-                        List<CalendarEvent> events = new ArrayList<>();
-                        events.add(new CalendarEvent(Color.TRANSPARENT, "event"));
-                        if(rnd.nextBoolean()) events.add(new CalendarEvent(Color.RED, "event"));
-                        return events;
-                    }
-                })
                 .build();
 
         breakfast_save = rootView.findViewById(R.id.my_nutrition_breakfast);
