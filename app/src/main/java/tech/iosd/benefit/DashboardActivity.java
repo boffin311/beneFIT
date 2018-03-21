@@ -1,12 +1,7 @@
 package tech.iosd.benefit;
 
 import android.app.FragmentManager;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.view.MenuInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -14,14 +9,12 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.Button;
 import android.widget.ImageView;
 
+import tech.iosd.benefit.DashboardFragments.Chat;
 import tech.iosd.benefit.DashboardFragments.Main;
+import tech.iosd.benefit.DashboardFragments.Notification;
 
 public class DashboardActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener
 {
@@ -53,8 +46,17 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
             @Override
             public void onClick(View view)
             {
-                Intent intent = new Intent(DashboardActivity.this, MessagesActivity.class);
-                startActivity(intent);
+                fm.beginTransaction().replace(R.id.dashboard_content, new Chat()).addToBackStack("tag").commit();
+            }
+        });
+
+        ImageView notificationBtn = findViewById(R.id.navigation_dashboard_coach);
+        notificationBtn.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                fm.beginTransaction().replace(R.id.dashboard_content, new Notification()).addToBackStack("tag").commit();
             }
         });
 

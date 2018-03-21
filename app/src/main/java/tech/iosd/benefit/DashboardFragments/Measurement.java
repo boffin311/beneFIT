@@ -81,6 +81,15 @@ public class Measurement extends Fragment
         fat_data.setAxisYLeft(fat_axisY);
         fat_chart.setLineChartData(fat_data);
 
+        rootView.findViewById(R.id.dashboard_measurement_back).setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                getFragmentManager().popBackStack();
+            }
+        });
+
         return rootView;
     }
 }

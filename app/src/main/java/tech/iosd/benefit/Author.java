@@ -23,13 +23,13 @@ public class Author implements IUser
         return avatar;
     }
 
-    Author(String _id, String _name, String _avatar)
+    public Author(String _id, String _name, String _avatar)
     {
         id = _id;
         name = _name;
         avatar = _avatar;
     }
-    Author(String _id, String _name)
+    public Author(String _id, String _name)
     {
         id = _id;
         name = _name;

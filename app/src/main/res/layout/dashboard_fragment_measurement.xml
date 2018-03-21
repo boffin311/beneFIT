@@ -302,10 +302,11 @@
         </android.support.v7.widget.CardView>
 
         <Button
+            android:id="@+id/dashboard_measurement_back"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/oswald"
-            android:text="Get a coach now"
+            android:text="Back"
             android:textStyle="bold"
             android:background="@drawable/button_style"
             android:textColor="@color/colorClear"

@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 
 import tech.iosd.benefit.R;
 
-public class NutritionInsight extends Fragment
+public class Notification extends Fragment
 {
     Context ctx;
     FragmentManager fm;
@@ -20,7 +20,7 @@ public class NutritionInsight extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState)
     {
-        View rootView = inflater.inflate(R.layout.dashboard_fragment_free_workout, container, false);
+        View rootView = inflater.inflate(R.layout.dashboard_fragment_notifications, container, false);
         ctx = rootView.getContext();
         fm = getFragmentManager();
 

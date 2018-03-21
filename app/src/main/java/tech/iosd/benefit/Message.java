@@ -41,14 +41,14 @@ public class Message implements IMessage, MessageContentType.Image, MessageConte
         return image == null ? null : image.getImageUrl();
     }
 
-    Message(String _id, String _text, Author _author, Date _createdAt)
+    public Message(String _id, String _text, Author _author, Date _createdAt)
     {
         id = _id;
         text = _text;
         author = _author;
         createdAt = _createdAt;
     }
-    Message(String _id, Image _image, Author _author, Date _createdAt)
+    public Message(String _id, Image _image, Author _author, Date _createdAt)
     {
         id = _id;
         image = _image;

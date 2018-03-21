@@ -64,6 +64,7 @@ dependencies {
     compile 'com.sdsmdg.harjot:rotatingtext:1.0.2'
     compile 'com.github.stfalcon:chatkit:0.2.2'
     compile 'com.gelitenight.waveview:waveview:1.0.0'
+    compile 'com.github.aliab:Two-Step-Picker-Dialog:V1.1.0'
 
     testCompile 'junit:junit:4.12'
 }

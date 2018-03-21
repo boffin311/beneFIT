@@ -58,7 +58,7 @@ public class Main extends Fragment implements View.OnTouchListener
             @Override
             public void onClick(View view)
             {
-
+                fm.beginTransaction().replace(R.id.dashboard_content, new Chat()).addToBackStack("tag").commit();
             }
         });
 

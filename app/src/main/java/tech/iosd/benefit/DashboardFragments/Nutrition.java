@@ -85,9 +85,6 @@ public class Nutrition extends Fragment implements View.OnClickListener
                     fm.beginTransaction().replace(R.id.dashboard_content, new MyNutrition()).addToBackStack("tag").commit();
                 break;
             }
-            case R.id.dashboard_nutrition_insight:
-                fm.beginTransaction().replace(R.id.dashboard_content, new NutritionInsight()).addToBackStack("tag").commit();
-                break;
             case R.id.dashboard_nutrition_protein_facts:
                 fm.beginTransaction().replace(R.id.dashboard_content, new ProteinFacts()).addToBackStack("tag").commit();
                 break;

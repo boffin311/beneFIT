@@ -51,6 +51,21 @@ public class TrackMyActivity extends Fragment implements View.OnClickListener
             case R.id.dashboard_track_my_activity_running:
                 fm.beginTransaction().replace(R.id.dashboard_content, new TrackMyActivityRun()).addToBackStack("tag").commit();
                 break;
+            case R.id.dashboard_track_my_activity_walking:
+                fm.beginTransaction().replace(R.id.dashboard_content, new TrackMyActivityRun()).addToBackStack("tag").commit();
+                break;
+            case R.id.dashboard_track_my_activity_ride:
+                fm.beginTransaction().replace(R.id.dashboard_content, new TrackMyActivityRun()).addToBackStack("tag").commit();
+                break;
+            case R.id.dashboard_track_my_activity_aerobics:
+                fm.beginTransaction().replace(R.id.dashboard_content, new TrackMyActivityRun()).addToBackStack("tag").commit();
+                break;
+            case R.id.dashboard_track_my_activity_swimming:
+                fm.beginTransaction().replace(R.id.dashboard_content, new TrackMyActivityRun()).addToBackStack("tag").commit();
+                break;
+            case R.id.dashboard_track_my_activity_skipping:
+                fm.beginTransaction().replace(R.id.dashboard_content, new TrackMyActivityRun()).addToBackStack("tag").commit();
+                break;
         }
     }
 }

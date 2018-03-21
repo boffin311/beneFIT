@@ -1,6 +1,5 @@
 package tech.iosd.benefit;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -36,7 +35,7 @@ public class OnBoardingActivity extends AppCompatActivity
     public int weight = 0;
     public life lifestyle = life.SEDENTARY;
     public Boolean isKgSelected = true;
-    public Boolean isCmSelected = true;
+    public Boolean isFtSelected = true;
 
     enum life {SEDENTARY, MODERATE, ACTIVE, VERY_ACTIVE};
 
@@ -146,7 +145,7 @@ public class OnBoardingActivity extends AppCompatActivity
 
         final Button weightKg = findViewById(R.id.get_started_profile_setup_kg);
         final Button weightLbs = findViewById(R.id.get_started_profile_setup_lbs);
-        final Button heightCm = findViewById(R.id.get_started_profile_setup_cm);
+        final Button heightFt = findViewById(R.id.get_started_profile_setup_ft);
         final Button heightIn = findViewById(R.id.get_started_profile_setup_in);
         final Button setupNext = findViewById(R.id.get_started_profile_setup_next);
         setupNext.setAlpha(0.2f);
@@ -255,15 +254,15 @@ public class OnBoardingActivity extends AppCompatActivity
                 }
             }
         });
-        heightCm.setOnClickListener(new View.OnClickListener()
+        heightFt.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view)
             {
-                if(!isCmSelected)
+                if(!isFtSelected)
                 {
-                    isCmSelected = true;
-                    heightCm.setBackground(getResources().getDrawable(R.drawable.button_style_on));
+                    isFtSelected = true;
+                    heightFt.setBackground(getResources().getDrawable(R.drawable.button_style_on));
                     heightIn.setBackground(getResources().getDrawable(R.drawable.button_style_off));
                 }
             }
@@ -273,10 +272,10 @@ public class OnBoardingActivity extends AppCompatActivity
             @Override
             public void onClick(View view)
             {
-                if(isCmSelected)
+                if(isFtSelected)
                 {
-                    isCmSelected = false;
-                    heightCm.setBackground(getResources().getDrawable(R.drawable.button_style_off));
+                    isFtSelected = false;
+                    heightFt.setBackground(getResources().getDrawable(R.drawable.button_style_off));
                     heightIn.setBackground(getResources().getDrawable(R.drawable.button_style_on));
                 }
             }

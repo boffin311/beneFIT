@@ -90,9 +90,6 @@ public class Workout extends Fragment implements View.OnClickListener
                     fm.beginTransaction().replace(R.id.dashboard_content, new MyWorkout()).addToBackStack("tag").commit();
                 break;
             }
-            case R.id.dashboard_workout_free_workouts:
-                fm.beginTransaction().replace(R.id.dashboard_content, new FreeWorkout()).addToBackStack("tag").commit();
-                break;
             case R.id.dashboard_workout_high_intensity_interval_training:
                 fm.beginTransaction().replace(R.id.dashboard_content, new HighIntensityTraining()).addToBackStack("tag").commit();
                 break;
