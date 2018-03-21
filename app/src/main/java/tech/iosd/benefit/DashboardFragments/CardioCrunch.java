@@ -20,7 +20,7 @@ public class CardioCrunch extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState)
     {
-        View rootView = inflater.inflate(R.layout.dashboard_fragment_cardio_crunch, container, false);
+        View rootView = inflater.inflate(R.layout.dashboard_cardio_crunch, container, false);
         ctx = rootView.getContext();
         fm = getFragmentManager();
 

@@ -20,7 +20,7 @@ public class LegedTube extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState)
     {
-        View rootView = inflater.inflate(R.layout.dashboard_fragment_leged_tube, container, false);
+        View rootView = inflater.inflate(R.layout.dashboard_leged_tube, container, false);
         ctx = rootView.getContext();
         fm = getFragmentManager();
 

@@ -26,13 +26,11 @@ public class Chat extends Fragment
     Context ctx;
     FragmentManager fm;
 
-    private final String senderId = "0";
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState)
     {
-        View rootView = inflater.inflate(R.layout.dashboard_fragment_chat, container, false);
+        View rootView = inflater.inflate(R.layout.dashboard_chat, container, false);
         ctx = rootView.getContext();
         fm = getFragmentManager();
 
@@ -45,7 +43,7 @@ public class Chat extends Fragment
             }
         };
 
-        MessagesListAdapter<Message> adapter = new MessagesListAdapter<>(senderId, imageLoader);
+        MessagesListAdapter<Message> adapter = new MessagesListAdapter<>("0", imageLoader);
 
         //Demo Code
         Author coach = new Author("50", "Ankit Priyarup", "https://graph.facebook.com/100002080115387/picture?type=square");

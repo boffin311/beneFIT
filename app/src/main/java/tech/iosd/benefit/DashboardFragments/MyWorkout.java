@@ -3,7 +3,6 @@ package tech.iosd.benefit.DashboardFragments;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -11,20 +10,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
 
 import devs.mulham.horizontalcalendar.HorizontalCalendar;
-import devs.mulham.horizontalcalendar.model.CalendarEvent;
-import devs.mulham.horizontalcalendar.model.CalendarItemStyle;
-import devs.mulham.horizontalcalendar.utils.CalendarEventsPredicate;
 import devs.mulham.horizontalcalendar.utils.HorizontalCalendarListener;
-import devs.mulham.horizontalcalendar.utils.HorizontalCalendarPredicate;
 import tech.iosd.benefit.R;
 
 public class MyWorkout extends Fragment
@@ -39,7 +28,7 @@ public class MyWorkout extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState)
     {
-        View rootView = inflater.inflate(R.layout.dashboard_fragment_my_workouts, container, false);
+        View rootView = inflater.inflate(R.layout.dashboard_my_workouts, container, false);
         ctx = rootView.getContext();
         fm = getFragmentManager();
 

@@ -47,7 +47,7 @@ public class TrackAndLog extends Fragment implements View.OnClickListener
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState)
     {
-        View rootView = inflater.inflate(R.layout.dashboard_fragment_track_and_log, container, false);
+        View rootView = inflater.inflate(R.layout.dashboard_track_and_log, container, false);
         ctx = rootView.getContext();
         fm = getFragmentManager();
         WaveView waveView = rootView.findViewById(R.id.dashboard_track_indicator_tab_water_wave);

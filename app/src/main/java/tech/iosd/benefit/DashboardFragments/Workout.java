@@ -35,7 +35,7 @@ public class Workout extends Fragment implements View.OnClickListener
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState)
     {
-        View rootView = inflater.inflate(R.layout.dashboard_fragment_workout, container, false);
+        View rootView = inflater.inflate(R.layout.dashboard_workout, container, false);
         ctx = rootView.getContext();
         fm = getFragmentManager();
 

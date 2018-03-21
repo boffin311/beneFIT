@@ -20,7 +20,7 @@ public class FunctionallyFit extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState)
     {
-        View rootView = inflater.inflate(R.layout.dashboard_fragment_functionally_fit, container, false);
+        View rootView = inflater.inflate(R.layout.dashboard_functionally_fit, container, false);
         ctx = rootView.getContext();
         fm = getFragmentManager();
 

@@ -17,162 +17,31 @@
     <application
         android:allowBackup="true"
         android:hardwareAccelerated="true"
+        android:configChanges="orientation"
+        android:screenOrientation="portrait"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity
-            android:name=".SplashActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".MainActivity"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".MeasurementActivity"
-            android:label="Measurements"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="tech.iosd.benefit.MainActivity" />
-        </activity>
-        <activity
-            android:name=".NutritionActivity"
-            android:label="Have A Look At Nutrition!"
-            android:parentActivityName=".MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="tech.iosd.benefit.MainActivity" />
-        </activity>
-        <activity
-            android:name=".TrackNLogActivity"
-            android:label="Track \&apos;N\&apos; Log"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/TrackNLogTheme">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="tech.iosd.benefit.MainActivity" />
-        </activity>
-        <activity
-            android:name=".GoalActivity"
-            android:label="My Goals"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/GoalTheme">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="tech.iosd.benefit.MainActivity" />
-        </activity>
-        <activity
-            android:name=".CoachActivity"
-            android:parentActivityName=".MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="tech.iosd.benefit.MainActivity" />
-        </activity>
-        <activity
-            android:name=".SettingsActivity"
-            android:label="Settings"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/TrackNLogTheme" />
-        <activity
-            android:name=".WorkoutActivity"
-            android:label="Workout Section"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="tech.iosd.benefit.MainActivity" />
-        </activity>
-        <activity
-            android:name=".AbsWorkoutActivity"
-            android:label="Abs Workout"
-            android:parentActivityName=".WorkoutActivity"
-            android:theme="@style/AppTheme">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="tech.iosd.benefit.WorkoutActivity" />
-        </activity>
-        <activity
-            android:name=".ProfileActivity"
-            android:label="@string/title_activity_scrolling"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="tech.iosd.benefit.MainActivity" />
-        </activity>
-        <activity
-            android:name=".UpdatesActivity"
-            android:label="What&apos;s New!"
-            android:parentActivityName=".MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="tech.iosd.benefit.MainActivity" />
-        </activity>
-        <activity
-            android:name=".ChatActivity"
-            android:label="Chat Bot"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="tech.iosd.benefit.MainActivity" />
-        </activity>
+
         <activity
             android:name=".OnBoardingActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".Authentication.OtpActivity"
-            android:theme="@style/Theme.Transparent" />
 
-        <meta-data
-            android:name="com.facebook.sdk.ApplicationId"
-            android:value="@string/facebook_app_id" />
-
-        <activity
-            android:name="com.facebook.FacebookActivity"
-            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
-            android:label="@string/app_name" />
-        <activity
-            android:name="com.facebook.CustomTabActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data android:scheme="@string/fb_login_protocol_scheme" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".Authentication.EnterOtpActivity"
-            android:theme="@style/Theme.Transparent" />
         <activity
             android:name=".DashboardActivity"
             android:label="@string/title_activity_dashboard"
             android:theme="@style/AppTheme">
         </activity>
-        <activity android:name=".MessagesActivity" />
-        <!--
-             The API key for Google Maps-based APIs is defined as a string resource.
-             (See the file "res/values/google_maps_api.xml").
-             Note that the API key is linked to the encryption key used to sign the APK.
-             You need a different API key for each encryption key, including the release key that is used to
-             sign the APK for publishing.
-             You can define the keys for the debug and release targets in src/debug/ and src/release/. 
-        -->
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
     </application>
-
 </manifest>

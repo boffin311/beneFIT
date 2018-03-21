@@ -1,37 +1,49 @@
 <resources>
     <string name="app_name">beneFIT</string>
+    <string name="app_motto">Train like you mean it</string>
+    <string name="get_started_begin">Begin your journey</string>
+    <string name="get_started_btn">Get started</string>
+    <string name="choose_goals_title">Choose a goal</string>
+    <string name="choose_goals_desc">Start your journey with a clear goal that you are aiming to achieve</string>
+    <string name="setup_profile_title">Set up your profile</string>
+    <string name="setup_profile_desc">Just a few more details..</string>
+    <string name="setup_profile_lbl_age">What\'s your age?</string>
+    <string name="setup_profile_lbl_height">What\'s your height?</string>
+    <string name="setup_profile_lbl_weight">What\'s your weight?</string>
+    <string name="setup_profile_lbl_lifestyle">What\'s your lifestyle?</string>
+    <string name="setup_profile_lifestyle_1">Sedentary</string>
+    <string name="setup_profile_lifestyle_2">Moderate</string>
+    <string name="setup_profile_lifestyle_3">Active</string>
+    <string name="setup_profile_lifestyle_4">Very Active</string>
+    <string name="login_lbl">Login</string>
+    <string name="login_desc">You can login through your Benefit account or through Google+ or Facebook</string>
+    <string name="signup_lbl">Create a new account</string>
+    <string name="signup_desc">Enter your details to create a new Benefit account</string>
+    <string name="signle_workou_lbl">Create a new account</string>
+    <string name="signle_workou_desc">A specialized workout designed to make sure that you hit all muscles with high intensity.</string>
+
+    <string name="lbl_continue">Continue</string>
+    <string name="lbl_next">Next</string>
+    <string name="lbl_back">Go Back</string>
+    <string name="lbl_intensity">Intensity -</string>
+    <string name="lbl_male">Male</string>
+    <string name="lbl_female">Female</string>
+    <string name="lbl_feet">Ft</string>
+    <string name="lbl_inches">In</string>
+    <string name="lbl_kilograms">Kg</string>
+    <string name="lbl_pounds">Lbs</string>
+    <string name="lbl_fb_login">Log in with facebook</string>
+    <string name="lbl_google_login">Sign in with google</string>
+    <string name="lbl_email">Email Address</string>
+    <string name="lbl_username">Username</string>
+    <string name="lbl_password">Password</string>
+    <string name="lbl_invalid">Invalid</string>
+    <string name="lbl_incorrect">Incorrect</string>
+    <string name="lbl_forget_pass">Forget password?</string>
+    <string name="lbl_signup">Sign Up</string>
+    <string name="lbl_pass_short_warning">atleast 8 characters</string>
+
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="action_settings">Settings</string>
-    <string name="title_activity_scrolling">User Profile</string>
-    <string name="facebook_app_id">1606654286094369</string>
-    <string name="fb_login_protocol_scheme">fb1606654286094369</string>
-
-    <string name="desc">
-        Lorem Ipsum Dummy Text. Here you will get more inormation about any new update.
-        \nLorem Ipsum Dummy Text.
-        \nLorem Ipsum Dummy Text.
-        \nLorem Ipsum Dummy Text.
-        \nLorem Ipsum Dummy Text.
-    </string>
-    <string name="tag1"><b><u>Tip:</u></b> You Should update your data within every 2-3 days, so we can give you more affective advices.</string>
-    <string name="workout_desc">
-        <b>Preferred Duration: </b>1 Hour
-        \n Lorem Ipsum Dummy Text
-        \n Lorem Ipsum Dummy Text
-        \n Lorem Ipsum Dummy Text
-        \n Lorem Ipsum Dummy Text
-        \n Lorem Ipsum Dummy Text
-        \n Lorem Ipsum Dummy Text
-        \n Lorem Ipsum Dummy Text
-    </string>
-
-    <string-array name="weight_array">
-        <item>lbs</item>
-        <item>Kgs</item>
-    </string-array>
     <string name="title_activity_dashboard">DashboardActivity</string>
-    <string name="title_activity_steps_water_intake_fragment">StepsWaterIntakeFragment</string>
-    <string name="section_format">Hello World from section: %1$d</string>
-    <string name="title_activity_maps">Map</string>
 </resources>

@@ -29,7 +29,7 @@ public class Main extends Fragment implements View.OnTouchListener
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState)
     {
-        View rootView = inflater.inflate(R.layout.dashboard_fragment_main, container, false);
+        View rootView = inflater.inflate(R.layout.dashboard_main, container, false);
         ctx = rootView.getContext();
         fm = getFragmentManager();
         scaleInAnimation = AnimationUtils.loadAnimation(ctx, R.anim.scale_in_src);
@@ -59,6 +59,8 @@ public class Main extends Fragment implements View.OnTouchListener
             public void onClick(View view)
             {
                 fm.beginTransaction().replace(R.id.dashboard_content, new Chat()).addToBackStack("tag").commit();
+                contactBtn.startAnimation(AnimationUtils.loadAnimation(ctx, R.anim.top_down));
+                contactBtn.setVisibility(View.INVISIBLE);
             }
         });
 

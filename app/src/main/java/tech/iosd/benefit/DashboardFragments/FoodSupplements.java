@@ -20,7 +20,7 @@ public class FoodSupplements extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState)
     {
-        View rootView = inflater.inflate(R.layout.dashboard_fragment_food_supplements, container, false);
+        View rootView = inflater.inflate(R.layout.dashboard_food_supplements, container, false);
         ctx = rootView.getContext();
         fm = getFragmentManager();
 

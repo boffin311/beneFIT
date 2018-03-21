@@ -3,7 +3,6 @@ package tech.iosd.benefit.DashboardFragments;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -13,15 +12,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
 
 import devs.mulham.horizontalcalendar.HorizontalCalendar;
-import devs.mulham.horizontalcalendar.model.CalendarEvent;
-import devs.mulham.horizontalcalendar.utils.CalendarEventsPredicate;
 import devs.mulham.horizontalcalendar.utils.HorizontalCalendarListener;
 import tech.iosd.benefit.R;
 
@@ -49,7 +42,7 @@ public class MyNutrition extends Fragment implements View.OnClickListener
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState)
     {
-        rootView = inflater.inflate(R.layout.dashboard_fragment_my_nutrition, container, false);
+        rootView = inflater.inflate(R.layout.dashboard_my_nutrition, container, false);
         ctx = rootView.getContext();
         fm = getFragmentManager();
 

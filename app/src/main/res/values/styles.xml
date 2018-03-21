@@ -37,12 +37,6 @@
         <item name="colorAccent">#fff</item>
     </style>
 
-    <style name="GoalTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="colorPrimary">@color/colorPrimaryGoal</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDarkGoal</item>
-        <item name="colorAccent">@color/colorAccentGoal</item>
-    </style>
-
     <style name="Theme.Transparent" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowActionBar">false</item>
@@ -56,12 +50,6 @@
         <!--<item name="android:textColor">@color/blueOnBoard</item>-->
         <item name="android:fontFamily">sans-serif-condensed</item>
         <item name="android:textColorHint">#aac2b6</item>
-    </style>
-
-    <style name="MeasurementsTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="colorPrimary">@color/colorPrimaryGoal</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDarkGoal</item>
-        <item name="colorAccent">#978f8f</item>
     </style>
 
 </resources>

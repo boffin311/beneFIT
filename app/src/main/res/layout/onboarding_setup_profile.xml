@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorLightGrey">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/get_started_profile_setup_lbl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/setup_profile_title"
+            android:textAllCaps="true"
+            android:fontFamily="@font/oswald"
+            android:textStyle="bold"
+            android:textSize="30sp"
+            android:layout_marginTop="20dp"
+            android:textColor="@color/colorPrimary"
+            android:textAlignment="center"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="50dp"
+            android:layout_marginEnd="50dp"
+            android:fontFamily="@font/proxima_nova"
+            android:textColor="@color/colorPrimary"
+            android:textStyle="bold"
+            android:text="@string/setup_profile_desc"
+            android:textSize="16sp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="160dp"
+            android:layout_marginTop="30dp"
+            android:gravity="center">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <android.support.design.widget.FloatingActionButton
+                    android:id="@+id/get_started_profile_setup_female"
+                    android:layout_gravity="center"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_margin="10dp"
+                    android:focusable="true"
+                    android:clickable="true"
+                    app:backgroundTint="#70cceb"
+                    app:rippleColor="#dfdfdf"
+                    android:src="@drawable/ic_female_sel_24dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/lbl_male"
+                    android:textColor="#3b8199"
+                    android:layout_gravity="center"/>
+            </LinearLayout>
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/get_started_profile_setup_gender"
+                android:layout_gravity="center"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                app:backgroundTint="#dfdfdf"
+                android:src="@drawable/female_img"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <android.support.design.widget.FloatingActionButton
+                    android:id="@+id/get_started_profile_setup_male"
+                    android:layout_gravity="center"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_margin="10dp"
+                    android:focusable="true"
+                    android:clickable="true"
+                    app:backgroundTint="#dfdfdf"
+                    app:rippleColor="#70cceb"
+                    android:src="@drawable/ic_male_sel_24dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/lbl_male"
+                    android:textColor="#3b8199"
+                    android:layout_gravity="center"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:fontFamily="@font/proxima_nova"
+            android:textColor="@color/colorPrimary"
+            android:layout_marginStart="50dp"
+            android:layout_marginEnd="50dp"
+            android:layout_marginBottom="5dp"
+            android:text="@string/setup_profile_lbl_age"/>
+
+        <EditText
+            android:id="@+id/get_started_profile_setup_age"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="7dp"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:paddingBottom="7dp"
+            android:layout_marginStart="50dp"
+            android:layout_marginEnd="50dp"
+            android:layout_marginBottom="20dp"
+            android:maxLines="1"
+            android:hint=""
+            android:inputType="number"
+            android:background="@drawable/edittxt_style"
+            android:textColor="@color/colorPrimary"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:fontFamily="@font/proxima_nova"
+            android:textColor="@color/colorPrimary"
+            android:layout_marginStart="50dp"
+            android:layout_marginEnd="50dp"
+            android:layout_marginBottom="5dp"
+            android:text="@string/setup_profile_lbl_height"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginStart="50dp"
+            android:layout_marginEnd="50dp"
+            android:layout_marginBottom="20dp">
+
+            <EditText
+                android:id="@+id/get_started_profile_setup_height"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="4"
+                android:paddingTop="7dp"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:paddingBottom="7dp"
+                android:layout_marginEnd="4dp"
+                android:maxLines="1"
+                android:hint=""
+                android:inputType="number"
+                android:background="@drawable/edittxt_style"
+                android:textColor="@color/colorPrimary"/>
+
+            <Button
+                android:id="@+id/get_started_profile_setup_ft"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="2dp"
+                android:layout_marginEnd="2dp"
+                android:text="@string/lbl_feet"
+                android:textAllCaps="true"
+                android:textColor="@color/white"
+                android:background="@drawable/button_style_on"/>
+
+            <Button
+                android:id="@+id/get_started_profile_setup_in"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="2dp"
+                android:layout_marginEnd="2dp"
+                android:text="@string/lbl_inches"
+                android:textAllCaps="true"
+                android:textColor="@color/colorPrimaryDark"
+                android:background="@drawable/button_style_off"/>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:fontFamily="@font/proxima_nova"
+            android:textColor="@color/colorPrimary"
+            android:layout_marginStart="50dp"
+            android:layout_marginEnd="50dp"
+            android:layout_marginBottom="5dp"
+            android:text="@string/setup_profile_lbl_weight"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginStart="50dp"
+            android:layout_marginEnd="50dp"
+            android:layout_marginBottom="20dp">
+
+            <EditText
+                android:id="@+id/get_started_profile_setup_weight"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="4"
+                android:paddingTop="7dp"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:paddingBottom="7dp"
+                android:layout_marginEnd="4dp"
+                android:maxLines="1"
+                android:hint=""
+                android:inputType="number"
+                android:background="@drawable/edittxt_style"
+                android:textColor="@color/colorPrimary"/>
+
+            <Button
+                android:id="@+id/get_started_profile_setup_kg"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="2dp"
+                android:layout_marginEnd="2dp"
+                android:text="@string/lbl_kilograms"
+                android:textColor="@color/white"
+                android:background="@drawable/button_style_on"/>
+
+            <Button
+                android:id="@+id/get_started_profile_setup_lbs"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="2dp"
+                android:layout_marginEnd="2dp"
+                android:text="@string/lbl_pounds"
+                android:textColor="@color/colorPrimaryDark"
+                android:background="@drawable/button_style_off"/>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:fontFamily="@font/proxima_nova"
+            android:textColor="@color/colorPrimary"
+            android:layout_marginStart="50dp"
+            android:layout_marginEnd="50dp"
+            android:layout_marginBottom="5dp"
+            android:text="@string/setup_profile_lbl_lifestyle"/>
+
+        <RadioGroup
+            android:id="@+id/get_started_profile_setup_lifestyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="50dp"
+            android:layout_marginEnd="50dp"
+            android:layout_marginBottom="10dp"
+            android:orientation="vertical">
+
+            <RadioButton
+                android:id="@+id/get_started_profile_setup_lifestyle1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorPrimaryDark"
+                android:text="@string/setup_profile_lifestyle_1"/>
+            <RadioButton
+                android:id="@+id/get_started_profile_setup_lifestyle2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorPrimaryDark"
+                android:text="@string/setup_profile_lifestyle_2"/>
+            <RadioButton
+                android:id="@+id/get_started_profile_setup_lifestyle3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorPrimaryDark"
+                android:text="@string/setup_profile_lifestyle_3"/>
+            <RadioButton
+                android:id="@+id/get_started_profile_setup_lifestyle4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorPrimaryDark"
+                android:text="@string/setup_profile_lifestyle_4"/>
+        </RadioGroup>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginStart="50dp"
+            android:layout_marginEnd="50dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp">
+
+            <Button
+                android:id="@+id/get_started_profile_setup_next"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/oswald"
+                android:textStyle="bold"
+                android:text="@string/lbl_next"
+                android:background="@drawable/button_style"
+                android:textColor="@color/colorClear"
+                android:paddingStart="50dp"
+                android:paddingEnd="50dp"/>
+        </LinearLayout>
+    </LinearLayout>
+
+</ScrollView>

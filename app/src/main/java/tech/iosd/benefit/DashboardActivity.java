@@ -11,7 +11,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.ImageView;
-
 import tech.iosd.benefit.DashboardFragments.Chat;
 import tech.iosd.benefit.DashboardFragments.Main;
 import tech.iosd.benefit.DashboardFragments.Notification;
