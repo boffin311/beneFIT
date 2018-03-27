@@ -1,7 +1,7 @@
 package tech.iosd.benefit.DashboardFragments;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -85,22 +85,22 @@ public class Workout extends Fragment implements View.OnClickListener
             case R.id.dashboard_workout_my_workouts:
             {
                 if(isMyWorkoutLocked)
-                    fm.beginTransaction().replace(R.id.dashboard_content, new MyWorkoutLocked()).addToBackStack("tag").commit();
+                    fm.beginTransaction().replace(R.id.dashboard_content, new MyWorkoutLocked()).addToBackStack(null).commit();
                 else
-                    fm.beginTransaction().replace(R.id.dashboard_content, new MyWorkout()).addToBackStack("tag").commit();
+                    fm.beginTransaction().replace(R.id.dashboard_content, new MyWorkout()).addToBackStack(null).commit();
                 break;
             }
             case R.id.dashboard_workout_high_intensity_interval_training:
-                fm.beginTransaction().replace(R.id.dashboard_content, new HighIntensityTraining()).addToBackStack("tag").commit();
+                fm.beginTransaction().replace(R.id.dashboard_content, new HighIntensityTraining()).addToBackStack(null).commit();
                 break;
             case R.id.dashboard_workout_functionally_fit:
-                fm.beginTransaction().replace(R.id.dashboard_content, new FunctionallyFit()).addToBackStack("tag").commit();
+                fm.beginTransaction().replace(R.id.dashboard_content, new FunctionallyFit()).addToBackStack(null).commit();
                 break;
             case R.id.dashboard_workout_legedtude:
-                fm.beginTransaction().replace(R.id.dashboard_content, new LegedTube()).addToBackStack("tag").commit();
+                fm.beginTransaction().replace(R.id.dashboard_content, new LegedTube()).addToBackStack(null).commit();
                 break;
             case R.id.dashboard_workout_cardio_crunch:
-                fm.beginTransaction().replace(R.id.dashboard_content, new CardioCrunch()).addToBackStack("tag").commit();
+                fm.beginTransaction().replace(R.id.dashboard_content, new CardioCrunch()).addToBackStack(null).commit();
                 break;
         }
 

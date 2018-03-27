@@ -1,7 +1,7 @@
 package tech.iosd.benefit.DashboardFragments;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -79,16 +79,16 @@ public class Nutrition extends Fragment implements View.OnClickListener
             case R.id.dashboard_nutrition_my_nutrition:
             {
                 if(isMyNutritionLocked)
-                    fm.beginTransaction().replace(R.id.dashboard_content, new MyNutritionLocked()).addToBackStack("tag").commit();
+                    fm.beginTransaction().replace(R.id.dashboard_content, new MyNutritionLocked()).addToBackStack(null).commit();
                 else
-                    fm.beginTransaction().replace(R.id.dashboard_content, new MyNutrition()).addToBackStack("tag").commit();
+                    fm.beginTransaction().replace(R.id.dashboard_content, new MyNutrition()).addToBackStack(null).commit();
                 break;
             }
             case R.id.dashboard_nutrition_protein_facts:
-                fm.beginTransaction().replace(R.id.dashboard_content, new ProteinFacts()).addToBackStack("tag").commit();
+                fm.beginTransaction().replace(R.id.dashboard_content, new ProteinFacts()).addToBackStack(null).commit();
                 break;
             case R.id.dashboard_nutrition_food_supplements:
-                fm.beginTransaction().replace(R.id.dashboard_content, new FoodSupplements()).addToBackStack("tag").commit();
+                fm.beginTransaction().replace(R.id.dashboard_content, new FoodSupplements()).addToBackStack(null).commit();
                 break;
         }
     }

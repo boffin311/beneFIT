@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/dialog_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="30dp"
+        android:fontFamily="@font/proxima_nova"
+        android:textSize="16sp"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:background="@color/white"
+        android:text=""/>
+
+    <Button
+        android:id="@+id/dialog_done"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/proxima_nova"
+        android:textStyle="bold"
+        android:text="@string/lbl_ok"
+        android:background="@drawable/button_style_grey"
+        android:textColor="@color/colorClear"
+        android:paddingStart="50dp"
+        android:paddingEnd="50dp"/>
+</LinearLayout>

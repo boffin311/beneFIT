@@ -1,7 +1,9 @@
 package tech.iosd.benefit;
 
-import android.app.FragmentManager;
+import android.content.Context;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -10,6 +12,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import tech.iosd.benefit.DashboardFragments.Chat;
 import tech.iosd.benefit.DashboardFragments.Main;
@@ -17,6 +20,7 @@ import tech.iosd.benefit.DashboardFragments.Notification;
 
 public class DashboardActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener
 {
+    Context ctx;
     FragmentManager fm;
 
     @Override
@@ -26,6 +30,7 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         setContentView(R.layout.activity_dashboard);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        ctx = this;
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -36,7 +41,7 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.getMenu().getItem(0).setChecked(true);
-        fm = getFragmentManager();
+        fm = getSupportFragmentManager();
         fm.beginTransaction().replace(R.id.dashboard_content, new Main()).commit();
 
         ImageView msgBtn = findViewById(R.id.navigation_dashboard_notification);
@@ -45,7 +50,13 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
             @Override
             public void onClick(View view)
             {
-                fm.beginTransaction().replace(R.id.dashboard_content, new Chat()).addToBackStack("tag").commit();
+                fm.beginTransaction().replace(R.id.dashboard_content, new Chat()).addToBackStack(null).commit();
+                FloatingActionButton contactBtn = findViewById(R.id.dashboard_contact);
+                if(contactBtn != null)
+                {
+                    contactBtn.startAnimation(AnimationUtils.loadAnimation(ctx, R.anim.top_down));
+                    contactBtn.setVisibility(View.INVISIBLE);
+                }
             }
         });
 
@@ -55,10 +66,9 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
             @Override
             public void onClick(View view)
             {
-                fm.beginTransaction().replace(R.id.dashboard_content, new Notification()).addToBackStack("tag").commit();
+                fm.beginTransaction().replace(R.id.dashboard_content, new Notification()).addToBackStack(null).commit();
             }
         });
-
     }
 
     @Override

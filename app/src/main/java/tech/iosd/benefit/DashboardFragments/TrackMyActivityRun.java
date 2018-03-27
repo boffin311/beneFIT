@@ -1,16 +1,19 @@
 package tech.iosd.benefit.DashboardFragments;
 
 import android.Manifest;
-import android.app.Fragment;
-import android.app.FragmentManager;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -47,6 +50,7 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
         stopBtn = rootView.findViewById(R.id.dashboard_track_my_activity_running_stop);
 
         rootView.findViewById(R.id.back_icon).setOnClickListener(this);
+        rootView.findViewById(R.id.dashboard_track_my_activity_running_discard).setOnClickListener(this);
         startBtn.setOnClickListener(this);
         pauseBtn.setOnClickListener(this);
 
@@ -140,6 +144,36 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
                 startBtn.setVisibility(View.GONE);
                 pauseBtn.setVisibility(View.GONE);
                 stopBtn.setVisibility(View.VISIBLE);
+                break;
+            }
+            case R.id.dashboard_track_my_activity_running_discard:
+            {
+                AlertDialog.Builder mBuilder = new AlertDialog.Builder(getActivity());
+                View mView = getActivity().getLayoutInflater().inflate(R.layout.dialog_accept, null);
+                TextView dialogMsg = mView.findViewById(R.id.dialog_message);
+                Button dialogAccept = mView.findViewById(R.id.dialog_accept);
+                Button dialogCancel = mView.findViewById(R.id.dialog_cancel);
+                mBuilder.setView(mView);
+                final AlertDialog dialog = mBuilder.create();
+                dialog.show();
+
+                dialogMsg.setText(R.string.alert_discard_activity);
+                dialogAccept.setOnClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View view)
+                    {
+                        dialog.dismiss();
+                    }
+                });
+                dialogCancel.setOnClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View view)
+                    {
+                        dialog.dismiss();
+                    }
+                });
                 break;
             }
         }

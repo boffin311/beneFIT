@@ -1,7 +1,7 @@
 package tech.iosd.benefit.DashboardFragments;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -25,6 +25,11 @@ public class TrackMyActivity extends Fragment implements View.OnClickListener
         fm = getFragmentManager();
 
         rootView.findViewById(R.id.dashboard_track_my_activity_running).setOnClickListener(this);
+        rootView.findViewById(R.id.dashboard_track_my_activity_walking).setOnClickListener(this);
+        rootView.findViewById(R.id.dashboard_track_my_activity_ride).setOnClickListener(this);
+        rootView.findViewById(R.id.dashboard_track_my_activity_aerobics).setOnClickListener(this);
+        rootView.findViewById(R.id.dashboard_track_my_activity_swimming).setOnClickListener(this);
+        rootView.findViewById(R.id.dashboard_track_my_activity_skipping).setOnClickListener(this);
         return rootView;
     }
 
@@ -34,22 +39,22 @@ public class TrackMyActivity extends Fragment implements View.OnClickListener
         switch (view.getId())
         {
             case R.id.dashboard_track_my_activity_running:
-                fm.beginTransaction().replace(R.id.dashboard_content, new TrackMyActivityRun()).addToBackStack("tag").commit();
+                fm.beginTransaction().replace(R.id.dashboard_content, new TrackMyActivityRun()).addToBackStack(null).commit();
                 break;
             case R.id.dashboard_track_my_activity_walking:
-                fm.beginTransaction().replace(R.id.dashboard_content, new TrackMyActivityRun()).addToBackStack("tag").commit();
+                fm.beginTransaction().replace(R.id.dashboard_content, new TrackMyActivityRun()).addToBackStack(null).commit();
                 break;
             case R.id.dashboard_track_my_activity_ride:
-                fm.beginTransaction().replace(R.id.dashboard_content, new TrackMyActivityRun()).addToBackStack("tag").commit();
+                fm.beginTransaction().replace(R.id.dashboard_content, new TrackMyActivityRun()).addToBackStack(null).commit();
                 break;
             case R.id.dashboard_track_my_activity_aerobics:
-                fm.beginTransaction().replace(R.id.dashboard_content, new TrackMyActivityRun()).addToBackStack("tag").commit();
+                fm.beginTransaction().replace(R.id.dashboard_content, new TrackMyActivityCallisthenics()).addToBackStack(null).commit();
                 break;
             case R.id.dashboard_track_my_activity_swimming:
-                fm.beginTransaction().replace(R.id.dashboard_content, new TrackMyActivityRun()).addToBackStack("tag").commit();
+                fm.beginTransaction().replace(R.id.dashboard_content, new TrackMyActivityCallisthenics()).addToBackStack(null).commit();
                 break;
             case R.id.dashboard_track_my_activity_skipping:
-                fm.beginTransaction().replace(R.id.dashboard_content, new TrackMyActivityRun()).addToBackStack("tag").commit();
+                fm.beginTransaction().replace(R.id.dashboard_content, new TrackMyActivityCallisthenics()).addToBackStack(null).commit();
                 break;
         }
     }

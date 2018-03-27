@@ -1,19 +1,22 @@
 package tech.iosd.benefit.DashboardFragments;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import tech.iosd.benefit.R;
 
@@ -58,9 +61,26 @@ public class Main extends Fragment implements View.OnTouchListener
             @Override
             public void onClick(View view)
             {
-                fm.beginTransaction().replace(R.id.dashboard_content, new Chat()).addToBackStack("tag").commit();
-                contactBtn.startAnimation(AnimationUtils.loadAnimation(ctx, R.anim.top_down));
-                contactBtn.setVisibility(View.INVISIBLE);
+                AlertDialog.Builder mBuilder = new AlertDialog.Builder(getActivity());
+                View mView = getActivity().getLayoutInflater().inflate(R.layout.dialog_message, null);
+                TextView dialogMsg = mView.findViewById(R.id.dialog_message);
+                Button dialogDone = mView.findViewById(R.id.dialog_done);
+                mBuilder.setView(mView);
+                final AlertDialog dialog = mBuilder.create();
+                dialog.show();
+
+                dialogMsg.setText(R.string.alert_get_chat_plan);
+                dialogDone.setOnClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View view)
+                    {
+                        dialog.dismiss();
+                        fm.beginTransaction().replace(R.id.dashboard_content, new ChoosePlan()).addToBackStack(null).commit();
+                        contactBtn.startAnimation(AnimationUtils.loadAnimation(ctx, R.anim.top_down));
+                        contactBtn.setVisibility(View.INVISIBLE);
+                    }
+                });
             }
         });
 
@@ -92,35 +112,35 @@ public class Main extends Fragment implements View.OnTouchListener
         {
             case R.id.dashboard_main_workout:
             {
-                fm.beginTransaction().replace(R.id.dashboard_content, new Workout()).addToBackStack("tag").commit();
+                fm.beginTransaction().replace(R.id.dashboard_content, new Workout()).addToBackStack(null).commit();
                 contactBtn.startAnimation(AnimationUtils.loadAnimation(ctx, R.anim.top_down));
                 contactBtn.setVisibility(View.INVISIBLE);
                 break;
             }
             case R.id.dashboard_main_nutrition:
             {
-                fm.beginTransaction().replace(R.id.dashboard_content, new Nutrition()).addToBackStack("tag").commit();
+                fm.beginTransaction().replace(R.id.dashboard_content, new Nutrition()).addToBackStack(null).commit();
                 contactBtn.startAnimation(AnimationUtils.loadAnimation(ctx, R.anim.top_down));
                 contactBtn.setVisibility(View.INVISIBLE);
                 break;
             }
             case R.id.dashboard_main_track_and_log:
             {
-                fm.beginTransaction().replace(R.id.dashboard_content, new TrackAndLog()).addToBackStack("tag").commit();
+                fm.beginTransaction().replace(R.id.dashboard_content, new TrackAndLog()).addToBackStack(null).commit();
                 contactBtn.startAnimation(AnimationUtils.loadAnimation(ctx, R.anim.top_down));
                 contactBtn.setVisibility(View.INVISIBLE);
                 break;
             }
             case R.id.dashboard_main_measurement:
             {
-                fm.beginTransaction().replace(R.id.dashboard_content, new Measurement()).addToBackStack("tag").commit();
+                fm.beginTransaction().replace(R.id.dashboard_content, new MeasurementData()).addToBackStack(null).commit();
                 contactBtn.startAnimation(AnimationUtils.loadAnimation(ctx, R.anim.top_down));
                 contactBtn.setVisibility(View.INVISIBLE);
                 break;
             }
             case R.id.dashboard_main_challenges:
             {
-                fm.beginTransaction().replace(R.id.dashboard_content, new Challenges()).addToBackStack("tag").commit();
+                fm.beginTransaction().replace(R.id.dashboard_content, new Challenges()).addToBackStack(null).commit();
                 contactBtn.startAnimation(AnimationUtils.loadAnimation(ctx, R.anim.top_down));
                 contactBtn.setVisibility(View.INVISIBLE);
                 break;

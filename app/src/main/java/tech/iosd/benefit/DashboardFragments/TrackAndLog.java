@@ -1,7 +1,7 @@
 package tech.iosd.benefit.DashboardFragments;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -137,7 +137,7 @@ public class TrackAndLog extends Fragment implements View.OnClickListener
                     stepsText.setTextColor(getResources().getColor(R.color.black));
                     stepsIcon.setBackgroundResource(R.drawable.ic_steps_on_24dp);
                     waterText.setTextColor(getResources().getColor(R.color.warm_grey));
-                    waterIcon.setBackgroundResource(R.drawable.ic_steps_off_24dp);
+                    waterIcon.setBackgroundResource(R.drawable.ic_water_off_24dp);
                     stepsTab = true;
                 }
                 break;
@@ -151,7 +151,7 @@ public class TrackAndLog extends Fragment implements View.OnClickListener
                     stepsTabView.setVisibility(View.GONE);
                     stepsTabViewIndicator.setVisibility(View.INVISIBLE);
                     waterText.setTextColor(getResources().getColor(R.color.black));
-                    waterIcon.setBackgroundResource(R.drawable.ic_steps_on_24dp);
+                    waterIcon.setBackgroundResource(R.drawable.ic_water_on_24dp);
                     stepsText.setTextColor(getResources().getColor(R.color.warm_grey));
                     stepsIcon.setBackgroundResource(R.drawable.ic_steps_off_24dp);
                     stepsTab = false;
@@ -160,12 +160,12 @@ public class TrackAndLog extends Fragment implements View.OnClickListener
             }
             case R.id.dashboard_track_my_activity:
             {
-                fm.beginTransaction().replace(R.id.dashboard_content, new TrackMyActivity()).addToBackStack("tag").commit();
+                fm.beginTransaction().replace(R.id.dashboard_content, new TrackMyActivity()).addToBackStack(null).commit();
                 break;
             }
             case R.id.dashboard_track_meal_log:
             {
-                fm.beginTransaction().replace(R.id.dashboard_content, new MealLog()).addToBackStack("tag").commit();
+                fm.beginTransaction().replace(R.id.dashboard_content, new MealLog()).addToBackStack(null).commit();
                 break;
             }
         }

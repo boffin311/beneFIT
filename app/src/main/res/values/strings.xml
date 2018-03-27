@@ -15,7 +15,7 @@
     <string name="setup_profile_lifestyle_2">Moderate</string>
     <string name="setup_profile_lifestyle_3">Active</string>
     <string name="setup_profile_lifestyle_4">Very Active</string>
-    <string name="login_lbl">Login</string>
+    <string name="login_label">Login</string>
     <string name="login_desc">You can login through your Benefit account or through Google+ or Facebook</string>
     <string name="signup_lbl">Create a new account</string>
     <string name="signup_desc">Enter your details to create a new Benefit account</string>
@@ -25,6 +25,8 @@
     <string name="lbl_continue">Continue</string>
     <string name="lbl_next">Next</string>
     <string name="lbl_back">Go Back</string>
+    <string name="lbl_ok">OK</string>
+    <string name="lbl_cancel">Cancel</string>
     <string name="lbl_intensity">Intensity -</string>
     <string name="lbl_male">Male</string>
     <string name="lbl_female">Female</string>
@@ -46,4 +48,7 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="title_activity_dashboard">DashboardActivity</string>
+    <string name="alert_discard_activity">Are you sure you want to discard this activity?</string>
+    <string name="alert_get_back_shortly">Thank you for reaching out to us. We will get back to you shortly.</string>
+    <string name="alert_get_chat_plan">Chat is a paid feature, Get a coach add a personalized plans to chat now.</string>
 </resources>
