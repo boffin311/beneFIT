@@ -95,7 +95,7 @@
                 android:textStyle="bold"
                 android:fontFamily="@font/proxima_nova"
                 android:textColor="@color/colorPrimary"
-                android:text="@string/lbl_password"/>
+                android:text="@string/lbl_username"/>
 
             <TextView
                 android:id="@+id/get_started_login_invalid"

@@ -394,10 +394,10 @@
                         android:layout_centerVertical="true">
 
                         <TextView
+                            android:id="@+id/dashboard_track_water_consumed"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textSize="42sp"
-                            android:text="5"
                             android:fontFamily="@font/oswald"
                             android:textStyle="bold"
                             android:textAlignment="center"
@@ -434,24 +434,26 @@
                             android:src="@drawable/water_glass"/>
 
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:id="@+id/dashboard_track_water_add"
+                            android:layout_width="60dp"
+                            android:layout_height="match_parent"
                             android:layout_alignParentEnd="true"
-                            android:layout_centerVertical="true"
                             android:fontFamily="@font/proxima_nova"
                             android:text="+"
-                            android:layout_marginEnd="20dp"
+                            android:gravity="center"
+                            android:textAlignment="gravity"
                             android:textColor="#FFFFFF"
                             android:textSize="42sp"
                             android:textStyle="bold" />
 
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
+                            android:id="@+id/dashboard_track_water_subtract"
+                            android:layout_width="60dp"
+                            android:layout_height="match_parent"
                             android:fontFamily="@font/proxima_nova"
                             android:text="-"
-                            android:layout_marginStart="20dp"
+                            android:gravity="center"
+                            android:textAlignment="gravity"
                             android:textColor="#FFFFFF"
                             android:textSize="42sp"
                             android:textStyle="bold" />
@@ -463,10 +465,10 @@
                         android:layout_centerVertical="true">
 
                         <TextView
+                            android:id="@+id/dashboard_track_water_target"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textSize="42sp"
-                            android:text="8"
                             android:fontFamily="@font/oswald"
                             android:textStyle="bold"
                             android:textAlignment="center"

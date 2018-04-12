@@ -12,10 +12,10 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/get_started_profile_setup_lbl"
+            android:id="@+id/dashboard_measurement_setup_lbl"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/setup_profile_title"
+            android:text="Update your profile"
             android:textAllCaps="true"
             android:fontFamily="@font/oswald"
             android:textStyle="bold"
@@ -23,19 +23,6 @@
             android:layout_marginTop="20dp"
             android:textColor="@color/colorPrimary"
             android:textAlignment="center"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:layout_marginTop="10dp"
-            android:layout_marginStart="50dp"
-            android:layout_marginEnd="50dp"
-            android:fontFamily="@font/proxima_nova"
-            android:textColor="@color/colorPrimary"
-            android:textStyle="bold"
-            android:text="@string/setup_profile_desc"
-            android:textSize="16sp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -49,7 +36,7 @@
                 android:orientation="vertical">
 
                 <android.support.design.widget.FloatingActionButton
-                    android:id="@+id/get_started_profile_setup_female"
+                    android:id="@+id/dashboard_measurement_setup_female"
                     android:layout_gravity="center"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
@@ -69,7 +56,7 @@
             </LinearLayout>
 
             <android.support.design.widget.FloatingActionButton
-                android:id="@+id/get_started_profile_setup_gender"
+                android:id="@+id/dashboard_measurement_setup_gender"
                 android:layout_gravity="center"
                 android:layout_width="120dp"
                 android:layout_height="120dp"
@@ -82,7 +69,7 @@
                 android:orientation="vertical">
 
                 <android.support.design.widget.FloatingActionButton
-                    android:id="@+id/get_started_profile_setup_male"
+                    android:id="@+id/dashboard_measurement_setup_male"
                     android:layout_gravity="center"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
@@ -114,7 +101,7 @@
             android:text="@string/setup_profile_lbl_age"/>
 
         <EditText
-            android:id="@+id/get_started_profile_setup_age"
+            android:id="@+id/dashboard_measurement_setup_age"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="7dp"
@@ -150,7 +137,7 @@
             android:layout_marginBottom="20dp">
 
             <TextView
-                android:id="@+id/get_started_profile_setup_height"
+                android:id="@+id/dashboard_measurement_setup_height"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -164,7 +151,7 @@
                 android:textColor="@color/colorPrimary"/>
 
             <Button
-                android:id="@+id/get_started_profile_setup_ft"
+                android:id="@+id/dashboard_measurement_setup_height_ft"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -176,7 +163,7 @@
                 android:background="@drawable/button_style_on"/>
 
             <Button
-                android:id="@+id/get_started_profile_setup_cm"
+                android:id="@+id/dashboard_measurement_setup_height_cm"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -197,7 +184,7 @@
             android:layout_marginStart="50dp"
             android:layout_marginEnd="50dp"
             android:layout_marginBottom="5dp"
-            android:text="@string/setup_profile_lbl_weight"/>
+            android:text="What's your waist size?"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -208,7 +195,7 @@
             android:layout_marginBottom="20dp">
 
             <TextView
-                android:id="@+id/get_started_profile_setup_weight"
+                android:id="@+id/dashboard_measurement_setup_waist"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -222,24 +209,24 @@
                 android:textColor="@color/colorPrimary"/>
 
             <Button
-                android:id="@+id/get_started_profile_setup_kg"
+                android:id="@+id/dashboard_measurement_setup_waist_cm"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginStart="2dp"
                 android:layout_marginEnd="2dp"
-                android:text="@string/lbl_kilograms"
+                android:text="@string/lbl_cms"
                 android:textColor="@color/white"
                 android:background="@drawable/button_style_on"/>
 
             <Button
-                android:id="@+id/get_started_profile_setup_lbs"
+                android:id="@+id/dashboard_measurement_setup_waist_in"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginStart="2dp"
                 android:layout_marginEnd="2dp"
-                android:text="@string/lbl_pounds"
+                android:text="in"
                 android:textColor="@color/colorPrimaryDark"
                 android:background="@drawable/button_style_off"/>
         </LinearLayout>
@@ -253,42 +240,108 @@
             android:layout_marginStart="50dp"
             android:layout_marginEnd="50dp"
             android:layout_marginBottom="5dp"
-            android:text="@string/setup_profile_lbl_lifestyle"/>
+            android:text="What's your neck size?"/>
 
-        <RadioGroup
-            android:id="@+id/get_started_profile_setup_lifestyle"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="horizontal"
             android:layout_marginStart="50dp"
             android:layout_marginEnd="50dp"
-            android:layout_marginBottom="10dp"
-            android:orientation="vertical">
+            android:layout_marginBottom="20dp">
 
-            <RadioButton
-                android:id="@+id/get_started_profile_setup_lifestyle1"
-                android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/dashboard_measurement_setup_neck"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:textColor="@color/colorPrimaryDark"
-                android:text="@string/setup_profile_lifestyle_1"/>
-            <RadioButton
-                android:id="@+id/get_started_profile_setup_lifestyle2"
-                android:layout_width="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="4"
+                android:paddingTop="7dp"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:paddingBottom="7dp"
+                android:layout_marginEnd="4dp"
+                android:background="@drawable/edittxt_style"
+                android:textColor="@color/colorPrimary"/>
+
+            <Button
+                android:id="@+id/dashboard_measurement_setup_neck_cm"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:textColor="@color/colorPrimaryDark"
-                android:text="@string/setup_profile_lifestyle_2"/>
-            <RadioButton
-                android:id="@+id/get_started_profile_setup_lifestyle3"
-                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="2dp"
+                android:layout_marginEnd="2dp"
+                android:text="@string/lbl_cms"
+                android:textColor="@color/white"
+                android:background="@drawable/button_style_on"/>
+
+            <Button
+                android:id="@+id/dashboard_measurement_setup_neck_in"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="2dp"
+                android:layout_marginEnd="2dp"
+                android:text="in"
                 android:textColor="@color/colorPrimaryDark"
-                android:text="@string/setup_profile_lifestyle_3"/>
-            <RadioButton
-                android:id="@+id/get_started_profile_setup_lifestyle4"
-                android:layout_width="wrap_content"
+                android:background="@drawable/button_style_off"/>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:fontFamily="@font/proxima_nova"
+            android:textColor="@color/colorPrimary"
+            android:layout_marginStart="50dp"
+            android:layout_marginEnd="50dp"
+            android:layout_marginBottom="5dp"
+            android:text="What's your hip size?"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginStart="50dp"
+            android:layout_marginEnd="50dp"
+            android:layout_marginBottom="20dp">
+
+            <TextView
+                android:id="@+id/dashboard_measurement_setup_hip"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="4"
+                android:paddingTop="7dp"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:paddingBottom="7dp"
+                android:layout_marginEnd="4dp"
+                android:background="@drawable/edittxt_style"
+                android:textColor="@color/colorPrimary"/>
+
+            <Button
+                android:id="@+id/dashboard_measurement_setup_hip_cm"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="2dp"
+                android:layout_marginEnd="2dp"
+                android:text="@string/lbl_cms"
+                android:textColor="@color/white"
+                android:background="@drawable/button_style_on"/>
+
+            <Button
+                android:id="@+id/dashboard_measurement_setup_hip_in"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="2dp"
+                android:layout_marginEnd="2dp"
+                android:text="in"
                 android:textColor="@color/colorPrimaryDark"
-                android:text="@string/setup_profile_lifestyle_4"/>
-        </RadioGroup>
+                android:background="@drawable/button_style_off"/>
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -301,12 +354,12 @@
             android:layout_marginBottom="20dp">
 
             <Button
-                android:id="@+id/get_started_profile_setup_next"
+                android:id="@+id/dashboard_measurement_setup_save"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/oswald"
                 android:textStyle="bold"
-                android:text="@string/lbl_next"
+                android:text="Save"
                 android:background="@drawable/button_style"
                 android:textColor="@color/colorClear"
                 android:paddingStart="50dp"

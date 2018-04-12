@@ -28,7 +28,7 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/dialog_accept"
+            android:id="@+id/dialog_cancel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -41,7 +41,7 @@
             android:paddingStart="50dp"
             android:paddingEnd="50dp"/>
         <Button
-            android:id="@+id/dialog_cancel"
+            android:id="@+id/dialog_accept"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"

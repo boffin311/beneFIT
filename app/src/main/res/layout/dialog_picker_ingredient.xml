@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/dialog_picker_ingredient_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="20dp"
+        android:fontFamily="@font/proxima_nova"
+        android:textSize="22sp"
+        android:textColor="@color/black"
+        android:background="@color/white"
+        android:text="Ingredient"/>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#a7a7a7" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <com.aigestudio.wheelpicker.WheelPicker
+            android:id="@+id/dialog_picker_ingredient_qty"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:wheel_atmospheric="true"
+            app:wheel_curved="true"
+            app:wheel_cyclic="true"
+            app:wheel_item_text_color="#A7A7DB"
+            app:wheel_item_text_size="24sp"
+            app:wheel_selected_item_text_color="#536D8A" />
+        <com.aigestudio.wheelpicker.WheelPicker
+            android:id="@+id/dialog_picker_ingredient_typ"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            app:wheel_atmospheric="true"
+            app:wheel_curved="true"
+            app:wheel_cyclic="true"
+            app:wheel_item_text_color="#A7A7DB"
+            app:wheel_item_text_size="24sp"
+            app:wheel_selected_item_text_color="#536D8A" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_gravity="center">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="26sp"
+                android:text="270"
+                android:textAllCaps="true"
+                android:fontFamily="@font/oswald"
+                android:textColor="#000000"
+                android:textStyle="bold"
+                android:textAlignment="center"
+                android:layout_marginStart="10dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:text="Calories"
+                android:textAllCaps="true"
+                android:fontFamily="@font/oswald"
+                android:textColor="#565656"
+                android:textStyle="bold"
+                android:layout_marginStart="10dp"/>
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="18dp"
+            android:layout_marginEnd="10dp"
+            android:background="#b3b3b3"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="26sp"
+                android:text="35"
+                android:textAllCaps="true"
+                android:fontFamily="@font/oswald"
+                android:textColor="#000000"
+                android:textStyle="bold"
+                android:textAlignment="center"
+                android:layout_marginStart="10dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:text="Carbs"
+                android:textAllCaps="true"
+                android:fontFamily="@font/oswald"
+                android:textColor="#565656"
+                android:textStyle="bold"
+                android:layout_marginStart="10dp"/>
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="18dp"
+            android:layout_marginEnd="10dp"
+            android:background="#b3b3b3"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="26sp"
+                android:text="24"
+                android:textAllCaps="true"
+                android:fontFamily="@font/oswald"
+                android:textColor="#000000"
+                android:textStyle="bold"
+                android:textAlignment="center"
+                android:layout_marginStart="10dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:text="Protein"
+                android:textAllCaps="true"
+                android:fontFamily="@font/oswald"
+                android:textColor="#565656"
+                android:textStyle="bold"
+                android:layout_marginStart="10dp"/>
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="18dp"
+            android:layout_marginEnd="10dp"
+            android:background="#b3b3b3"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="26sp"
+                android:text="24"
+                android:textAllCaps="true"
+                android:fontFamily="@font/oswald"
+                android:textColor="#000000"
+                android:textStyle="bold"
+                android:textAlignment="center"
+                android:layout_marginStart="10dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:text="Protein"
+                android:textAllCaps="true"
+                android:fontFamily="@font/oswald"
+                android:textColor="#565656"
+                android:textStyle="bold"
+                android:layout_marginStart="10dp"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/dialog_remove"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/proxima_nova"
+            android:textStyle="bold"
+            android:text="Remove Food Item"
+            android:background="@drawable/button_style_white"
+            android:textColor="@color/colorGrey"
+            android:textAllCaps="false"/>
+        <Button
+            android:id="@+id/dialog_modify"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/proxima_nova"
+            android:textStyle="bold"
+            android:text="Modify"
+            android:background="@drawable/button_style_grey"
+            android:textColor="@color/colorClear"/>
+    </LinearLayout>
+</LinearLayout>

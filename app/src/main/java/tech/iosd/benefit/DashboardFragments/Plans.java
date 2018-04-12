@@ -10,6 +10,7 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 
 import java.util.ArrayList;
@@ -43,8 +44,23 @@ public class Plans extends Fragment implements ViewPager.OnPageChangeListener
             indicatorViews.add((ImageView) rootView.findViewById(aPagerIndicator));
 
         ViewPager mPager = rootView.findViewById(R.id.dashboard_plan_views_pager);
-        mPager.setAdapter(new PlansView(layouts, ctx));
+        mPager.setAdapter(new PlansView(layouts, ctx, fm));
         mPager.addOnPageChangeListener(this);
+
+        Button callBtn = rootView.findViewById(R.id.nutrition_plan_call);
+
+        if(callBtn != null)
+        {
+            callBtn.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View view)
+                {
+                    fm.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                    fm.beginTransaction().replace(R.id.dashboard_content, new BodyCompositionAnalysis()).addToBackStack(null).commit();
+                }
+            });
+        }
 
         return rootView;
     }

@@ -22,6 +22,8 @@ import tech.iosd.benefit.R;
 
 public class Main extends Fragment implements View.OnTouchListener
 {
+    public static boolean introShown = false;
+
     Context ctx;
     Animation scaleInAnimation;
     Animation scaleOutAnimation;
@@ -35,26 +37,36 @@ public class Main extends Fragment implements View.OnTouchListener
         View rootView = inflater.inflate(R.layout.dashboard_main, container, false);
         ctx = rootView.getContext();
         fm = getFragmentManager();
+
         scaleInAnimation = AnimationUtils.loadAnimation(ctx, R.anim.scale_in_src);
         scaleOutAnimation = AnimationUtils.loadAnimation(ctx, R.anim.scale_out_src);
         scaleInAnimation.setFillAfter(true);
         scaleOutAnimation.setFillAfter(true);
+
+        contactBtn = getActivity().findViewById(R.id.dashboard_contact);
+        if(!introShown)
+        {
+            contactBtn.setVisibility(View.INVISIBLE);
+            fm.beginTransaction().replace(R.id.dashboard_content, new BMIIntro()).addToBackStack(null).commit();
+            introShown = true;
+        }
+        else
+        {
+            contactBtn.setVisibility(View.VISIBLE);
+            contactBtn.startAnimation(AnimationUtils.loadAnimation(ctx, R.anim.bottom_up));
+        }
 
         final ImageView workout = rootView.findViewById(R.id.dashboard_main_workout);
         final ImageView nutrition = rootView.findViewById(R.id.dashboard_main_nutrition);
         final ImageView track_and_log = rootView.findViewById(R.id.dashboard_main_track_and_log);
         final ImageView measurement = rootView.findViewById(R.id.dashboard_main_measurement);
         final ImageView challenges = rootView.findViewById(R.id.dashboard_main_challenges);
-        contactBtn = getActivity().findViewById(R.id.dashboard_contact);
 
         workout.setOnTouchListener(this);
         nutrition.setOnTouchListener(this);
         track_and_log.setOnTouchListener(this);
         measurement.setOnTouchListener(this);
         challenges.setOnTouchListener(this);
-
-        contactBtn.setVisibility(View.VISIBLE);
-        contactBtn.startAnimation(AnimationUtils.loadAnimation(ctx, R.anim.bottom_up));
 
         contactBtn.setOnClickListener(new View.OnClickListener()
         {
@@ -76,14 +88,13 @@ public class Main extends Fragment implements View.OnTouchListener
                     public void onClick(View view)
                     {
                         dialog.dismiss();
-                        fm.beginTransaction().replace(R.id.dashboard_content, new ChoosePlan()).addToBackStack(null).commit();
+                        fm.beginTransaction().replace(R.id.dashboard_content, new Chat()).addToBackStack(null).commit();
                         contactBtn.startAnimation(AnimationUtils.loadAnimation(ctx, R.anim.top_down));
                         contactBtn.setVisibility(View.INVISIBLE);
                     }
                 });
             }
         });
-
         return rootView;
     }
 

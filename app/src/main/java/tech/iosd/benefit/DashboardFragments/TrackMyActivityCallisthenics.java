@@ -37,7 +37,7 @@ public class TrackMyActivityCallisthenics extends Fragment
             public void onClick(View view)
             {
                 AlertDialog.Builder mBuilder = new AlertDialog.Builder(getActivity());
-                View mView = getActivity().getLayoutInflater().inflate(R.layout.dialog_time_picker, null);
+                View mView = getActivity().getLayoutInflater().inflate(R.layout.dialog_picker_time, null);
                 Button dialogDone = mView.findViewById(R.id.dialog_done);
                 WheelPicker wheelPickerHour = mView.findViewById(R.id.dialog_picker_hour);
                 WheelPicker wheelPickerMinute = mView.findViewById(R.id.dialog_picker_minute);

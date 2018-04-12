@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="20dp"
+        android:fontFamily="@font/proxima_nova"
+        android:textSize="22sp"
+        android:textColor="@color/black"
+        android:background="@color/white"
+        android:text="Weight"/>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#a7a7a7" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <com.aigestudio.wheelpicker.WheelPicker
+            android:id="@+id/dialog_picker_weight"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:wheel_atmospheric="true"
+            app:wheel_curved="true"
+            app:wheel_cyclic="true"
+            app:wheel_item_text_color="#A7A7DB"
+            app:wheel_item_text_size="24sp"
+            app:wheel_selected_item_text_color="#536D8A" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/dialog_done"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/proxima_nova"
+        android:textStyle="bold"
+        android:text="@string/lbl_ok"
+        android:background="@drawable/button_style_grey"
+        android:textColor="@color/colorClear"
+        android:paddingStart="50dp"
+        android:paddingEnd="50dp"/>
+</LinearLayout>

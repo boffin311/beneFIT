@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import tech.iosd.benefit.DashboardFragments.Chat;
+import tech.iosd.benefit.DashboardFragments.ChoosePlan;
 import tech.iosd.benefit.DashboardFragments.Main;
 import tech.iosd.benefit.DashboardFragments.Notification;
 
@@ -44,13 +45,13 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         fm = getSupportFragmentManager();
         fm.beginTransaction().replace(R.id.dashboard_content, new Main()).commit();
 
-        ImageView msgBtn = findViewById(R.id.navigation_dashboard_notification);
-        msgBtn.setOnClickListener(new View.OnClickListener()
+        ImageView notificationsBtn = findViewById(R.id.navigation_dashboard_notification);
+        notificationsBtn.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view)
             {
-                fm.beginTransaction().replace(R.id.dashboard_content, new Chat()).addToBackStack(null).commit();
+                fm.beginTransaction().replace(R.id.dashboard_content, new Notification()).addToBackStack(null).commit();
                 FloatingActionButton contactBtn = findViewById(R.id.dashboard_contact);
                 if(contactBtn != null)
                 {
@@ -60,13 +61,19 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
             }
         });
 
-        ImageView notificationBtn = findViewById(R.id.navigation_dashboard_coach);
-        notificationBtn.setOnClickListener(new View.OnClickListener()
+        ImageView coachBtn = findViewById(R.id.navigation_dashboard_coach);
+        coachBtn.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view)
             {
-                fm.beginTransaction().replace(R.id.dashboard_content, new Notification()).addToBackStack(null).commit();
+                fm.beginTransaction().replace(R.id.dashboard_content, new ChoosePlan()).addToBackStack(null).commit();
+                FloatingActionButton contactBtn = findViewById(R.id.dashboard_contact);
+                if(contactBtn != null)
+                {
+                    contactBtn.startAnimation(AnimationUtils.loadAnimation(ctx, R.anim.top_down));
+                    contactBtn.setVisibility(View.INVISIBLE);
+                }
             }
         });
     }

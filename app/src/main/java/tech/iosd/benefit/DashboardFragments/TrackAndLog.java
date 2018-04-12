@@ -29,6 +29,9 @@ import tech.iosd.benefit.WaveHelper;
 
 public class TrackAndLog extends Fragment implements View.OnClickListener
 {
+    public int waterConsumed = 5;
+    public int waterTarget = 8;
+
     private WaveHelper mWaveHelper;
     private boolean stepsTab = true;
     private View stepsTabView;
@@ -39,6 +42,9 @@ public class TrackAndLog extends Fragment implements View.OnClickListener
     private TextView stepsText;
     private ImageView waterIcon;
     private TextView waterText;
+    private WaveView waveView;
+    private TextView waterConsumedTxt;
+    private TextView waterTargetTxt;
 
     Context ctx;
     FragmentManager fm;
@@ -50,13 +56,14 @@ public class TrackAndLog extends Fragment implements View.OnClickListener
         View rootView = inflater.inflate(R.layout.dashboard_track_and_log, container, false);
         ctx = rootView.getContext();
         fm = getFragmentManager();
-        WaveView waveView = rootView.findViewById(R.id.dashboard_track_indicator_tab_water_wave);
+        waveView = rootView.findViewById(R.id.dashboard_track_indicator_tab_water_wave);
 
-        mWaveHelper = new WaveHelper(waveView);
         waveView.setShapeType(WaveView.ShapeType.CIRCLE);
         waveView.setWaveColor(
                 Color.parseColor("#88b8f1ed"),
                 Color.parseColor("#FF2984FF"));
+        mWaveHelper = new WaveHelper(waveView);
+        waveView.setWaterLevelRatio((float)waterConsumed/waterTarget);
         mWaveHelper.start();
 
         stepsTabView = rootView.findViewById(R.id.dashboard_track_indicator_tab_steps);
@@ -67,11 +74,17 @@ public class TrackAndLog extends Fragment implements View.OnClickListener
         stepsText = rootView.findViewById(R.id.steps_txt);
         waterIcon = rootView.findViewById(R.id.water_icon);
         waterText = rootView.findViewById(R.id.water_txt);
+        waterConsumedTxt = rootView.findViewById(R.id.dashboard_track_water_consumed);
+        waterTargetTxt = rootView.findViewById(R.id.dashboard_track_water_target);
+        waterConsumedTxt.setText(String.valueOf(waterConsumed));
+        waterTargetTxt.setText(String.valueOf(waterTarget));
 
         rootView.findViewById(R.id.dashboard_track_steps_tab_btn).setOnClickListener(this);
         rootView.findViewById(R.id.dashboard_track_water_tab_btn).setOnClickListener(this);
         rootView.findViewById(R.id.dashboard_track_my_activity).setOnClickListener(this);
         rootView.findViewById(R.id.dashboard_track_meal_log).setOnClickListener(this);
+        rootView.findViewById(R.id.dashboard_track_water_add).setOnClickListener(this);
+        rootView.findViewById(R.id.dashboard_track_water_subtract).setOnClickListener(this);
 
         ColumnChartView steps_chart = rootView.findViewById(R.id.dashboard_track_steps_graph);
         ColumnChartView water_chart = rootView.findViewById(R.id.dashboard_track_water_graph);
@@ -166,6 +179,25 @@ public class TrackAndLog extends Fragment implements View.OnClickListener
             case R.id.dashboard_track_meal_log:
             {
                 fm.beginTransaction().replace(R.id.dashboard_content, new MealLog()).addToBackStack(null).commit();
+                break;
+            }
+            case R.id.dashboard_track_water_add:
+            {
+                waterTarget++;
+                waveView.setWaterLevelRatio((float)waterConsumed/waterTarget);
+                waterConsumedTxt.setText(String.valueOf(waterConsumed));
+                waterTargetTxt.setText(String.valueOf(waterTarget));
+                break;
+            }
+            case R.id.dashboard_track_water_subtract:
+            {
+                if(waterTarget <= waterConsumed)
+                    break;
+
+                waterTarget--;
+                waveView.setWaterLevelRatio((float)waterConsumed/waterTarget);
+                waterConsumedTxt.setText(String.valueOf(waterConsumed));
+                waterTargetTxt.setText(String.valueOf(waterTarget));
                 break;
             }
         }

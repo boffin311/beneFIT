@@ -31,7 +31,7 @@
     <string name="lbl_male">Male</string>
     <string name="lbl_female">Female</string>
     <string name="lbl_feet">Ft</string>
-    <string name="lbl_inches">In</string>
+    <string name="lbl_cms">Cm</string>
     <string name="lbl_kilograms">Kg</string>
     <string name="lbl_pounds">Lbs</string>
     <string name="lbl_fb_login">Log in with facebook</string>

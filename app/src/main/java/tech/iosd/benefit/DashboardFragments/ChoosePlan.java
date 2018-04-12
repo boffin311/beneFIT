@@ -2,6 +2,7 @@ package tech.iosd.benefit.DashboardFragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,6 +15,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import tech.iosd.benefit.Adapters.PlansIntro;
 import tech.iosd.benefit.R;
@@ -25,6 +28,10 @@ public class ChoosePlan extends Fragment implements ViewPager.OnPageChangeListen
     View rootView;
     ArrayList<ImageView> pagerIndicator;
     TextView introPagerTxt;
+    int currentPage = 0;
+    Timer timer;
+    final long DELAY_MS = 500;
+    final long PERIOD_MS = 2000;
     String[] introPagerTxts = {"Talk to your coach regularly through chat and call.",
                                 "Train smarter with our coach. Get personalized plan that suits your lifestyle.",
                                 "Personally meet with coaches. Note - terms and conditions apply.",
@@ -37,9 +44,9 @@ public class ChoosePlan extends Fragment implements ViewPager.OnPageChangeListen
         ctx = rootView.getContext();
         fm = getFragmentManager();
 
-        ViewPager viewPager = rootView.findViewById(R.id.choose_a_plan_intro_pager);
+        final ViewPager viewPager = rootView.findViewById(R.id.choose_a_plan_intro_pager);
         introPagerTxt = rootView.findViewById(R.id.choose_a_plan_intro_pager_txt);
-        ArrayList<Integer> plansImages = new ArrayList<>();
+        final ArrayList<Integer> plansImages = new ArrayList<>();
         plansImages.add(R.drawable.m1);
         plansImages.add(R.drawable.m2);
         plansImages.add(R.drawable.m3);
@@ -53,6 +60,27 @@ public class ChoosePlan extends Fragment implements ViewPager.OnPageChangeListen
 
         viewPager.setAdapter(new PlansIntro(getChildFragmentManager(), plansImages));
         viewPager.addOnPageChangeListener(this);
+        final Handler handler = new Handler();
+        final Runnable update = new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                if(currentPage == plansImages.size())
+                    currentPage = 0;
+                viewPager.setCurrentItem(currentPage++, true);
+            }
+        };
+
+        timer = new Timer();
+        timer .schedule(new TimerTask()
+        {
+            @Override
+            public void run()
+            {
+                handler.post(update);
+            }
+        }, DELAY_MS, PERIOD_MS);
 
         rootView.findViewById(R.id.choose_a_plan_intro_plans).setOnClickListener(this);
 
