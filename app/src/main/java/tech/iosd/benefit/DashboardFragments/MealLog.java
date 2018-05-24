@@ -5,24 +5,45 @@ import android.support.v4.app.FragmentManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 
+import com.aigestudio.wheelpicker.WheelPicker;
+
+import java.util.ArrayList;
 import java.util.Calendar;
 
 import devs.mulham.horizontalcalendar.HorizontalCalendar;
 import devs.mulham.horizontalcalendar.utils.HorizontalCalendarListener;
 import tech.iosd.benefit.R;
 
-public class MealLog extends Fragment
+public class MealLog extends Fragment implements AdapterView.OnItemClickListener, View.OnClickListener
 {
     public Calendar selDate;
 
     String[] months = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
+    ArrayList<String> ingredientTyp = new ArrayList<>();
+    ArrayList<String> ingredientsQty;
     Context ctx;
+    View rootView;
     FragmentManager fm;
+    ListView breakfastListView;
+    ArrayList<String> breakfastIngredients;
+    ListView midMorningListView;
+    ArrayList<String> midMorningIngredients;
+    ListView lunchListView;
+    ArrayList<String> lunchIngredients;
+    ListView snackListView;
+    ArrayList<String> snacksIngredients;
+    ListView dinnerListView;
+    ArrayList<String> dinnerIngredients;
 
     @Nullable
     @Override
@@ -63,6 +84,278 @@ public class MealLog extends Fragment
             }
         });
 
+        ingredientsQty = new ArrayList<>();
+        for (int i = 1; i < 100; i++)
+            ingredientsQty.add(Integer.toString(i));
+        ingredientTyp.add("Banana ripe");
+        ingredientTyp.add("Samosa");
+        ingredientTyp.add("Orange");
+        ingredientTyp.add("Egg Rotis");
+        ingredientTyp.add("Rotis");
+        ingredientTyp.add("Glass of mix fruit juice");
+
+        breakfastListView = rootView.findViewById(R.id.my_nutrition_breakfast);
+        breakfastIngredients = new ArrayList<>();
+        breakfastIngredients.add("2 Egg Whites");
+        breakfastIngredients.add("4 Rotis");
+        breakfastIngredients.add("1 Glass of mix fruit juice");
+        final ArrayAdapter<String> breakfastAdapter = new ArrayAdapter<>(ctx, R.layout.listview_text, breakfastIngredients);
+        breakfastListView.setAdapter(breakfastAdapter);
+        breakfastListView.setOnItemClickListener(this);
+        breakfastListView.getLayoutParams().height = 110 * breakfastIngredients.size();
+        rootView.findViewById(R.id.my_nutrition_breakfast_add).setOnClickListener(this);
+
+        midMorningListView = rootView.findViewById(R.id.my_nutrition_mid_morning);
+        midMorningIngredients = new ArrayList<>();
+        midMorningIngredients.add("2 Egg Whites");
+        midMorningIngredients.add("4 Rotis");
+        midMorningIngredients.add("1 Glass of mix fruit juice");
+        final ArrayAdapter<String> midMorningAdapter = new ArrayAdapter<>(ctx, R.layout.listview_text, midMorningIngredients);
+        midMorningListView.setAdapter(midMorningAdapter);
+        midMorningListView.setOnItemClickListener(this);
+        midMorningListView.getLayoutParams().height = 110 * midMorningIngredients.size();
+        rootView.findViewById(R.id.my_nutrition_mid_morning_add).setOnClickListener(this);
+
+        lunchListView = rootView.findViewById(R.id.my_nutrition_lunch);
+        lunchIngredients = new ArrayList<>();
+        lunchIngredients.add("2 Egg Whites");
+        lunchIngredients.add("4 Rotis");
+        lunchIngredients.add("1 Glass of mix fruit juice");
+        final ArrayAdapter<String> lunchAdapter = new ArrayAdapter<>(ctx, R.layout.listview_text, lunchIngredients);
+        lunchListView.setAdapter(lunchAdapter);
+        lunchListView.setOnItemClickListener(this);
+        lunchListView.getLayoutParams().height = 110 * lunchIngredients.size();
+        rootView.findViewById(R.id.my_nutrition_lunch_add).setOnClickListener(this);
+
+        snackListView = rootView.findViewById(R.id.my_nutrition_snacks);
+        snacksIngredients = new ArrayList<>();
+        snacksIngredients.add("2 Egg Whites");
+        snacksIngredients.add("4 Rotis");
+        snacksIngredients.add("1 Glass of mix fruit juice");
+        final ArrayAdapter<String> snacksAdapter = new ArrayAdapter<>(ctx, R.layout.listview_text, snacksIngredients);
+        snackListView.setAdapter(snacksAdapter);
+        snackListView.setOnItemClickListener(this);
+        snackListView.getLayoutParams().height = 110 * snacksIngredients.size();
+        rootView.findViewById(R.id.my_nutrition_snack_add).setOnClickListener(this);
+
+        dinnerListView = rootView.findViewById(R.id.my_nutrition_dinner);
+        dinnerIngredients = new ArrayList<>();
+        dinnerIngredients.add("2 Egg Whites");
+        dinnerIngredients.add("4 Rotis");
+        dinnerIngredients.add("1 Glass of mix fruit juice");
+        final ArrayAdapter<String> dinnerAdapter = new ArrayAdapter<>(ctx, R.layout.listview_text, dinnerIngredients);
+        dinnerListView.setAdapter(dinnerAdapter);
+        dinnerListView.setOnItemClickListener(this);
+        dinnerListView.getLayoutParams().height = 110 * dinnerIngredients.size();
+        rootView.findViewById(R.id.my_nutrition_dinner_add).setOnClickListener(this);
+
         return rootView;
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l)
+    {
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(getActivity());
+        View mView = getActivity().getLayoutInflater().inflate(R.layout.dialog_picker_ingredient, null);
+        TextView dialogTitle = mView.findViewById(R.id.dialog_picker_ingredient_title);
+        Button dialogModify = mView.findViewById(R.id.dialog_modify);
+        Button dialogRemove = mView.findViewById(R.id.dialog_remove);
+        final WheelPicker wheelPickerQty = mView.findViewById(R.id.dialog_picker_ingredient_qty);
+        final WheelPicker wheelPickerTyp = mView.findViewById(R.id.dialog_picker_ingredient_typ);
+        mBuilder.setView(mView);
+        final AlertDialog dialog = mBuilder.create();
+        dialog.show();
+        wheelPickerQty.setData(ingredientsQty);
+        wheelPickerTyp.setData(ingredientTyp);
+
+        final int pos = i;
+
+        switch (adapterView.getId())
+        {
+            case R.id.my_nutrition_breakfast:
+            {
+                dialogTitle.setText(breakfastIngredients.get(pos));
+                dialogModify.setOnClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View view)
+                    {
+                        breakfastIngredients.set(pos, wheelPickerQty.getData().get(wheelPickerQty.getCurrentItemPosition()) + " " + wheelPickerTyp.getData().get(wheelPickerTyp.getCurrentItemPosition()));
+                        final ArrayAdapter<String> breakfastAdapter = new ArrayAdapter<>(ctx, R.layout.listview_text, breakfastIngredients);
+                        breakfastListView.setAdapter(breakfastAdapter);
+                        dialog.dismiss();
+                    }
+                });
+                dialogRemove.setOnClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View view)
+                    {
+                        breakfastIngredients.remove(pos);
+                        final ArrayAdapter<String> breakfastAdapter = new ArrayAdapter<>(ctx, R.layout.listview_text, breakfastIngredients);
+                        breakfastListView.setAdapter(breakfastAdapter);
+                        breakfastListView.getLayoutParams().height = 110 * breakfastIngredients.size();
+                        dialog.dismiss();
+                    }
+                });
+                break;
+            }
+            case R.id.my_nutrition_mid_morning:
+            {
+                dialogTitle.setText(midMorningIngredients.get(pos));
+                dialogModify.setOnClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View view)
+                    {
+                        midMorningIngredients.set(pos, wheelPickerQty.getData().get(wheelPickerQty.getCurrentItemPosition()) + " " + wheelPickerTyp.getData().get(wheelPickerTyp.getCurrentItemPosition()));
+                        final ArrayAdapter<String> midMorningAdapter = new ArrayAdapter<>(ctx, R.layout.listview_text, midMorningIngredients);
+                        midMorningListView.setAdapter(midMorningAdapter);
+                        dialog.dismiss();
+                    }
+                });
+                dialogRemove.setOnClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View view)
+                    {
+                        midMorningIngredients.remove(pos);
+                        final ArrayAdapter<String> midMorningAdapter = new ArrayAdapter<>(ctx, R.layout.listview_text, midMorningIngredients);
+                        midMorningListView.setAdapter(midMorningAdapter);
+                        midMorningListView.getLayoutParams().height = 110 * midMorningIngredients.size();
+                        dialog.dismiss();
+                    }
+                });
+                break;
+            }
+            case R.id.my_nutrition_lunch:
+            {
+                dialogTitle.setText(lunchIngredients.get(pos));
+                dialogModify.setOnClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View view)
+                    {
+                        lunchIngredients.set(pos, wheelPickerQty.getData().get(wheelPickerQty.getCurrentItemPosition()) + " " + wheelPickerTyp.getData().get(wheelPickerTyp.getCurrentItemPosition()));
+                        final ArrayAdapter<String> lunchAdapter = new ArrayAdapter<>(ctx, R.layout.listview_text, lunchIngredients);
+                        lunchListView.setAdapter(lunchAdapter);
+                        dialog.dismiss();
+                    }
+                });
+                dialogRemove.setOnClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View view)
+                    {
+                        lunchIngredients.remove(pos);
+                        final ArrayAdapter<String> lunchAdapter = new ArrayAdapter<>(ctx, R.layout.listview_text, lunchIngredients);
+                        lunchListView.setAdapter(lunchAdapter);
+                        lunchListView.getLayoutParams().height = 110 * lunchIngredients.size();
+                        dialog.dismiss();
+                    }
+                });
+                break;
+            }
+            case R.id.my_nutrition_snacks:
+            {
+                dialogTitle.setText(snacksIngredients.get(pos));
+                dialogModify.setOnClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View view)
+                    {
+                        snacksIngredients.set(pos, wheelPickerQty.getData().get(wheelPickerQty.getCurrentItemPosition()) + " " + wheelPickerTyp.getData().get(wheelPickerTyp.getCurrentItemPosition()));
+                        final ArrayAdapter<String> snacksAdapter = new ArrayAdapter<>(ctx, R.layout.listview_text, snacksIngredients);
+                        snackListView.setAdapter(snacksAdapter);
+                        dialog.dismiss();
+                    }
+                });
+                dialogRemove.setOnClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View view)
+                    {
+                        snacksIngredients.remove(pos);
+                        final ArrayAdapter<String> snacksAdapter = new ArrayAdapter<>(ctx, R.layout.listview_text, snacksIngredients);
+                        snackListView.setAdapter(snacksAdapter);
+                        snackListView.getLayoutParams().height = 110 * snacksIngredients.size();
+                        dialog.dismiss();
+                    }
+                });
+                break;
+            }
+            case R.id.my_nutrition_dinner:
+            {
+                dialogTitle.setText(dinnerIngredients.get(pos));
+                dialogModify.setOnClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View view)
+                    {
+                        dinnerIngredients.set(pos, wheelPickerQty.getData().get(wheelPickerQty.getCurrentItemPosition()) + " " + wheelPickerTyp.getData().get(wheelPickerTyp.getCurrentItemPosition()));
+                        final ArrayAdapter<String> dinnerAdapter = new ArrayAdapter<>(ctx, R.layout.listview_text, dinnerIngredients);
+                        dinnerListView.setAdapter(dinnerAdapter);
+                        dialog.dismiss();
+                    }
+                });
+                dialogRemove.setOnClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View view)
+                    {
+                        dinnerIngredients.remove(pos);
+                        final ArrayAdapter<String> dinnerAdapter = new ArrayAdapter<>(ctx, R.layout.listview_text, dinnerIngredients);
+                        dinnerListView.setAdapter(dinnerAdapter);
+                        dinnerListView.getLayoutParams().height = 110 * dinnerIngredients.size();
+                        dialog.dismiss();
+                    }
+                });
+                break;
+            }
+        }
+    }
+
+    @Override
+    public void onClick(View view)
+    {
+        switch (view.getId())
+        {
+            case R.id.my_nutrition_breakfast_add:
+            {
+                AlertDialog.Builder mBuilder = new AlertDialog.Builder(getActivity());
+                View mView = getActivity().getLayoutInflater().inflate(R.layout.dialog_picker_ingredient_add, null);
+                Button dialogAdd = mView.findViewById(R.id.dialog_add);
+                Button dialogCancel = mView.findViewById(R.id.dialog_cancel);
+                final WheelPicker wheelPickerQty = mView.findViewById(R.id.dialog_picker_ingredient_qty);
+                final WheelPicker wheelPickerTyp = mView.findViewById(R.id.dialog_picker_ingredient_typ);
+                mBuilder.setView(mView);
+                final AlertDialog dialog = mBuilder.create();
+                dialog.show();
+                wheelPickerQty.setData(ingredientsQty);
+                wheelPickerTyp.setData(ingredientTyp);
+
+                dialogAdd.setOnClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View view)
+                    {
+                        breakfastIngredients.add(wheelPickerQty.getData().get(wheelPickerQty.getCurrentItemPosition()) + " " + wheelPickerTyp.getData().get(wheelPickerTyp.getCurrentItemPosition()));
+                        final ArrayAdapter<String> breakfastAdapter = new ArrayAdapter<>(ctx, R.layout.listview_text, breakfastIngredients);
+                        breakfastListView.setAdapter(breakfastAdapter);
+                        breakfastListView.getLayoutParams().height = 110 * breakfastIngredients.size();
+                        dialog.dismiss();
+                    }
+                });
+                dialogCancel.setOnClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View view)
+                    {
+                        dialog.dismiss();
+                    }
+                });
+                break;
+            }
+        }
     }
 }

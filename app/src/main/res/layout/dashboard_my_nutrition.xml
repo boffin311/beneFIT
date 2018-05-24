@@ -127,14 +127,46 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginStart="25dp"/>
 
-            <ListView
-                android:id="@+id/my_nutrition_breakfast"
-                android:layout_marginTop="40dp"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"/>
+                android:layout_marginTop="40dp"
+                android:orientation="vertical"
+                android:paddingStart="25dp"
+                android:paddingEnd="25dp"
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp"
+                android:background="#e6b475">
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2 egg whites"
+                    android:textSize="18sp"
+                    android:fontFamily="@font/proxima_nova"
+                    android:textColor="@color/white"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="4 rotis"
+                    android:textSize="18sp"
+                    android:fontFamily="@font/proxima_nova"
+                    android:textColor="@color/white"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1 glass of mix fruit juice"
+                    android:textSize="18sp"
+                    android:fontFamily="@font/proxima_nova"
+                    android:textColor="@color/white"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Handful of nutes"
+                    android:textSize="18sp"
+                    android:fontFamily="@font/proxima_nova"
+                    android:textColor="@color/white"/>
+            </LinearLayout>
         </android.support.v7.widget.CardView>
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
@@ -283,25 +315,50 @@
             </LinearLayout>
         </android.support.v7.widget.CardView>
         <android.support.v7.widget.CardView
-            android:id="@+id/my_nutrition_breakfast_add"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginTop="1dp"
             app:cardBackgroundColor="#f7f7f7"
             app:cardElevation="2dp">
-            <TextView
-                android:background="#f7f7f7"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="18sp"
-                android:gravity="center_vertical"
-                android:drawableStart="@drawable/ic_add_attachment"
-                android:text="Add Food Item"
-                android:textAlignment="center"
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:fontFamily="@font/proxima_nova"
-                android:textStyle="bold"
-                android:textColor="#848484"/>
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_gravity="center_vertical"
+                    android:background="@drawable/ic_comment_24dp"/>
+
+                <ImageView
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="10dp"
+                    android:background="#b3b3b3"/>
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="80dp"
+                    android:fontFamily="@font/proxima_nova"
+                    android:maxLines="1"
+                    android:hint="Comment on this meal"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="-80dp"
+                    android:gravity="center"
+                    android:textAlignment="gravity"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:text="Save"/>
+            </LinearLayout>
         </android.support.v7.widget.CardView>
 
         <android.support.v7.widget.CardView
@@ -315,21 +372,53 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="20sp"
-                android:text="Mid-morning"
+                android:text="Mid-Morning"
                 android:fontFamily="@font/proxima_nova"
                 android:textStyle="bold"
                 android:textColor="#333333"
                 android:layout_marginTop="10dp"
                 android:layout_marginStart="25dp"/>
 
-            <ListView
-                android:id="@+id/my_nutrition_mid_morning"
-                android:layout_marginTop="40dp"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"/>
+                android:layout_marginTop="40dp"
+                android:orientation="vertical"
+                android:paddingStart="25dp"
+                android:paddingEnd="25dp"
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp"
+                android:background="#82d0aa">
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2 egg whites"
+                    android:textSize="18sp"
+                    android:fontFamily="@font/proxima_nova"
+                    android:textColor="@color/white"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="4 rotis"
+                    android:textSize="18sp"
+                    android:fontFamily="@font/proxima_nova"
+                    android:textColor="@color/white"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1 glass of mix fruit juice"
+                    android:textSize="18sp"
+                    android:fontFamily="@font/proxima_nova"
+                    android:textColor="@color/white"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Handful of nutes"
+                    android:textSize="18sp"
+                    android:fontFamily="@font/proxima_nova"
+                    android:textColor="@color/white"/>
+            </LinearLayout>
         </android.support.v7.widget.CardView>
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
@@ -478,25 +567,50 @@
             </LinearLayout>
         </android.support.v7.widget.CardView>
         <android.support.v7.widget.CardView
-            android:id="@+id/my_nutrition_mid_morning_add"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginTop="1dp"
             app:cardBackgroundColor="#f7f7f7"
             app:cardElevation="2dp">
-            <TextView
-                android:background="#f7f7f7"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="18sp"
-                android:gravity="center_vertical"
-                android:drawableStart="@drawable/ic_add_attachment"
-                android:text="Add Food Item"
-                android:textAlignment="center"
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:fontFamily="@font/proxima_nova"
-                android:textStyle="bold"
-                android:textColor="#848484"/>
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_gravity="center_vertical"
+                    android:background="@drawable/ic_comment_24dp"/>
+
+                <ImageView
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="10dp"
+                    android:background="#b3b3b3"/>
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="80dp"
+                    android:fontFamily="@font/proxima_nova"
+                    android:maxLines="1"
+                    android:hint="Comment on this meal"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="-80dp"
+                    android:gravity="center"
+                    android:textAlignment="gravity"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:text="Save"/>
+            </LinearLayout>
         </android.support.v7.widget.CardView>
 
         <android.support.v7.widget.CardView
@@ -517,14 +631,46 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginStart="25dp"/>
 
-            <ListView
-                android:id="@+id/my_nutrition_lunch"
-                android:layout_marginTop="40dp"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"/>
+                android:layout_marginTop="40dp"
+                android:orientation="vertical"
+                android:paddingStart="25dp"
+                android:paddingEnd="25dp"
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp"
+                android:background="#558da7">
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2 egg whites"
+                    android:textSize="18sp"
+                    android:fontFamily="@font/proxima_nova"
+                    android:textColor="@color/white"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="4 rotis"
+                    android:textSize="18sp"
+                    android:fontFamily="@font/proxima_nova"
+                    android:textColor="@color/white"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1 glass of mix fruit juice"
+                    android:textSize="18sp"
+                    android:fontFamily="@font/proxima_nova"
+                    android:textColor="@color/white"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Handful of nutes"
+                    android:textSize="18sp"
+                    android:fontFamily="@font/proxima_nova"
+                    android:textColor="@color/white"/>
+            </LinearLayout>
         </android.support.v7.widget.CardView>
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
@@ -673,25 +819,50 @@
             </LinearLayout>
         </android.support.v7.widget.CardView>
         <android.support.v7.widget.CardView
-            android:id="@+id/my_nutrition_lunch_add"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginTop="1dp"
             app:cardBackgroundColor="#f7f7f7"
             app:cardElevation="2dp">
-            <TextView
-                android:background="#f7f7f7"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="18sp"
-                android:gravity="center_vertical"
-                android:drawableStart="@drawable/ic_add_attachment"
-                android:text="Add Food Item"
-                android:textAlignment="center"
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:fontFamily="@font/proxima_nova"
-                android:textStyle="bold"
-                android:textColor="#848484"/>
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_gravity="center_vertical"
+                    android:background="@drawable/ic_comment_24dp"/>
+
+                <ImageView
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="10dp"
+                    android:background="#b3b3b3"/>
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="80dp"
+                    android:fontFamily="@font/proxima_nova"
+                    android:maxLines="1"
+                    android:hint="Comment on this meal"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="-80dp"
+                    android:gravity="center"
+                    android:textAlignment="gravity"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:text="Save"/>
+            </LinearLayout>
         </android.support.v7.widget.CardView>
 
         <android.support.v7.widget.CardView
@@ -705,21 +876,53 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="20sp"
-                android:text="Snack"
+                android:text="Snacks"
                 android:fontFamily="@font/proxima_nova"
                 android:textStyle="bold"
                 android:textColor="#333333"
                 android:layout_marginTop="10dp"
                 android:layout_marginStart="25dp"/>
 
-            <ListView
-                android:id="@+id/my_nutrition_snacks"
-                android:layout_marginTop="40dp"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"/>
+                android:layout_marginTop="40dp"
+                android:orientation="vertical"
+                android:paddingStart="25dp"
+                android:paddingEnd="25dp"
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp"
+                android:background="#d2615f">
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2 egg whites"
+                    android:textSize="18sp"
+                    android:fontFamily="@font/proxima_nova"
+                    android:textColor="@color/white"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="4 rotis"
+                    android:textSize="18sp"
+                    android:fontFamily="@font/proxima_nova"
+                    android:textColor="@color/white"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1 glass of mix fruit juice"
+                    android:textSize="18sp"
+                    android:fontFamily="@font/proxima_nova"
+                    android:textColor="@color/white"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Handful of nutes"
+                    android:textSize="18sp"
+                    android:fontFamily="@font/proxima_nova"
+                    android:textColor="@color/white"/>
+            </LinearLayout>
         </android.support.v7.widget.CardView>
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
@@ -868,25 +1071,50 @@
             </LinearLayout>
         </android.support.v7.widget.CardView>
         <android.support.v7.widget.CardView
-            android:id="@+id/my_nutrition_snack_add"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginTop="1dp"
             app:cardBackgroundColor="#f7f7f7"
             app:cardElevation="2dp">
-            <TextView
-                android:background="#f7f7f7"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="18sp"
-                android:gravity="center_vertical"
-                android:drawableStart="@drawable/ic_add_attachment"
-                android:text="Add Food Item"
-                android:textAlignment="center"
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:fontFamily="@font/proxima_nova"
-                android:textStyle="bold"
-                android:textColor="#848484"/>
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_gravity="center_vertical"
+                    android:background="@drawable/ic_comment_24dp"/>
+
+                <ImageView
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="10dp"
+                    android:background="#b3b3b3"/>
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="80dp"
+                    android:fontFamily="@font/proxima_nova"
+                    android:maxLines="1"
+                    android:hint="Comment on this meal"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="-80dp"
+                    android:gravity="center"
+                    android:textAlignment="gravity"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:text="Save"/>
+            </LinearLayout>
         </android.support.v7.widget.CardView>
 
         <android.support.v7.widget.CardView
@@ -907,14 +1135,46 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginStart="25dp"/>
 
-            <ListView
-                android:id="@+id/my_nutrition_dinner"
-                android:layout_marginTop="40dp"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"/>
+                android:layout_marginTop="40dp"
+                android:orientation="vertical"
+                android:paddingStart="25dp"
+                android:paddingEnd="25dp"
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp"
+                android:background="#37474f">
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2 egg whites"
+                    android:textSize="18sp"
+                    android:fontFamily="@font/proxima_nova"
+                    android:textColor="@color/white"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="4 rotis"
+                    android:textSize="18sp"
+                    android:fontFamily="@font/proxima_nova"
+                    android:textColor="@color/white"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1 glass of mix fruit juice"
+                    android:textSize="18sp"
+                    android:fontFamily="@font/proxima_nova"
+                    android:textColor="@color/white"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Handful of nutes"
+                    android:textSize="18sp"
+                    android:fontFamily="@font/proxima_nova"
+                    android:textColor="@color/white"/>
+            </LinearLayout>
         </android.support.v7.widget.CardView>
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
@@ -1063,25 +1323,50 @@
             </LinearLayout>
         </android.support.v7.widget.CardView>
         <android.support.v7.widget.CardView
-            android:id="@+id/my_nutrition_dinner_add"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginTop="1dp"
             app:cardBackgroundColor="#f7f7f7"
             app:cardElevation="2dp">
-            <TextView
-                android:background="#f7f7f7"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="18sp"
-                android:gravity="center_vertical"
-                android:drawableStart="@drawable/ic_add_attachment"
-                android:text="Add Food Item"
-                android:textAlignment="center"
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:fontFamily="@font/proxima_nova"
-                android:textStyle="bold"
-                android:textColor="#848484"/>
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_gravity="center_vertical"
+                    android:background="@drawable/ic_comment_24dp"/>
+
+                <ImageView
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="10dp"
+                    android:background="#b3b3b3"/>
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="80dp"
+                    android:fontFamily="@font/proxima_nova"
+                    android:maxLines="1"
+                    android:hint="Comment on this meal"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="-80dp"
+                    android:gravity="center"
+                    android:textAlignment="gravity"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:text="Save"/>
+            </LinearLayout>
         </android.support.v7.widget.CardView>
 
         <android.support.v7.widget.CardView
