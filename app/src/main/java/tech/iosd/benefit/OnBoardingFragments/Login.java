@@ -289,7 +289,6 @@ public class Login extends Fragment implements View.OnClickListener
         } else {
 
             showSnackBarMessage("Network Error !");
-            Log.d("errorLogin",error.getMessage());
         }
     }
 
