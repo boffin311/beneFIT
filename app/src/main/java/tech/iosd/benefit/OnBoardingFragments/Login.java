@@ -4,13 +4,17 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,9 +23,21 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import java.io.IOException;
+
+import retrofit2.adapter.rxjava.HttpException;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
+import rx.subscriptions.CompositeSubscription;
 import tech.iosd.benefit.DashboardActivity;
 import tech.iosd.benefit.DashboardFragments.ChoosePlan;
+import tech.iosd.benefit.Model.Response;
+import tech.iosd.benefit.Network.NetworkUtil;
 import tech.iosd.benefit.R;
+import tech.iosd.benefit.Utils.Constants;
 
 public class Login extends Fragment implements View.OnClickListener
 {
@@ -37,6 +53,9 @@ public class Login extends Fragment implements View.OnClickListener
     Context ctx;
     FragmentManager fm;
     View rootView;
+
+    private CompositeSubscription mSubscriptions;
+    private SharedPreferences mSharedPreferences;
 
     @Nullable
     @Override
@@ -100,6 +119,10 @@ public class Login extends Fragment implements View.OnClickListener
         forgetPass.setOnClickListener(this);
         signupBtn.setOnClickListener(this);
 
+
+        mSubscriptions = new CompositeSubscription();
+        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+
         return rootView;
     }
 
@@ -112,15 +135,10 @@ public class Login extends Fragment implements View.OnClickListener
             {
                 TextView invalidUsername = rootView.findViewById(R.id.get_started_login_invalid);
                 TextView invalidPass = rootView.findViewById(R.id.get_started_pass_invalid);
-                //TODO-Login
 
-                Activity activity = getActivity();
-                if(activity != null)
-                {
-                    Intent myIntent = new Intent(activity, DashboardActivity.class);
-                    startActivity(myIntent);
-                    getActivity().finish();
-                }
+                loginProcess(usernameField.getText().toString(),passField.getText().toString());
+
+
                 break;
             }
             case R.id.get_started_login_signup_btn:
@@ -206,13 +224,71 @@ public class Login extends Fragment implements View.OnClickListener
         dialog.show();
 
         dialogMsg.setText("A password reset message was sent to your email address...");
-        dialogDone.setOnClickListener(new View.OnClickListener()
-        {
+        dialogDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view)
             {
                 dialog.dismiss();
             }
         });
+    }
+
+    private void loginProcess(String email, String password) {
+
+        mSubscriptions.add(NetworkUtil.getRetrofit().login()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(this::handleResponse,this::handleError));
+    }
+
+    private void handleResponse(Response response) {
+
+
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.putString(Constants.TOKEN,response.token.token);
+        editor.putString(Constants.EMAIL,response.getMessage());
+        editor.apply();
+
+
+
+        Activity activity = getActivity();
+        if(activity != null)
+        {
+            Intent myIntent = new Intent(activity, DashboardActivity.class);
+            startActivity(myIntent);
+            getActivity().finish();
+        }
+
+    }
+
+    private void handleError(Throwable error) {
+
+
+        if (error instanceof HttpException) {
+
+            Gson gson = new GsonBuilder().create();
+
+            try {
+
+                String errorBody = ((HttpException) error).response().errorBody().string();
+                Response response = gson.fromJson(errorBody,Response.class);
+                showSnackBarMessage(response.getMessage());
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+
+            showSnackBarMessage("Network Error !");
+            Log.d("errorLogin",error.getMessage());
+        }
+    }
+
+    private void showSnackBarMessage(String message) {
+
+        if (getView() != null) {
+
+            Snackbar.make(getView(),message, Snackbar.LENGTH_SHORT).show();
+        }
     }
 }
