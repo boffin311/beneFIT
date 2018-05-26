@@ -181,7 +181,6 @@ public class Signup extends Fragment implements View.OnClickListener
 
         showSnackBarMessage(response.getMessage());
         String string = response.token.token;
-        Toast.makeText(getActivity().getApplicationContext(),string, Toast.LENGTH_LONG).show();
 
     }
 
