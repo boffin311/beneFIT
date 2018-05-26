@@ -35,9 +35,11 @@ import rx.subscriptions.CompositeSubscription;
 import tech.iosd.benefit.DashboardActivity;
 import tech.iosd.benefit.DashboardFragments.ChoosePlan;
 import tech.iosd.benefit.Model.Response;
+import tech.iosd.benefit.Model.UserForLogin;
 import tech.iosd.benefit.Network.NetworkUtil;
 import tech.iosd.benefit.R;
 import tech.iosd.benefit.Utils.Constants;
+import tech.iosd.benefit.Utils.Validation;
 
 public class Login extends Fragment implements View.OnClickListener
 {
@@ -136,7 +138,14 @@ public class Login extends Fragment implements View.OnClickListener
                 TextView invalidUsername = rootView.findViewById(R.id.get_started_login_invalid);
                 TextView invalidPass = rootView.findViewById(R.id.get_started_pass_invalid);
 
-                loginProcess(usernameField.getText().toString(),passField.getText().toString());
+                if(Validation.validateFields(usernameField.getText().toString())&&Validation.validateFields(passField.getText().toString())){
+                    loginProcess(new UserForLogin(usernameField.getText().toString(), passField.getText().toString()));
+                    showSnackBarMessage("Connecting to server...");
+                }else {
+                    showSnackBarMessage("Enter valid details.");
+                }
+
+
 
 
                 break;
@@ -233,9 +242,9 @@ public class Login extends Fragment implements View.OnClickListener
         });
     }
 
-    private void loginProcess(String email, String password) {
+    private void loginProcess(UserForLogin userForLogin) {
 
-        mSubscriptions.add(NetworkUtil.getRetrofit().login()
+        mSubscriptions.add(NetworkUtil.getRetrofit().login(userForLogin)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(this::handleResponse,this::handleError));

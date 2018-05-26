@@ -13,6 +13,7 @@ import rx.Observable;
 
 import tech.iosd.benefit.Model.Response;
 import tech.iosd.benefit.Model.User;
+import tech.iosd.benefit.Model.UserForLogin;
 
 public interface RetrofitInterface {
 
@@ -20,7 +21,7 @@ public interface RetrofitInterface {
     Observable<Response> register(@Body User user);
 
     @POST("auth/login")
-    Observable<Response> login();
+    Observable<Response> login(@Body UserForLogin userForLogin);
 
     @GET("users/{email}")
     Observable<User> getProfile(@Path("email") String email);
