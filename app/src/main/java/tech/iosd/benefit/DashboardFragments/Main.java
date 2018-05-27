@@ -1,8 +1,11 @@
 package tech.iosd.benefit.DashboardFragments;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -44,11 +47,15 @@ public class Main extends Fragment implements View.OnTouchListener
         scaleOutAnimation.setFillAfter(true);
 
         contactBtn = getActivity().findViewById(R.id.dashboard_contact);
-        if(!introShown)
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        if(!prefs.getBoolean("first_time", false))
         {
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putBoolean("first_time", true);
+            editor.commit();
             contactBtn.setVisibility(View.INVISIBLE);
             fm.beginTransaction().replace(R.id.dashboard_content, new BMIIntro()).addToBackStack(null).commit();
-            introShown = true;
         }
         else
         {
