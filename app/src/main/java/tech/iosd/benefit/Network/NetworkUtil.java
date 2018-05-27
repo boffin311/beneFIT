@@ -60,8 +60,7 @@ public class NetworkUtil {
                 .addCallAdapterFactory(rxAdapter)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build().create(RetrofitInterface.class);
-    }
-
+    }*/
     public static RetrofitInterface getRetrofit(final String token) {
 
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
@@ -87,5 +86,5 @@ public class NetworkUtil {
                 .addCallAdapterFactory(rxAdapter)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build().create(RetrofitInterface.class);
-    }*/
+    }
 }
