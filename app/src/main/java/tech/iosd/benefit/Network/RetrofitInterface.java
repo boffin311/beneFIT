@@ -15,6 +15,7 @@ import rx.Observable;
 import tech.iosd.benefit.Model.Response;
 import tech.iosd.benefit.Model.ResponseForUpdate;
 import tech.iosd.benefit.Model.User;
+import tech.iosd.benefit.Model.UserDetails;
 import tech.iosd.benefit.Model.UserForLogin;
 import tech.iosd.benefit.Model.UserProfileUpdate;
 
@@ -30,7 +31,7 @@ public interface RetrofitInterface {
     Observable<ResponseForUpdate> update(@Header("authorization") String token,@Body UserProfileUpdate userProfileUpdate);
 
     @GET("profile")
-    Observable<ResponseForUpdate> getProfile(@Header("Authorization") String token);
+    Observable<UserDetails> getProfile(@Header("Authorization") String token);
     /*@GET("users/{email}")
     Observable<User> getProfile(@Path("email") String email);*/
 

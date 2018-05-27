@@ -22,6 +22,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -35,6 +36,7 @@ import rx.subscriptions.CompositeSubscription;
 import tech.iosd.benefit.DashboardActivity;
 import tech.iosd.benefit.DashboardFragments.ChoosePlan;
 import tech.iosd.benefit.Model.Response;
+import tech.iosd.benefit.Model.UserDetails;
 import tech.iosd.benefit.Model.UserForLogin;
 import tech.iosd.benefit.Network.NetworkUtil;
 import tech.iosd.benefit.R;
@@ -258,18 +260,21 @@ public class Login extends Fragment implements View.OnClickListener
 
         SharedPreferences.Editor editor = mSharedPreferences.edit();
         editor.putString(Constants.TOKEN,response.token.token);
-        //editor.putString(Constants.EMAIL,response.getMessage());
+
         editor.apply();
+        showSnackBarMessage("Getting user details..");
 
+        getUserDetails(response.token.token);
 
-
-        Activity activity = getActivity();
+        /*Activity activity = getActivity();
         if(activity != null)
         {
             Intent myIntent = new Intent(activity, DashboardActivity.class);
+            myIntent.putExtra("height",userDetails.getHeight());
+            myIntent.putExtra("weight",userDetails.getWeight());
             startActivity(myIntent);
             getActivity().finish();
-        }
+        }*/
 
     }
 
@@ -292,6 +297,60 @@ public class Login extends Fragment implements View.OnClickListener
         } else {
 
             showSnackBarMessage("Network Error !");
+        }
+    }
+
+    private void getUserDetails(String token) {
+
+        mSubscriptions.add(NetworkUtil.getRetrofit(token).getProfile(token)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(this::handleDetailsResponse,this::handleDetailsError));
+    }
+
+    private void handleDetailsResponse(UserDetails userDetails) {
+
+        Activity activity = getActivity();
+        if(activity != null)
+        {
+            SharedPreferences.Editor editor = mSharedPreferences.edit();
+            editor.putInt(Constants.HEIGHT,userDetails.getHeight());
+            editor.putInt(Constants.WEIGHT,userDetails.getWeight());
+            editor.apply();
+
+            Intent myIntent = new Intent(activity, DashboardActivity.class);
+
+            startActivity(myIntent);
+            getActivity().finish();
+        }
+
+    }
+
+    private void handleDetailsError(Throwable error) {
+
+
+
+        if (error instanceof HttpException) {
+
+            Gson gson = new GsonBuilder().create();
+
+            try {
+                Toast.makeText(getActivity().getApplicationContext(),"You have been logged out.",Toast.LENGTH_SHORT).show();
+                SharedPreferences.Editor editor = mSharedPreferences.edit();
+                editor.putString(Constants.TOKEN,"");
+
+                String errorBody = ((HttpException) error).response().errorBody().string();
+                Response response = gson.fromJson(errorBody,Response.class);
+                showSnackBarMessage(response.getMessage());
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+
+            //Log.d("errorabsd: ",error.getMessage());
+            showSnackBarMessage("Network Error !");
+
         }
     }
 

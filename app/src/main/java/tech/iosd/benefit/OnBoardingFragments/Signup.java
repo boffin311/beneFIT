@@ -200,7 +200,7 @@ public class Signup extends Fragment implements View.OnClickListener
 
         showSnackBarMessage(response.getMessage()+"\nUpdating profile...");
         String token = response.token.token;
-        Toast.makeText(getActivity().getApplicationContext(),token,Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getActivity().getApplicationContext(),token,Toast.LENGTH_SHORT).show();
 
         updateProfile(token );
 
@@ -264,7 +264,7 @@ public class Signup extends Fragment implements View.OnClickListener
                 e.printStackTrace();
             }
         } else {
-            Log.d("error77",error.getMessage());
+            //Log.d("error77",error.getMessage());
 
             showSnackBarMessage("Network Error !");
         }
