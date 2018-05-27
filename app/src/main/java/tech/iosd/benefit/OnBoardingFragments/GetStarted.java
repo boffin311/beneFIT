@@ -31,6 +31,7 @@ import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 import tech.iosd.benefit.DashboardActivity;
 import tech.iosd.benefit.Model.Response;
+import tech.iosd.benefit.Model.User;
 import tech.iosd.benefit.Model.UserForLogin;
 import tech.iosd.benefit.Network.NetworkUtil;
 import tech.iosd.benefit.R;
@@ -98,21 +99,21 @@ public class GetStarted extends Fragment implements View.OnClickListener
         }
     }
 
-    private void loginProcess(UserForLogin userForLogin) {
+    private void loginProcess(String token) {
 
-        mSubscriptions.add(NetworkUtil.getRetrofit().login(userForLogin)
+        mSubscriptions.add(NetworkUtil.getRetrofit(token).getProfile()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(this::handleResponse,this::handleError));
     }
 
-    private void handleResponse(Response response) {
+    private void handleResponse(User user) {
 
 
-        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        /*SharedPreferences.Editor editor = mSharedPreferences.edit();
         editor.putString(Constants.TOKEN,response.token.token);
         editor.putString(Constants.EMAIL,response.getMessage());
-        editor.apply();
+        editor.apply();*/
 
 
 

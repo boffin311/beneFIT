@@ -67,6 +67,7 @@ public class Login extends Fragment implements View.OnClickListener
         ctx = rootView.getContext();
         fm = getFragmentManager();
 
+
         loginBtn = rootView.findViewById(R.id.get_started_login_btn);
         signupBtn = rootView.findViewById(R.id.get_started_login_signup_btn);
         forgetPass = rootView.findViewById(R.id.get_started_login_forget_pass);
@@ -152,7 +153,9 @@ public class Login extends Fragment implements View.OnClickListener
             }
             case R.id.get_started_login_signup_btn:
             {
-                fm.beginTransaction().replace(R.id.onboarding_content, new Signup())
+                Signup signup = new Signup();
+                signup.setArguments(getArguments());
+                fm.beginTransaction().replace(R.id.onboarding_content, signup)
                         .addToBackStack(null)
                         .commit();
                 break;
@@ -255,7 +258,7 @@ public class Login extends Fragment implements View.OnClickListener
 
         SharedPreferences.Editor editor = mSharedPreferences.edit();
         editor.putString(Constants.TOKEN,response.token.token);
-        editor.putString(Constants.EMAIL,response.getMessage());
+        //editor.putString(Constants.EMAIL,response.getMessage());
         editor.apply();
 
 

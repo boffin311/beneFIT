@@ -7,12 +7,13 @@ import com.google.gson.annotations.SerializedName;
  */
 
 public class User {
-    @SerializedName("username")
+    @SerializedName("email")
     private String email;
     @SerializedName("name")
     private String userName;
     @SerializedName("password")
     private String password;
+
     /*
     private String newPassword;
     private String token;
@@ -23,48 +24,13 @@ public class User {
     private String weightLB;
     private Integer lifestyleId;*/
 
-/*
-    public Integer getLifestyleId() {
-        return lifestyleId;
-    }
 
-    public void setLifestyleId(Integer lifestyleId) {
-        this.lifestyleId = lifestyleId;
-    }
 
-    public Integer getAge() {
-        return age;
-    }
 
-    public void setAge(Integer age) {
-        this.age = age;
-    }
 
-    public String getHeightCM() {
-        return heightCM;
-    }
 
-    public void setHeightCM(String heightCM) {
-        this.heightCM = heightCM;
-    }
 
-    public String getHeightFT() {
-        return heightFT;
-    }
-
-    public void setHeightFT(String heightFT) {
-        this.heightFT = heightFT;
-    }
-
-    public String getWeightKG() {
-        return weightKG;
-    }
-
-    public void setWeightKG(String weightKG) {
-        this.weightKG = weightKG;
-    }
-
-    public String getWeightLB() {
+  /*public String getWeightLB() {
         return weightLB;
     }
 

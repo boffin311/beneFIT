@@ -27,7 +27,9 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 import tech.iosd.benefit.Model.Response;
+import tech.iosd.benefit.Model.ResponseForUpdate;
 import tech.iosd.benefit.Model.User;
+import tech.iosd.benefit.Model.UserProfileUpdate;
 import tech.iosd.benefit.Network.NetworkUtil;
 import tech.iosd.benefit.R;
 
@@ -48,12 +50,19 @@ public class Signup extends Fragment implements View.OnClickListener
     View rootView;
 
     private CompositeSubscription mSubscriptions;
+    private CompositeSubscription mSubscriptionsNew;
+
+    private Bundle bundle;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState)
     {
+
+
         mSubscriptions = new CompositeSubscription();
+        mSubscriptionsNew = new CompositeSubscription();
+
 
         rootView = inflater.inflate(R.layout.onboarding_signup, container, false);
         ctx = rootView.getContext();
@@ -127,6 +136,15 @@ public class Signup extends Fragment implements View.OnClickListener
         signupNextBtn.setOnClickListener(this);
         rootView.findViewById(R.id.get_started_signup_login_btn).setOnClickListener(this);
 
+        bundle = getArguments();
+        if(bundle == null){
+            Toast.makeText(getActivity().getApplicationContext(),"Please make your profile first.",Toast.LENGTH_SHORT).show();
+            fm.beginTransaction().replace(R.id.onboarding_content, new SetupProfile())
+                    .addToBackStack(null)
+                    .commit();
+        }
+
+
         return rootView;
     }
 
@@ -140,12 +158,13 @@ public class Signup extends Fragment implements View.OnClickListener
                 TextView invalidEmail = rootView.findViewById(R.id.get_started_signup_email_invalid);
                 TextView invalidUsername = rootView.findViewById(R.id.get_started_signup_username_invalid);
                 TextView invalidPassword = rootView.findViewById(R.id.get_started_signup_password_invalid);
-                //TODO-Sign-Up
+
 
                 User user = new User();
                 user.setEmail(emailField.getText().toString());
                 user.setUserName(userField.getText().toString());
                 user.setPassword(passwordField.getText().toString());
+
                 showSnackBarMessage("Registering..." );
 
                 registerUser(user);
@@ -179,8 +198,11 @@ public class Signup extends Fragment implements View.OnClickListener
 
     private void handleResponse(Response response) {
 
-        showSnackBarMessage(response.getMessage());
-        String string = response.token.token;
+        showSnackBarMessage(response.getMessage()+"\nUpdating profile...");
+        String token = response.token.token;
+        Toast.makeText(getActivity().getApplicationContext(),token,Toast.LENGTH_SHORT).show();
+
+        updateProfile(token );
 
     }
 
@@ -202,6 +224,47 @@ public class Signup extends Fragment implements View.OnClickListener
             }
         } else {
             //Log.d("error77",error.getMessage());
+
+            showSnackBarMessage("Network Error !");
+        }
+    }
+
+    private void updateProfile(String token){
+        int age = Integer.valueOf(bundle.getString("age"));
+        int height = Integer.valueOf(bundle.getString("height"));;
+        int weight = Integer.valueOf(bundle.getString("weight"));;
+        String gender = bundle.getString("gender");
+        UserProfileUpdate userProfileUpdate = new UserProfileUpdate(age, height, weight,gender);
+        mSubscriptionsNew.add(NetworkUtil.getRetrofit(token).update(token,userProfileUpdate)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(this::handleResponseUpdate,this::handleErrorUpdate));
+    }
+
+    private void handleResponseUpdate(ResponseForUpdate responseForUpdate) {
+
+        showSnackBarMessage("Update successful.");
+
+
+    }
+    private void handleErrorUpdate(Throwable error) {
+
+
+        if (error instanceof HttpException) {
+
+            Gson gson = new GsonBuilder().create();
+
+            try {
+
+                String errorBody = ((HttpException) error).response().errorBody().string();
+                Response response = gson.fromJson(errorBody,Response.class);
+                showSnackBarMessage(response.getMessage());
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            Log.d("error77",error.getMessage());
 
             showSnackBarMessage("Network Error !");
         }

@@ -32,6 +32,7 @@ public class SetupProfile extends Fragment implements View.OnClickListener
     public life lifestyle = life.SEDENTARY;
     public Boolean isKgSelected = true;
     public Boolean isFtSelected = true;
+    private String gender ;
 
     Context ctx;
     FragmentManager fm;
@@ -182,7 +183,7 @@ public class SetupProfile extends Fragment implements View.OnClickListener
             public void afterTextChanged(Editable editable) { }
         });
 
-
+        gender = "female";
         return rootView;
     }
 
@@ -205,7 +206,30 @@ public class SetupProfile extends Fragment implements View.OnClickListener
         {
             case R.id.get_started_profile_setup_next:
             {
-                fm.beginTransaction().replace(R.id.onboarding_content, new Login())
+
+                isFtSelected = false;
+                heightFt.setBackground(getResources().getDrawable(R.drawable.button_style_off));
+                heightFt.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+                heightCm.setBackground(getResources().getDrawable(R.drawable.button_style_on));
+                heightCm.setTextColor(getResources().getColor(R.color.white));
+                heightField.setText(heightsCM.get(heightPickerPos));
+
+                isKgSelected = true;
+                weightKg.setBackground(getResources().getDrawable(R.drawable.button_style_on));
+                weightKg.setTextColor(getResources().getColor(R.color.white));
+                weightLbs.setBackground(getResources().getDrawable(R.drawable.button_style_off));
+                weightLbs.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+                weightField.setText(weightsKG.get(weightPickerPos));
+
+                Login login = new Login();
+                Bundle bundle = getArguments();
+                String age = ageField.getText().toString();
+                bundle.putString("age", age);
+                bundle.putString("weight",weightField.getText().toString());
+                bundle.putString("height",heightField.getText().toString());
+                bundle.putString("gender",gender);
+                login.setArguments(bundle);
+                fm.beginTransaction().replace(R.id.onboarding_content, login)
                         .addToBackStack(null)
                         .commit();
                 break;
@@ -219,6 +243,7 @@ public class SetupProfile extends Fragment implements View.OnClickListener
                 btnMale.setColorFilter(getResources().getColor(R.color.FABIndicatorSelected));
                 btnFemale.setColorFilter(getResources().getColor(R.color.FABIndicatorNotSelected));
                 genderSelector.setImageResource(R.drawable.female_img);
+                gender = "female";
                 break;
             }
             case R.id.get_started_profile_setup_male:
@@ -230,6 +255,7 @@ public class SetupProfile extends Fragment implements View.OnClickListener
                 btnFemale.setColorFilter(getResources().getColor(R.color.FABIndicatorSelected));
                 btnMale.setColorFilter(getResources().getColor(R.color.FABIndicatorNotSelected));
                 genderSelector.setImageResource(R.drawable.male_img);
+                gender = "male";
                 break;
             }
             case R.id.get_started_profile_setup_cm:
