@@ -24,6 +24,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.Task;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -38,10 +44,14 @@ import tech.iosd.benefit.DashboardFragments.ChoosePlan;
 import tech.iosd.benefit.Model.Response;
 import tech.iosd.benefit.Model.UserDetails;
 import tech.iosd.benefit.Model.UserForLogin;
+import tech.iosd.benefit.Model.UserGoogleLogin;
 import tech.iosd.benefit.Network.NetworkUtil;
 import tech.iosd.benefit.R;
 import tech.iosd.benefit.Utils.Constants;
 import tech.iosd.benefit.Utils.Validation;
+
+import static android.app.Activity.RESULT_CANCELED;
+import static tech.iosd.benefit.Utils.Constants.RC_SIGN_IN;
 
 public class Login extends Fragment implements View.OnClickListener
 {
@@ -59,7 +69,11 @@ public class Login extends Fragment implements View.OnClickListener
     View rootView;
 
     private CompositeSubscription mSubscriptions;
+    private CompositeSubscription mSubscriptionsGoogle;
+
     private SharedPreferences mSharedPreferences;
+
+    private GoogleSignInClient mGoogleSignInClient;
 
     @Nullable
     @Override
@@ -75,6 +89,7 @@ public class Login extends Fragment implements View.OnClickListener
         forgetPass = rootView.findViewById(R.id.get_started_login_forget_pass);
         usernameField = rootView.findViewById(R.id.get_started_login_username);
         passField = rootView.findViewById(R.id.get_started_login_pass);
+
 
         loginBtn.setAlpha(0.2f);
         loginBtn.setEnabled(false);
@@ -126,7 +141,15 @@ public class Login extends Fragment implements View.OnClickListener
 
 
         mSubscriptions = new CompositeSubscription();
+        mSubscriptionsGoogle = new CompositeSubscription();
+
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+        mGoogleSignInClient = GoogleSignIn.getClient(getActivity(), gso);
+
 
         return rootView;
     }
@@ -169,7 +192,9 @@ public class Login extends Fragment implements View.OnClickListener
             }
             case R.id.get_started_login_google:
             {
-                //TODO-Google-Login
+                googleSignIn();
+
+
                 break;
             }
             case R.id.get_started_login_forget_pass:
@@ -223,7 +248,40 @@ public class Login extends Fragment implements View.OnClickListener
                     }
                 });
                 break;
+
             }
+        }
+    }
+
+    private void googleSignIn() {
+        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+        startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
+        if (resultCode != RESULT_CANCELED && requestCode == RC_SIGN_IN) {
+            // The Task returned from this call is always completed, no need to attach
+            // a listener.
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            handleSignInResult(task);
+        }
+    }
+
+    private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
+        try {
+            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
+
+            // Signed in successfully, show authenticated UI.
+            checkForValidToken(account.getEmail(),account.getIdToken());
+
+        } catch (ApiException e) {
+
+            Toast.makeText(getActivity().getApplicationContext(), "signInResult:failed code=" + e.getStatusCode(),Toast.LENGTH_LONG).show();
+
         }
     }
 
@@ -287,9 +345,16 @@ public class Login extends Fragment implements View.OnClickListener
 
             try {
 
-                String errorBody = ((HttpException) error).response().errorBody().string();
-                Response response = gson.fromJson(errorBody,Response.class);
-                showSnackBarMessage(response.getMessage());
+                if(((HttpException) error).code()==401){
+                    showSnackBarMessage("Sorry you don't have an account.\nCreate one and continue.");
+
+                }
+                else {
+                    String errorBody = ((HttpException) error).response().errorBody().string();
+                    Response response = gson.fromJson(errorBody,Response.class);
+                    showSnackBarMessage(response.getMessage());
+                }
+
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -352,6 +417,12 @@ public class Login extends Fragment implements View.OnClickListener
             showSnackBarMessage("Network Error !");
 
         }
+    }
+    private void checkForValidToken(String email, String token){
+        mSubscriptionsGoogle.add(NetworkUtil.getRetrofit().loginGoogle(new UserGoogleLogin(email,token))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(this::handleResponse,this::handleError));
     }
 
     private void showSnackBarMessage(String message) {

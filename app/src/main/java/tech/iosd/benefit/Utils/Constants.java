@@ -10,5 +10,6 @@ public class Constants {
     public static final String TOKEN = "token";
     public static final String WEIGHT = "weight";
     public static final String HEIGHT = "height";
+    public static final int RC_SIGN_IN = 400;
 
 }

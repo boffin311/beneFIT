@@ -17,6 +17,7 @@ import tech.iosd.benefit.Model.ResponseForUpdate;
 import tech.iosd.benefit.Model.User;
 import tech.iosd.benefit.Model.UserDetails;
 import tech.iosd.benefit.Model.UserForLogin;
+import tech.iosd.benefit.Model.UserGoogleLogin;
 import tech.iosd.benefit.Model.UserProfileUpdate;
 
 public interface RetrofitInterface {
@@ -26,6 +27,9 @@ public interface RetrofitInterface {
 
     @POST("auth/login")
     Observable<Response> login(@Body UserForLogin userForLogin);
+
+    @POST("auth/logingoogle")
+    Observable<Response> loginGoogle(@Body UserGoogleLogin userGoogleLogin);
 
     @POST("profile/update")
     Observable<ResponseForUpdate> update(@Header("authorization") String token,@Body UserProfileUpdate userProfileUpdate);

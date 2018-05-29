@@ -234,6 +234,7 @@ public class Signup extends Fragment implements View.OnClickListener
         int height = Integer.valueOf(bundle.getString("height"));;
         int weight = Integer.valueOf(bundle.getString("weight"));;
         String gender = bundle.getString("gender");
+        Toast.makeText(getActivity().getApplicationContext(),"Age: "+ String.valueOf(age)+"\nHieght; "+String.valueOf(height)+"\nWeight: "+String.valueOf(weight)+"\nGender: "+gender,Toast.LENGTH_LONG).show();
         UserProfileUpdate userProfileUpdate = new UserProfileUpdate(age, height, weight,gender);
         mSubscriptionsNew.add(NetworkUtil.getRetrofit(token).update(token,userProfileUpdate)
                 .observeOn(AndroidSchedulers.mainThread())

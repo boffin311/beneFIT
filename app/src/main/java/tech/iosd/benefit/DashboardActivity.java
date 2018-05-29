@@ -1,7 +1,10 @@
 package tech.iosd.benefit;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
 import android.view.View;
@@ -18,11 +21,14 @@ import tech.iosd.benefit.DashboardFragments.Chat;
 import tech.iosd.benefit.DashboardFragments.ChoosePlan;
 import tech.iosd.benefit.DashboardFragments.Main;
 import tech.iosd.benefit.DashboardFragments.Notification;
+import tech.iosd.benefit.Utils.Constants;
 
 public class DashboardActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener
 {
     Context ctx;
     FragmentManager fm;
+    private SharedPreferences mSharedPreferences;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -76,6 +82,8 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
                 }
             }
         });
+        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
     }
 
     @Override
@@ -95,10 +103,27 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
     @Override
     public boolean onNavigationItemSelected(MenuItem item)
     {
-//        int id = item.getItemId();
+        int id = item.getItemId();
+        switch (id){
+            case R.id.nav_dashboard:
+            {
+                DrawerLayout drawer = findViewById(R.id.drawer_layout);
+                drawer.closeDrawer(GravityCompat.START);
+                return true;
+            }
+            case R.id.nav_logout:
+            {
+                SharedPreferences.Editor editor = mSharedPreferences.edit();
+                editor.putString(Constants.TOKEN,"");
+                editor.apply();
+                startActivity(new Intent(
+                        DashboardActivity.this,OnBoardingActivity.class
+                ));
+                finish();
+            }
+            break;
+        }
 
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 }
