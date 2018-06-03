@@ -134,7 +134,8 @@ public class GetStarted extends Fragment implements View.OnClickListener
             try {
                 Toast.makeText(getActivity().getApplicationContext(),"You have been logged out.",Toast.LENGTH_SHORT).show();
                 SharedPreferences.Editor editor = mSharedPreferences.edit();
-                editor.putString(Constants.TOKEN,"");
+                editor.putString(Constants.TOKEN,"");//null means logged out.
+                editor.apply();
 
                 String errorBody = ((HttpException) error).response().errorBody().string();
                 Response response = gson.fromJson(errorBody,Response.class);

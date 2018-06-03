@@ -31,6 +31,9 @@ dependencies {
     implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
 
     implementation 'com.google.android.gms:play-services-maps:11.8.0'
+
+    implementation 'com.facebook.android:facebook-android-sdk:[4,5)'
+
     compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
@@ -77,6 +80,12 @@ dependencies {
     compile 'io.reactivex:rxandroid:1.2.1'
 
     compile 'com.google.android.gms:play-services-auth:11.8.0'
+
+    compile 'com.google.android.gms:play-services-location:11.8.0'
+
+    compile 'com.google.maps.android:android-maps-utils:0.4+'
+
+
 
     testCompile 'junit:junit:4.12'
 }

@@ -51,4 +51,8 @@
     <string name="alert_discard_activity">Are you sure you want to discard this activity?</string>
     <string name="alert_get_back_shortly">Thank you for reaching out to us. We will get back to you shortly.</string>
     <string name="alert_get_chat_plan">Chat is a paid feature, Get a coach add a personalized plans to chat now.</string>
+
+    <string name="facebook_app_id">715649728825438</string>
+    <string name="fb_login_protocol_scheme">fb715649728825438</string>
+
 </resources>

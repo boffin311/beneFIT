@@ -259,14 +259,15 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/dashboard_track_my_activity_distance_textview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="28sp"
-                    android:text="1.2"
+                    android:layout_gravity="center_horizontal"
                     android:fontFamily="@font/oswald"
-                    android:textStyle="bold"
+                    android:text="0"
                     android:textColor="@color/colorGreyOnBoard"
-                    android:layout_gravity="center_horizontal"/>
+                    android:textSize="28sp"
+                    android:textStyle="bold" />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -308,14 +309,14 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="26sp"
-                        android:text="270"
-                        android:textAllCaps="true"
+                        android:layout_marginStart="10dp"
                         android:fontFamily="@font/oswald"
-                        android:textColor="#000000"
-                        android:textStyle="bold"
+                        android:text="0"
                         android:textAlignment="center"
-                        android:layout_marginStart="10dp"/>
+                        android:textAllCaps="true"
+                        android:textColor="#000000"
+                        android:textSize="26sp"
+                        android:textStyle="bold" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -343,14 +344,14 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="26sp"
-                        android:text="40"
-                        android:textAllCaps="true"
+                        android:layout_marginStart="10dp"
                         android:fontFamily="@font/oswald"
-                        android:textColor="#000000"
-                        android:textStyle="bold"
+                        android:text="0"
                         android:textAlignment="center"
-                        android:layout_marginStart="10dp"/>
+                        android:textAllCaps="true"
+                        android:textColor="#000000"
+                        android:textSize="26sp"
+                        android:textStyle="bold" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -378,14 +379,14 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="26sp"
-                        android:text="3"
-                        android:textAllCaps="true"
+                        android:layout_marginStart="10dp"
                         android:fontFamily="@font/oswald"
-                        android:textColor="#000000"
-                        android:textStyle="bold"
+                        android:text="0"
                         android:textAlignment="center"
-                        android:layout_marginStart="10dp"/>
+                        android:textAllCaps="true"
+                        android:textColor="#000000"
+                        android:textSize="26sp"
+                        android:textStyle="bold" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

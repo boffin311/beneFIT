@@ -24,6 +24,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -33,7 +41,14 @@ import com.google.android.gms.tasks.Task;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Arrays;
+import java.util.List;
 
 import retrofit2.adapter.rxjava.HttpException;
 import rx.android.schedulers.AndroidSchedulers;
@@ -75,6 +90,9 @@ public class Login extends Fragment implements View.OnClickListener
 
     private GoogleSignInClient mGoogleSignInClient;
 
+    public CallbackManager callbackManager;
+    private LoginButton loginButton;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState)
@@ -82,6 +100,8 @@ public class Login extends Fragment implements View.OnClickListener
         rootView = inflater.inflate(R.layout.onboarding_login, container, false);
         ctx = rootView.getContext();
         fm = getFragmentManager();
+
+        callbackManager = CallbackManager.Factory.create();
 
 
         loginBtn = rootView.findViewById(R.id.get_started_login_btn);
@@ -151,6 +171,54 @@ public class Login extends Fragment implements View.OnClickListener
         mGoogleSignInClient = GoogleSignIn.getClient(getActivity(), gso);
 
 
+
+        loginButton = (LoginButton) rootView.findViewById(R.id.login_button);
+
+        List< String > permissionNeeds = Arrays.asList( "email", "AccessToken");
+        loginButton.registerCallback(callbackManager,
+                new FacebookCallback < LoginResult > () {@Override
+                public void onSuccess(LoginResult loginResult) {
+
+                    showSnackBarMessage("Connected to facebook.");
+                    String accessToken = loginResult.getAccessToken()
+                            .getToken();
+
+                    GraphRequest request = GraphRequest.newMeRequest(
+                            loginResult.getAccessToken(),
+                            new GraphRequest.GraphJSONObjectCallback() {@Override
+                            public void onCompleted(JSONObject object,
+                                                    GraphResponse response) {
+
+                                Log.i("LoginActivity",
+                                        response.toString());
+
+
+                                try {
+                                    String email = object.getString("email");
+                                    checkForValidToken(email,loginResult.getAccessToken().toString());
+
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                    showSnackBarMessage("unable to get email from facebook.\nTry again or login with email.");
+                                }
+
+                            }
+                            });
+
+                }
+
+                    @Override
+                    public void onCancel() {
+                    showSnackBarMessage("Request cancelled.");
+                    }
+
+                    @Override
+                    public void onError(FacebookException exception) {
+                        System.out.println("onError");
+                        showSnackBarMessage( exception.getCause().toString());
+                    }
+                });
+
         return rootView;
     }
 
@@ -187,7 +255,7 @@ public class Login extends Fragment implements View.OnClickListener
             }
             case R.id.get_started_login_fb:
             {
-                //TODO-FB-Login
+                facebookSignIn();
                 break;
             }
             case R.id.get_started_login_google:
@@ -253,6 +321,12 @@ public class Login extends Fragment implements View.OnClickListener
         }
     }
 
+    private void facebookSignIn() {
+
+        loginButton.performClick();
+
+    }
+
     private void googleSignIn() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
@@ -261,6 +335,9 @@ public class Login extends Fragment implements View.OnClickListener
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        callbackManager.onActivityResult(requestCode, resultCode, data);
+
 
         // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
         if (resultCode != RESULT_CANCELED && requestCode == RC_SIGN_IN) {
@@ -403,6 +480,7 @@ public class Login extends Fragment implements View.OnClickListener
                 Toast.makeText(getActivity().getApplicationContext(),"You have been logged out.",Toast.LENGTH_SHORT).show();
                 SharedPreferences.Editor editor = mSharedPreferences.edit();
                 editor.putString(Constants.TOKEN,"");
+                editor.apply();
 
                 String errorBody = ((HttpException) error).response().errorBody().string();
                 Response response = gson.fromJson(errorBody,Response.class);
