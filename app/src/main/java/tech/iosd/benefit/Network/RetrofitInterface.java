@@ -28,7 +28,7 @@ public interface RetrofitInterface {
     @POST("auth/login")
     Observable<Response> login(@Body UserForLogin userForLogin);
 
-    @POST("auth/logingoogle")
+    @POST("auth/login/google")
     Observable<Response> loginGoogle(@Body UserGoogleLogin userGoogleLogin);
 
     @POST("profile/update")

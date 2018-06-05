@@ -268,16 +268,17 @@
                     android:textColor="@color/colorGreyOnBoard"
                     android:textSize="28sp"
                     android:textStyle="bold" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
                     android:layout_marginTop="-5dp"
-                    android:textSize="16sp"
-                    android:text="Distance (KM)"
-                    android:textAllCaps="true"
                     android:fontFamily="@font/oswald"
+                    android:text="Distance (M)"
+                    android:textAllCaps="true"
                     android:textColor="@color/colorGreyOnBoard"
-                    android:layout_gravity="center_horizontal"/>
+                    android:textSize="16sp" />
             </LinearLayout>
         </android.support.v7.widget.CardView>
         <android.support.v7.widget.CardView

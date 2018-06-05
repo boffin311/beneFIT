@@ -66,43 +66,7 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
 
     private TextView distance;
 
-    private ServiceConnection mServiceConnection = new ServiceConnection() {
 
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            mServiceBound = false;
-            Toast.makeText(getActivity().getApplicationContext(),"service disconnceted",Toast.LENGTH_LONG).show();
-
-        }
-
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            GPSTracker.MyBinder myBinder = (GPSTracker.MyBinder) service;
-            gpsTracker = myBinder.getService();
-            mServiceBound = true;
-            Toast.makeText(getActivity().getApplicationContext(),"service connceted",Toast.LENGTH_LONG).show();
-            if(isgoogleMap){
-                if(mServiceBound && gpsTracker.canGetLocation()){
-                    LatLng myLocation = new LatLng(gpsTracker.getLatitude(), gpsTracker.getLongitude());
-
-                    CameraUpdate center=
-                            CameraUpdateFactory.newLatLng(myLocation);
-                    CameraUpdate zoom=CameraUpdateFactory.zoomTo(15);
-
-                    googleMap.moveCamera(center);
-                    googleMap.animateCamera(zoom);
-                }else if(mServiceBound){
-                    gpsTracker.showSettingsAlert();
-
-                }
-            }
-
-
-
-
-        }
-    };
 
     @Nullable
     @Override
@@ -122,12 +86,12 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
             }
         };
         t.start();
-       /*
+
         ctx.bindService(
                 new Intent(getActivity().getApplicationContext(), GPSTracker.class),
                 mServiceConnection,
                 Context.BIND_AUTO_CREATE
-        );*/
+        );
 
         fm = getFragmentManager();
 
@@ -167,10 +131,9 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
                 // For showing a move to my location button
                 if (ActivityCompat.checkSelfPermission(ctx, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(ctx, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
                 {
+                    googleMap.setMyLocationEnabled(true);
 
-                    return;
                 }
-                googleMap.setMyLocationEnabled(true);
 
                 if(mServiceBound && gpsTracker.canGetLocation()){
                     LatLng myLocation = new LatLng(gpsTracker.getLatitude(), gpsTracker.getLongitude());
@@ -202,7 +165,8 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
             Intent stopIntent = new Intent(MainActivity.this,
                         BroadcastService.class);
                 stopService(stopIntent);
-             */
+                */
+
                 if (intent.getAction().equals(Constants.GPS_UPDATE)) {
                     //intent.getExtras();
                     redrawLine();
@@ -231,6 +195,7 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
     public void onDestroy() {
         super.onDestroy();
         mMapView.onDestroy();
+        gpsTracker.onDestroy();
     }
 
     @Override
@@ -260,14 +225,18 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
                 startBtn.setVisibility(View.GONE);
                 pauseBtn.setVisibility(View.GONE);
                 stopBtn.setVisibility(View.VISIBLE);
-                gpsTracker.setPaused(true);
+                //gpsTracker.setPaused(true);
                 break;
             }
             case R.id.dashboard_track_my_activity_running_resume:
             {
-                gpsTracker.setPaused(false);
+                //gpsTracker.setPaused(false);
+                Toast.makeText(getActivity().getApplicationContext()," "+ gpsTracker.canGetLocation(),Toast.LENGTH_LONG).show();
+
+                break;
 
             }
+
             case R.id.dashboard_track_my_activity_running_discard:
             {
 
@@ -302,16 +271,51 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
         }
     }
 
+    private ServiceConnection mServiceConnection = new ServiceConnection() {
+
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            mServiceBound = false;
+            Toast.makeText(getActivity().getApplicationContext(),"service disconnceted",Toast.LENGTH_LONG).show();
+
+        }
+
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            GPSTracker.MyBinder myBinder = (GPSTracker.MyBinder) service;
+            gpsTracker = myBinder.getService();
+            mServiceBound = true;
+            //gpsTracker.setmContext(ctx);
+            Toast.makeText(getActivity().getApplicationContext(),"service connceted",Toast.LENGTH_LONG).show();
+
+            if(isgoogleMap){
+                if(mServiceBound && gpsTracker.canGetLocation()){
+                    LatLng myLocation = new LatLng(gpsTracker.getLatitude(), gpsTracker.getLongitude());
+
+                    CameraUpdate center=
+                            CameraUpdateFactory.newLatLng(myLocation);
+                    CameraUpdate zoom=CameraUpdateFactory.zoomTo(15);
+
+                    googleMap.moveCamera(center);
+                    googleMap.animateCamera(zoom);
+                }else if(mServiceBound){
+//                    gpsTracker.showSettingsAlert();
+
+                }
+            }
+
+
+
+
+        }
+    };
+
 
     private void startRunning() {
 
         if (gpsTracker.canGetLocation())
         {
-
-
-
-
-
             String stringLongitude = String.valueOf(gpsTracker.getLongitude());
 
             Toast.makeText(getActivity().getApplicationContext(),"Lat:"+stringLongitude+"\nLong"+stringLongitude,Toast.LENGTH_LONG).show();
@@ -319,7 +323,7 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
             LatLng sydney = new LatLng(gpsTracker.getLatitude(), gpsTracker.getLongitude());
             googleMap.addMarker(new MarkerOptions().position(sydney).title("Starting Point").snippet("You started your running journey from this point."));
 
-            CameraPosition cameraPosition = new CameraPosition.Builder().target(sydney).zoom(12).build();
+            CameraPosition cameraPosition = new CameraPosition.Builder().target(sydney).zoom(30).build();
             googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
 
@@ -338,7 +342,7 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
 
         googleMap.clear();
 
-        distance.setText(String.format("%.2f", gpsTracker.getDistance()));
+        //distance.setText(String.format("%.2f", gpsTracker.getDistance()));
 
 
         PolylineOptions options = new PolylineOptions().width(5).color(Color.BLUE).geodesic(true);

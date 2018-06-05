@@ -37,6 +37,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -92,6 +93,7 @@ public class Login extends Fragment implements View.OnClickListener
 
     public CallbackManager callbackManager;
     private LoginButton loginButton;
+
 
     @Nullable
     @Override
@@ -167,6 +169,7 @@ public class Login extends Fragment implements View.OnClickListener
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
+                .requestIdToken(getString(R.string.server_client_id))
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(getActivity(), gso);
 
@@ -195,7 +198,7 @@ public class Login extends Fragment implements View.OnClickListener
 
                                 try {
                                     String email = object.getString("email");
-                                    checkForValidToken(email,loginResult.getAccessToken().toString());
+                                    checkForValidToken(object.getString("first_name"),email,loginResult.getAccessToken().toString());
 
                                 } catch (JSONException e) {
                                     e.printStackTrace();
@@ -328,6 +331,12 @@ public class Login extends Fragment implements View.OnClickListener
     }
 
     private void googleSignIn() {
+        mGoogleSignInClient.signOut().addOnCompleteListener(getActivity(), new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        // ...
+                    }
+                });
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
@@ -353,7 +362,8 @@ public class Login extends Fragment implements View.OnClickListener
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
 
             // Signed in successfully, show authenticated UI.
-            checkForValidToken(account.getEmail(),account.getIdToken());
+            Log.d("googler"," " +"name : "+ account.getEmail()+" Token: "+account.getIdToken().toString());
+            checkForValidToken(account.getGivenName(),account.getEmail(),account.getIdToken());
 
         } catch (ApiException e) {
 
@@ -496,8 +506,8 @@ public class Login extends Fragment implements View.OnClickListener
 
         }
     }
-    private void checkForValidToken(String email, String token){
-        mSubscriptionsGoogle.add(NetworkUtil.getRetrofit().loginGoogle(new UserGoogleLogin(email,token))
+    private void checkForValidToken(String name,String email, String token){
+        mSubscriptionsGoogle.add(NetworkUtil.getRetrofit().loginGoogle(new UserGoogleLogin(name, email,token))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(this::handleResponse,this::handleError));

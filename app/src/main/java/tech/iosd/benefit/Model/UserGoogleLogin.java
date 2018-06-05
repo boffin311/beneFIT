@@ -6,11 +6,13 @@ package tech.iosd.benefit.Model;
 
 public class UserGoogleLogin {
     String email;
-    String googletoken;
+    String name;
+    String googleToken;
 
-    public UserGoogleLogin(String email, String googletoken) {
+    public UserGoogleLogin(String name,String email, String googletoken) {
         this.email = email;
-        this.googletoken = googletoken;
+        this.googleToken = googletoken;
+        this.name =  name;
     }
 
     public String getEmail() {
@@ -22,10 +24,10 @@ public class UserGoogleLogin {
     }
 
     public String getGoogletoken() {
-        return googletoken;
+        return googleToken;
     }
 
     public void setGoogletoken(String googletoken) {
-        this.googletoken = googletoken;
+        this.googleToken = googletoken;
     }
 }
