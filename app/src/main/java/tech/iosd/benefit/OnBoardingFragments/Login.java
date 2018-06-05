@@ -58,9 +58,11 @@ import rx.subscriptions.CompositeSubscription;
 import tech.iosd.benefit.DashboardActivity;
 import tech.iosd.benefit.DashboardFragments.ChoosePlan;
 import tech.iosd.benefit.Model.Response;
+import tech.iosd.benefit.Model.ResponseForUpdate;
 import tech.iosd.benefit.Model.UserDetails;
 import tech.iosd.benefit.Model.UserForLogin;
 import tech.iosd.benefit.Model.UserGoogleLogin;
+import tech.iosd.benefit.Model.UserProfileUpdate;
 import tech.iosd.benefit.Network.NetworkUtil;
 import tech.iosd.benefit.R;
 import tech.iosd.benefit.Utils.Constants;
@@ -407,19 +409,10 @@ public class Login extends Fragment implements View.OnClickListener
         editor.putString(Constants.TOKEN,response.token.token);
 
         editor.apply();
-        showSnackBarMessage("Getting user details..");
+        showSnackBarMessage("Sending user details..");
 
-        getUserDetails(response.token.token);
+        updateProfile(response.token.token);
 
-        /*Activity activity = getActivity();
-        if(activity != null)
-        {
-            Intent myIntent = new Intent(activity, DashboardActivity.class);
-            myIntent.putExtra("height",userDetails.getHeight());
-            myIntent.putExtra("weight",userDetails.getWeight());
-            startActivity(myIntent);
-            getActivity().finish();
-        }*/
 
     }
 
@@ -452,22 +445,46 @@ public class Login extends Fragment implements View.OnClickListener
         }
     }
 
-    private void getUserDetails(String token) {
 
-        mSubscriptions.add(NetworkUtil.getRetrofit(token).getProfile(token)
+    private void checkForValidToken(String name,String email, String token){
+        mSubscriptionsGoogle.add(NetworkUtil.getRetrofit().loginGoogle(new UserGoogleLogin(name, email,token))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(this::handleDetailsResponse,this::handleDetailsError));
+                .subscribe(this::handleResponse,this::handleError));
     }
 
-    private void handleDetailsResponse(UserDetails userDetails) {
+    private void updateProfile(String token){
+        Bundle bundle = getArguments();
+        if(bundle == null){
+            Toast.makeText(getActivity().getApplicationContext(),"Please make your profile first.",Toast.LENGTH_SHORT).show();
+            fm.beginTransaction().replace(R.id.onboarding_content, new SetupProfile())
+                    .addToBackStack(null)
+                    .commit();
+        }
+        int age = Integer.valueOf(bundle.getString("age"));
+        int height = Integer.valueOf(bundle.getString("height"));;
+        int weight = Integer.valueOf(bundle.getString("weight"));;
+        String gender = bundle.getString("gender");
+        //Toast.makeText(getActivity().getApplicationContext(),"Age: "+ String.valueOf(age)+"\nHieght; "+String.valueOf(height)+"\nWeight: "+String.valueOf(weight)+"\nGender: "+gender,Toast.LENGTH_LONG).show();
+        UserProfileUpdate userProfileUpdate = new UserProfileUpdate(age, height, weight,gender);
+        mSubscriptions.add(NetworkUtil.getRetrofit(token).update(token,userProfileUpdate)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(this::handleResponseUpdate,this::handleErrorUpdate));
+    }
 
+
+    private void handleResponseUpdate(ResponseForUpdate responseForUpdate) {
+
+        showSnackBarMessage("Update successful.");
         Activity activity = getActivity();
         if(activity != null)
         {
             SharedPreferences.Editor editor = mSharedPreferences.edit();
-            editor.putInt(Constants.HEIGHT,userDetails.getHeight());
-            editor.putInt(Constants.WEIGHT,userDetails.getWeight());
+            editor.putInt(Constants.HEIGHT,responseForUpdate.getHeight());
+            editor.putInt(Constants.WEIGHT,responseForUpdate.getWeight());
+            editor.putString(Constants.GENDER,responseForUpdate.getGender());
+            editor.putInt(Constants.AGE,responseForUpdate.getAge());
             editor.apply();
 
             Intent myIntent = new Intent(activity, DashboardActivity.class);
@@ -476,10 +493,9 @@ public class Login extends Fragment implements View.OnClickListener
             getActivity().finish();
         }
 
+
     }
-
-    private void handleDetailsError(Throwable error) {
-
+    private void handleErrorUpdate(Throwable error) {
 
 
         if (error instanceof HttpException) {
@@ -487,10 +503,6 @@ public class Login extends Fragment implements View.OnClickListener
             Gson gson = new GsonBuilder().create();
 
             try {
-                Toast.makeText(getActivity().getApplicationContext(),"You have been logged out.",Toast.LENGTH_SHORT).show();
-                SharedPreferences.Editor editor = mSharedPreferences.edit();
-                editor.putString(Constants.TOKEN,"");
-                editor.apply();
 
                 String errorBody = ((HttpException) error).response().errorBody().string();
                 Response response = gson.fromJson(errorBody,Response.class);
@@ -500,17 +512,10 @@ public class Login extends Fragment implements View.OnClickListener
                 e.printStackTrace();
             }
         } else {
+            //Log.d("error77",error.getMessage());
 
-            //Log.d("errorabsd: ",error.getMessage());
             showSnackBarMessage("Network Error !");
-
         }
-    }
-    private void checkForValidToken(String name,String email, String token){
-        mSubscriptionsGoogle.add(NetworkUtil.getRetrofit().loginGoogle(new UserGoogleLogin(name, email,token))
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(this::handleResponse,this::handleError));
     }
 
     private void showSnackBarMessage(String message) {

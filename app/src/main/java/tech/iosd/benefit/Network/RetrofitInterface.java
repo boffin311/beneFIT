@@ -12,7 +12,9 @@ import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import rx.Observable;
 
+import tech.iosd.benefit.Model.Measurements;
 import tech.iosd.benefit.Model.Response;
+import tech.iosd.benefit.Model.ResponseForMeasurementsUpdate;
 import tech.iosd.benefit.Model.ResponseForUpdate;
 import tech.iosd.benefit.Model.User;
 import tech.iosd.benefit.Model.UserDetails;
@@ -33,6 +35,9 @@ public interface RetrofitInterface {
 
     @POST("profile/update")
     Observable<ResponseForUpdate> update(@Header("authorization") String token,@Body UserProfileUpdate userProfileUpdate);
+
+    @POST("profile/measurements")
+    Observable<ResponseForMeasurementsUpdate> updateMeasurements(@Header("authorization") String token, @Body Measurements measurements );
 
     @GET("profile")
     Observable<UserDetails> getProfile(@Header("Authorization") String token);

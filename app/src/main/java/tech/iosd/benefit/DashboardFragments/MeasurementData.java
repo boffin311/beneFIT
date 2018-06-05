@@ -2,7 +2,9 @@ package tech.iosd.benefit.DashboardFragments;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -24,7 +26,9 @@ import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
+import tech.iosd.benefit.Model.Measurements;
 import tech.iosd.benefit.R;
+import tech.iosd.benefit.Utils.Constants;
 
 public class MeasurementData extends Fragment implements View.OnClickListener
 {
@@ -65,6 +69,16 @@ public class MeasurementData extends Fragment implements View.OnClickListener
     List<String> hipIN;
     List<String> hipCM;
 
+    private SharedPreferences mSharedPreferences;
+    private String gender;
+    private int height;
+    private int weight;
+    private int waistSize;
+    private int neckSize;
+    private int hipSize;
+    private int age;
+
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState)
@@ -72,6 +86,8 @@ public class MeasurementData extends Fragment implements View.OnClickListener
         View rootView = inflater.inflate(R.layout.dashboard_setup_measurement, container, false);
         ctx = rootView.getContext();
         fm = getFragmentManager();
+
+
 
         heightsCM = new ArrayList<>();
         heightsFT = new ArrayList<>();
@@ -227,6 +243,34 @@ public class MeasurementData extends Fragment implements View.OnClickListener
             public void afterTextChanged(Editable editable) { }
         });
 
+        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+
+        height = mSharedPreferences.getInt(Constants.HEIGHT,0);
+        weight = mSharedPreferences.getInt(Constants.WEIGHT,0);
+        age = mSharedPreferences.getInt(Constants.AGE,0);
+        gender = mSharedPreferences.getString(Constants.GENDER,"");
+        if(gender.equalsIgnoreCase("male")){
+            btnFemale.setBackgroundTintList(getResources().getColorStateList(R.color.FABIndicatorBGNotSelected));
+            btnMale.setBackgroundTintList(getResources().getColorStateList(R.color.FABIndicatorBGSelected));
+            btnFemale.setRippleColor(getResources().getColor(R.color.FABIndicatorBGSelected));
+            btnMale.setRippleColor(getResources().getColor(R.color.FABIndicatorBGNotSelected));
+            btnFemale.setColorFilter(getResources().getColor(R.color.FABIndicatorSelected));
+            btnMale.setColorFilter(getResources().getColor(R.color.FABIndicatorNotSelected));
+            genderSelector.setImageResource(R.drawable.male_img);
+        }
+        heightPickerPos = height - 120;
+
+        isHeightFtSelected = false;
+        heightFt.setBackground(getResources().getDrawable(R.drawable.button_style_off));
+        heightFt.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+        heightCm.setBackground(getResources().getDrawable(R.drawable.button_style_on));
+        heightCm.setTextColor(getResources().getColor(R.color.white));
+        heightField.setText(heightsCM.get(heightPickerPos));
+
+
+        ageField.setText(String.valueOf(age));
+        heightField.setText(String.valueOf(height));
+
 
         return rootView;
     }
@@ -255,6 +299,49 @@ public class MeasurementData extends Fragment implements View.OnClickListener
                 fm.beginTransaction().replace(R.id.dashboard_content, new Measurement())
                         .addToBackStack(null)
                         .commit();
+                //converting all field to standards units
+
+                isHeightFtSelected = false;
+                heightFt.setBackground(getResources().getDrawable(R.drawable.button_style_off));
+                heightFt.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+                heightCm.setBackground(getResources().getDrawable(R.drawable.button_style_on));
+                heightCm.setTextColor(getResources().getColor(R.color.white));
+                heightField.setText(heightsCM.get(heightPickerPos));
+
+                isWaistCmSelected = true;
+                waistCm.setBackground(getResources().getDrawable(R.drawable.button_style_on));
+                waistCm.setTextColor(getResources().getColor(R.color.white));
+                waistIn.setBackground(getResources().getDrawable(R.drawable.button_style_off));
+                waistIn.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+                waistField.setText(waistCM.get(waistPickerPos));
+
+                isNeckCmSelected = true;
+                neckCm.setBackground(getResources().getDrawable(R.drawable.button_style_on));
+                neckCm.setTextColor(getResources().getColor(R.color.white));
+                neckIn.setBackground(getResources().getDrawable(R.drawable.button_style_off));
+                neckIn.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+                neckField.setText(neckCM.get(neckPickerPos));
+
+                isHipCmSelected = true;
+                hipCm.setBackground(getResources().getDrawable(R.drawable.button_style_on));
+                hipCm.setTextColor(getResources().getColor(R.color.white));
+                hipIn.setBackground(getResources().getDrawable(R.drawable.button_style_off));
+                hipIn.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+                hipField.setText(hipCM.get(hipPickerPos));
+
+                Measurements measurements =  new Measurements(
+                        Integer.valueOf(ageField.getText().toString()),
+                        Integer.valueOf(heightField.getText().toString()),
+                        Integer.valueOf(waistField.getText().toString()),
+                        Integer.valueOf(neckField.getText().toString()),
+                        Integer.valueOf(hipField.getText().toString())
+                        );
+
+
+
+
+
+
                 break;
             }
             case R.id.dashboard_measurement_setup_female:
