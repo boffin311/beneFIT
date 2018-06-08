@@ -19,12 +19,22 @@ import lecho.lib.hellocharts.model.Line;
 import lecho.lib.hellocharts.model.LineChartData;
 import lecho.lib.hellocharts.model.PointValue;
 import lecho.lib.hellocharts.view.LineChartView;
+import tech.iosd.benefit.Model.DatabaseHandler;
 import tech.iosd.benefit.R;
 
 public class Measurement extends Fragment
 {
     Context ctx;
     FragmentManager fm;
+    DatabaseHandler db;
+
+    private double height;
+    private double weight;
+    private double age;
+    private double waist;
+    private double neck;
+    private double hip;
+    private String gender;
 
     @Nullable
     @Override
@@ -33,6 +43,11 @@ public class Measurement extends Fragment
         View rootView = inflater.inflate(R.layout.dashboard_measurement, container, false);
         ctx = rootView.getContext();
         fm = getFragmentManager();
+
+        db = new DatabaseHandler(getContext());
+
+        height = db.getUserHeight();
+        weight = db.getUserWeight();
 
         Random rand = new Random();
         LineChartView bmi_chart = rootView.findViewById(R.id.dashboard_measurement_bmi_graph);

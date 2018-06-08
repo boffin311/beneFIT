@@ -57,6 +57,7 @@ import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 import tech.iosd.benefit.DashboardActivity;
 import tech.iosd.benefit.DashboardFragments.ChoosePlan;
+import tech.iosd.benefit.Model.DatabaseHandler;
 import tech.iosd.benefit.Model.Response;
 import tech.iosd.benefit.Model.ResponseForUpdate;
 import tech.iosd.benefit.Model.UserDetails;
@@ -89,8 +90,7 @@ public class Login extends Fragment implements View.OnClickListener
     private CompositeSubscription mSubscriptions;
     private CompositeSubscription mSubscriptionsGoogle;
 
-    private SharedPreferences mSharedPreferences;
-
+    private DatabaseHandler db;
     private GoogleSignInClient mGoogleSignInClient;
 
     public CallbackManager callbackManager;
@@ -106,6 +106,8 @@ public class Login extends Fragment implements View.OnClickListener
         fm = getFragmentManager();
 
         callbackManager = CallbackManager.Factory.create();
+
+        db = new DatabaseHandler(getContext());
 
 
         loginBtn = rootView.findViewById(R.id.get_started_login_btn);
@@ -164,10 +166,10 @@ public class Login extends Fragment implements View.OnClickListener
         signupBtn.setOnClickListener(this);
 
 
+
         mSubscriptions = new CompositeSubscription();
         mSubscriptionsGoogle = new CompositeSubscription();
 
-        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
@@ -405,10 +407,20 @@ public class Login extends Fragment implements View.OnClickListener
     private void handleResponse(Response response) {
 
 
-        SharedPreferences.Editor editor = mSharedPreferences.edit();
-        editor.putString(Constants.TOKEN,response.token.token);
+        try{
+            db.addUser(response);
 
-        editor.apply();
+            Toast.makeText(getContext(),"successfull operation",Toast.LENGTH_SHORT).show();
+            Log.e("login"," Token: "+response.token.token);
+
+
+        }catch (Exception e){
+            Toast.makeText(getContext(),"error\nreinstall app or contact developer",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(),e.getMessage().toString(),Toast.LENGTH_SHORT).show();
+
+        }
+
+
         showSnackBarMessage("Sending user details..");
 
         updateProfile(response.token.token);
@@ -432,7 +444,7 @@ public class Login extends Fragment implements View.OnClickListener
                 else {
                     String errorBody = ((HttpException) error).response().errorBody().string();
                     Response response = gson.fromJson(errorBody,Response.class);
-                    showSnackBarMessage(response.getMessage());
+                    showSnackBarMessage(response.getMessage().toString());
                 }
 
 
@@ -441,6 +453,7 @@ public class Login extends Fragment implements View.OnClickListener
             }
         } else {
 
+            Log.e("error77",error.getMessage());
             showSnackBarMessage("Network Error !");
         }
     }
@@ -462,8 +475,8 @@ public class Login extends Fragment implements View.OnClickListener
                     .commit();
         }
         int age = Integer.valueOf(bundle.getString("age"));
-        int height = Integer.valueOf(bundle.getString("height"));;
-        int weight = Integer.valueOf(bundle.getString("weight"));;
+        int height = Integer.valueOf(bundle.getString("height"));
+        int weight = Integer.valueOf(bundle.getString("weight"));
         String gender = bundle.getString("gender");
         //Toast.makeText(getActivity().getApplicationContext(),"Age: "+ String.valueOf(age)+"\nHieght; "+String.valueOf(height)+"\nWeight: "+String.valueOf(weight)+"\nGender: "+gender,Toast.LENGTH_LONG).show();
         UserProfileUpdate userProfileUpdate = new UserProfileUpdate(age, height, weight,gender);
@@ -476,16 +489,35 @@ public class Login extends Fragment implements View.OnClickListener
 
     private void handleResponseUpdate(ResponseForUpdate responseForUpdate) {
 
+
         showSnackBarMessage("Update successful.");
         Activity activity = getActivity();
         if(activity != null)
         {
-            SharedPreferences.Editor editor = mSharedPreferences.edit();
-            editor.putInt(Constants.HEIGHT,responseForUpdate.getHeight());
-            editor.putInt(Constants.WEIGHT,responseForUpdate.getWeight());
-            editor.putString(Constants.GENDER,responseForUpdate.getGender());
-            editor.putInt(Constants.AGE,responseForUpdate.getAge());
-            editor.apply();
+            try{
+                /*Bundle bundle =  getArguments();
+                ResponseForUpdate r = new ResponseForUpdate();
+                int age = Integer.valueOf(bundle.getString("age"));
+                int height = Integer.valueOf(bundle.getString("height"));
+                int weight = Integer.valueOf(bundle.getString("weight"));
+                String gender = bundle.getString("gender");
+                r.setAge(age);
+                r.setHeight(height);
+                r.setWeight(weight);
+                r.setGender(gender);*/
+                db.updateUser(responseForUpdate);
+
+                Toast.makeText(getContext(),"successfull operation",Toast.LENGTH_SHORT).show();
+
+            }catch (Exception e){
+                Toast.makeText(getContext(),"error\nreinstall app or contact developer",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(),"error: "+ e.getMessage(),Toast.LENGTH_SHORT).show();
+                Log.e("DBERROR",e.getMessage());
+
+            }
+
+
+
 
             Intent myIntent = new Intent(activity, DashboardActivity.class);
 
@@ -506,13 +538,13 @@ public class Login extends Fragment implements View.OnClickListener
 
                 String errorBody = ((HttpException) error).response().errorBody().string();
                 Response response = gson.fromJson(errorBody,Response.class);
-                showSnackBarMessage(response.getMessage());
+                showSnackBarMessage(response.getMessage().toString());
 
             } catch (IOException e) {
                 e.printStackTrace();
             }
         } else {
-            //Log.d("error77",error.getMessage());
+            Log.e("error77",error.getMessage());
 
             showSnackBarMessage("Network Error !");
         }

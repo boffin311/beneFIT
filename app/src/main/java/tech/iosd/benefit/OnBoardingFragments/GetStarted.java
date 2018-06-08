@@ -32,6 +32,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 import tech.iosd.benefit.DashboardActivity;
+import tech.iosd.benefit.Model.DatabaseHandler;
 import tech.iosd.benefit.Model.Response;
 import tech.iosd.benefit.Model.UserDetails;
 import tech.iosd.benefit.Network.NetworkUtil;
@@ -42,8 +43,9 @@ public class GetStarted extends Fragment implements View.OnClickListener
 {
     Context ctx;
     FragmentManager fm;
-    private SharedPreferences mSharedPreferences;
     private CompositeSubscription mSubscriptions;
+    private DatabaseHandler db;
+
 
 
 
@@ -54,6 +56,9 @@ public class GetStarted extends Fragment implements View.OnClickListener
         View rootView = inflater.inflate(R.layout.onboarding_get_started, container, false);
         ctx = rootView.getContext();
         fm = getFragmentManager();
+
+        db = new DatabaseHandler(getContext());
+
 
         ImageView motto_guy = rootView.findViewById(R.id.get_started_motto_logo);
         TextView motto = rootView.findViewById(R.id.get_started_motto);
@@ -81,8 +86,18 @@ public class GetStarted extends Fragment implements View.OnClickListener
         {
             case R.id.get_started_startBtn:
             {
-                mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                String token= mSharedPreferences.getString(Constants.TOKEN,"");
+                String token="";
+                try {
+                     token= db.getUserToken();
+
+                }catch (Exception e){
+                    Toast.makeText(getContext(),"error\nreinstall app or contact developer",Toast.LENGTH_SHORT).show();
+
+                    Toast.makeText(getContext(),e.getMessage().toString(),Toast.LENGTH_SHORT).show();
+
+
+                }
+
                 if(token.compareTo("")==0 )
                 {
                     fm.beginTransaction().replace(R.id.onboarding_content, new ChooseAGoal())
@@ -133,13 +148,18 @@ public class GetStarted extends Fragment implements View.OnClickListener
 
             try {
                 Toast.makeText(getActivity().getApplicationContext(),"You have been logged out.",Toast.LENGTH_SHORT).show();
-                SharedPreferences.Editor editor = mSharedPreferences.edit();
-                editor.putString(Constants.TOKEN,"");//null means logged out.
-                editor.apply();
+                try {
+                     db.userLogOut();
+
+                }catch (Exception e){
+                    Toast.makeText(getContext(),"error\nreinstall app or contact developer",Toast.LENGTH_SHORT).show();
+
+                }
+
 
                 String errorBody = ((HttpException) error).response().errorBody().string();
                 Response response = gson.fromJson(errorBody,Response.class);
-                showSnackBarMessage(response.getMessage());
+                showSnackBarMessage(response.getMessage().toString());
 
             } catch (IOException e) {
                 e.printStackTrace();

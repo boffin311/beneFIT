@@ -223,7 +223,7 @@ public class Signup extends Fragment implements View.OnClickListener
                 e.printStackTrace();
             }
         } else {
-            //Log.d("error77",error.getMessage());
+            Log.d("error77",error.getMessage());
 
             showSnackBarMessage("Network Error !");
         }

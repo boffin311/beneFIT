@@ -8,6 +8,7 @@ import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.text.Editable;
@@ -18,15 +19,28 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.aigestudio.wheelpicker.WheelPicker;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.adapter.rxjava.HttpException;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
+import rx.subscriptions.CompositeSubscription;
+import tech.iosd.benefit.Model.DatabaseHandler;
 import tech.iosd.benefit.Model.Measurements;
+import tech.iosd.benefit.Model.Response;
+import tech.iosd.benefit.Model.ResponseForMeasurementsUpdate;
+import tech.iosd.benefit.Model.UserForLogin;
+import tech.iosd.benefit.Network.NetworkUtil;
 import tech.iosd.benefit.R;
 import tech.iosd.benefit.Utils.Constants;
 
@@ -69,7 +83,6 @@ public class MeasurementData extends Fragment implements View.OnClickListener
     List<String> hipIN;
     List<String> hipCM;
 
-    private SharedPreferences mSharedPreferences;
     private String gender;
     private int height;
     private int weight;
@@ -77,6 +90,9 @@ public class MeasurementData extends Fragment implements View.OnClickListener
     private int neckSize;
     private int hipSize;
     private int age;
+    private  DatabaseHandler db;
+    private CompositeSubscription mSubscriptions;
+
 
 
     @Nullable
@@ -86,6 +102,11 @@ public class MeasurementData extends Fragment implements View.OnClickListener
         View rootView = inflater.inflate(R.layout.dashboard_setup_measurement, container, false);
         ctx = rootView.getContext();
         fm = getFragmentManager();
+
+        db = new DatabaseHandler(getContext());
+
+        mSubscriptions = new CompositeSubscription();
+
 
 
 
@@ -243,12 +264,16 @@ public class MeasurementData extends Fragment implements View.OnClickListener
             public void afterTextChanged(Editable editable) { }
         });
 
-        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
-        height = mSharedPreferences.getInt(Constants.HEIGHT,0);
-        weight = mSharedPreferences.getInt(Constants.WEIGHT,0);
-        age = mSharedPreferences.getInt(Constants.AGE,0);
-        gender = mSharedPreferences.getString(Constants.GENDER,"");
+        height = db.getUserHeight();
+        weight = db.getUserWeight();
+
+
+
+
+        age = db.getUserAge();
+        gender = db.getUserGender();
+        Toast.makeText(getContext(), height+" "+ weight, Toast.LENGTH_SHORT).show();
         if(gender.equalsIgnoreCase("male")){
             btnFemale.setBackgroundTintList(getResources().getColorStateList(R.color.FABIndicatorBGNotSelected));
             btnMale.setBackgroundTintList(getResources().getColorStateList(R.color.FABIndicatorBGSelected));
@@ -258,7 +283,7 @@ public class MeasurementData extends Fragment implements View.OnClickListener
             btnMale.setColorFilter(getResources().getColor(R.color.FABIndicatorNotSelected));
             genderSelector.setImageResource(R.drawable.male_img);
         }
-        heightPickerPos = height - 120;
+       // heightPickerPos = height - 120;
 
         isHeightFtSelected = false;
         heightFt.setBackground(getResources().getDrawable(R.drawable.button_style_off));
@@ -296,9 +321,7 @@ public class MeasurementData extends Fragment implements View.OnClickListener
         {
             case R.id.dashboard_measurement_setup_save:
             {
-                fm.beginTransaction().replace(R.id.dashboard_content, new Measurement())
-                        .addToBackStack(null)
-                        .commit();
+
                 //converting all field to standards units
 
                 isHeightFtSelected = false;
@@ -337,6 +360,7 @@ public class MeasurementData extends Fragment implements View.OnClickListener
                         Integer.valueOf(hipField.getText().toString())
                         );
 
+                updateUser(measurements,db.getUserToken());
 
 
 
@@ -542,6 +566,66 @@ public class MeasurementData extends Fragment implements View.OnClickListener
                 });
                 break;
             }
+        }
+    }
+
+    private void updateUser(Measurements updateMeasurements,String token) {
+
+        showSnackBarMessage("Sending user details..");
+
+        mSubscriptions.add(NetworkUtil.getRetrofit(token).updateMeasurements(token,updateMeasurements)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(this::handleResponse,this::handleError));
+    }
+
+    private void handleResponse(ResponseForMeasurementsUpdate response) {
+
+
+        db.updateUserMeasurements(response);
+
+        fm.beginTransaction().replace(R.id.dashboard_content, new Measurement())
+                .addToBackStack(null)
+                .commit();
+
+
+
+        //updateProfile(response.token.token);
+
+
+    }
+
+    private void handleError(Throwable error) {
+
+
+        if (error instanceof HttpException) {
+
+            Gson gson = new GsonBuilder().create();
+
+            try {
+
+
+                 {
+                    String errorBody = ((HttpException) error).response().errorBody().string();
+                    ResponseForMeasurementsUpdate response = gson.fromJson(errorBody,ResponseForMeasurementsUpdate.class);
+                   // showSnackBarMessage(response.getMessage());
+                }
+
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+
+            showSnackBarMessage("Network Error !");
+        }
+    }
+
+    private void showSnackBarMessage(String message) {
+
+        if (getView() != null) {
+
+            Snackbar.make(getView(),message, Snackbar.LENGTH_SHORT).show();
         }
     }
 

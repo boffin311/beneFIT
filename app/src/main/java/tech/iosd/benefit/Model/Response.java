@@ -7,12 +7,12 @@ package tech.iosd.benefit.Model;
 public class Response {
 
     private String message;
-    private String success;
+    private Boolean success;
 
 
     public static class Token{
         public String token;
-        public String expiresIn;
+        public int expiresIn;
 
         public String getToken() {
             return token;
@@ -22,11 +22,11 @@ public class Response {
             this.token = token;
         }
 
-        public String getExpiresIn() {
+        public int getExpiresIn() {
             return expiresIn;
         }
 
-        public void setExpiresIn(String expiresIn) {
+        public void setExpiresIn(int expiresIn) {
             this.expiresIn = expiresIn;
         }
     }
@@ -46,11 +46,11 @@ public class Response {
         this.message = message;
     }
 
-    public String getSuccess() {
+    public Boolean getSuccess() {
         return success;
     }
 
-    public void setSuccess(String success) {
+    public void setSuccess(Boolean success) {
         this.success = success;
     }
 

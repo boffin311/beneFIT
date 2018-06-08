@@ -11,7 +11,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import tech.iosd.benefit.Model.DatabaseHandler;
 import tech.iosd.benefit.R;
 import tech.iosd.benefit.Utils.Constants;
 
@@ -24,17 +26,20 @@ public class BMIIntro extends Fragment implements View.OnClickListener
     private SharedPreferences mSharedPreferences;
     private Double bmi;
 
+    private DatabaseHandler db ;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState)
     {
+
+
         View rootView = inflater.inflate(R.layout.dashboard_bmi_intro, container, false);
         bmiTextView = rootView.findViewById(R.id.dashboard_bmi_intro_bmi_textview);
+        DatabaseHandler db = new DatabaseHandler(getContext());
 
-        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        height = mSharedPreferences.getInt(Constants.HEIGHT,0);
-        weight = mSharedPreferences.getInt(Constants.WEIGHT,0);
+        height = db.getUserHeight();
+        weight = db.getUserWeight();
         height=height/100;
 
         bmi = weight /(height*height);

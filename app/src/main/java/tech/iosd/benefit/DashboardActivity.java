@@ -1,5 +1,6 @@
 package tech.iosd.benefit;
 
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -17,10 +18,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.Toast;
+
 import tech.iosd.benefit.DashboardFragments.Chat;
 import tech.iosd.benefit.DashboardFragments.ChoosePlan;
 import tech.iosd.benefit.DashboardFragments.Main;
 import tech.iosd.benefit.DashboardFragments.Notification;
+import tech.iosd.benefit.Model.DatabaseHandler;
 import tech.iosd.benefit.Utils.Constants;
 
 public class DashboardActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener
@@ -28,6 +32,7 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
     Context ctx;
     FragmentManager fm;
     private SharedPreferences mSharedPreferences;
+    private DatabaseHandler db;
 
 
     @Override
@@ -38,6 +43,11 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ctx = this;
+
+        db = new DatabaseHandler(ctx);
+
+        showUserProfile();
+
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -84,6 +94,11 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         });
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
+    }
+
+    private void showUserProfile() {
+        String message = "Age: "+ db.getUserAge()+"\nHeight: "+db.getUserHeight()+"\nWeight: "+db.getUserWeight()+"\nGender "+db.getUserGender();
+        Toast.makeText(ctx,message,Toast.LENGTH_LONG).show();
     }
 
     @Override

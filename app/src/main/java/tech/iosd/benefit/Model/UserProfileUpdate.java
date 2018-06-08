@@ -9,16 +9,36 @@ import com.google.gson.annotations.SerializedName;
 public class UserProfileUpdate {
 
     private int age;
-    @SerializedName("height")
-    private int heightCM;
-    @SerializedName("weight")
-    private int weightKG;
+
     private String gender;
+
+    public class Measurements{
+        @SerializedName("height")
+        public int height;
+        @SerializedName("weight")
+        public int weight;
+        public int getHeightCM() {
+            return height;
+        }
+
+        public void setHeightCM(int heightCM) {
+            this.height = heightCM;
+        }
+
+        public int getWeightKG() {
+            return weight;
+        }
+
+        public void setWeightKG(int weightKG) {
+            this.weight = weightKG;
+        }
+    }
+    public Measurements measurements;
 
     public UserProfileUpdate(int age, int heightCM, int weightKG, String gender) {
         this.age = age;
-        this.heightCM = heightCM;
-        this.weightKG = weightKG;
+        this.measurements.height = heightCM;
+        this.measurements.weight = weightKG;
         this.gender = gender;
     }
 
@@ -37,20 +57,21 @@ public class UserProfileUpdate {
     public void setAge(int age) {
         this.age = age;
     }
-
     public int getHeightCM() {
-        return heightCM;
+        return measurements.height;
     }
 
     public void setHeightCM(int heightCM) {
-        this.heightCM = heightCM;
+        this.measurements.height = heightCM;
     }
 
     public int getWeightKG() {
-        return weightKG;
+        return measurements.weight;
     }
 
     public void setWeightKG(int weightKG) {
-        this.weightKG = weightKG;
+        this.measurements.weight = weightKG;
     }
+
+
 }
