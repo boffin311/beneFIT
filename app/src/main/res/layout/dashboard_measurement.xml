@@ -47,6 +47,7 @@
                     android:background="#a7a7a7" />
 
                 <TextView
+                    android:id="@+id/dashboard_mesurements_bmi_textview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
@@ -59,6 +60,7 @@
                     android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/dashboard_mesurements_bmi_message_textview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
@@ -71,6 +73,7 @@
                     android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/dashboard_mesurements_bmi_message_detailetextview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
@@ -245,17 +248,18 @@
                     android:background="#a7a7a7"/>
 
                 <TextView
+                    android:id="@+id/dashboard_mesurements_fat_percentage_textview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:textSize="36sp"
-                    android:text="15.9%"
                     android:layout_gravity="center_horizontal"
-                    android:textAllCaps="true"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="20dp"
                     android:fontFamily="@font/oswald"
-                    android:textStyle="bold"
+                    android:text="15.9%"
+                    android:textAllCaps="true"
                     android:textColor="#444444"
-                    android:layout_marginStart="10dp"/>
+                    android:textSize="36sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="wrap_content"

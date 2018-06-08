@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +29,11 @@ public class Measurement extends Fragment
     FragmentManager fm;
     DatabaseHandler db;
 
+    private TextView bmiTextView;
+    private TextView bmiMessageTextView;
+    private TextView bmiMessageDetailedTextView;
+    private TextView fatPercentageTectView;
+
     private double height;
     private double weight;
     private double age;
@@ -35,6 +41,9 @@ public class Measurement extends Fragment
     private double neck;
     private double hip;
     private String gender;
+
+    private double bmi;
+    private double  fatPercentage;
 
     @Nullable
     @Override
@@ -44,11 +53,45 @@ public class Measurement extends Fragment
         ctx = rootView.getContext();
         fm = getFragmentManager();
 
+        bmiTextView = rootView.findViewById(R.id.dashboard_mesurements_bmi_textview);
+        bmiMessageTextView = rootView.findViewById(R.id.dashboard_mesurements_bmi_message_textview);
+        bmiMessageDetailedTextView = rootView.findViewById(R.id.dashboard_mesurements_bmi_message_detailetextview);
+        fatPercentageTectView = rootView.findViewById(R.id.dashboard_mesurements_fat_percentage_textview);
+
         db = new DatabaseHandler(getContext());
 
+        gender = db.getUserGender();
+        hip = db.getUserNeck();
+        neck = db.getUserNeck();
+        waist = db.getUserWaist();
+        age = db.getUserAge();
         height = db.getUserHeight();
         weight = db.getUserWeight();
 
+        height=height/100;
+
+        bmi = weight /(height*height);
+        if(bmi<18.5){
+            bmiMessageTextView.setText(R.string.bmi_underweight);
+            bmiMessageDetailedTextView.setText(R.string.bmi_underweight_details);
+        }else if(bmi<24.99){
+            bmiMessageTextView.setText(R.string.bmi_overweight);
+            bmiMessageDetailedTextView.setText(R.string.bmi_overweight_details);
+        }else {
+            bmiMessageTextView.setText(R.string.bmi_obesity);
+            bmiMessageDetailedTextView.setText(R.string.bmi_obesity_details);
+        }
+
+        bmiTextView.setText(String.format("%.2f", bmi));
+
+
+        if(gender.equals("male")){
+            fatPercentage = (1.20 * bmi) + (0.23 * age) - 10.8 - 5.4;
+        }else{
+            fatPercentage = (1.20 * bmi) + (0.23 * age) - 5.4;
+
+        }
+        fatPercentageTectView.setText(String.format("%.2f",fatPercentage));
         Random rand = new Random();
         LineChartView bmi_chart = rootView.findViewById(R.id.dashboard_measurement_bmi_graph);
         LineChartView basal_chart = rootView.findViewById(R.id.dashboard_measurement_basal_graph);

@@ -22,11 +22,16 @@ public class BMIIntro extends Fragment implements View.OnClickListener
     Context ctx;
     FragmentManager fm;
     private TextView bmiTextView;
+    private TextView bmiMessageTextView;
+    private TextView bmiMessageDetailedTextView;
+
     private double height, weight;
     private SharedPreferences mSharedPreferences;
     private Double bmi;
 
     private DatabaseHandler db ;
+
+
 
     @Nullable
     @Override
@@ -36,6 +41,8 @@ public class BMIIntro extends Fragment implements View.OnClickListener
 
         View rootView = inflater.inflate(R.layout.dashboard_bmi_intro, container, false);
         bmiTextView = rootView.findViewById(R.id.dashboard_bmi_intro_bmi_textview);
+        bmiMessageTextView = rootView.findViewById(R.id.dashboard_bmi_intro_bmi_message_textview);
+        bmiMessageDetailedTextView = rootView.findViewById(R.id.dashboard_bmi_intro_bmi_message_detailed_textview);
         DatabaseHandler db = new DatabaseHandler(getContext());
 
         height = db.getUserHeight();
@@ -43,6 +50,17 @@ public class BMIIntro extends Fragment implements View.OnClickListener
         height=height/100;
 
         bmi = weight /(height*height);
+        if(bmi<18.5){
+            bmiMessageTextView.setText(R.string.bmi_underweight);
+            bmiMessageDetailedTextView.setText(R.string.bmi_underweight_details);
+        }else if(bmi<24.99){
+            bmiMessageTextView.setText(R.string.bmi_overweight);
+            bmiMessageDetailedTextView.setText(R.string.bmi_overweight_details);
+        }else {
+            bmiMessageTextView.setText(R.string.bmi_obesity);
+            bmiMessageDetailedTextView.setText(R.string.bmi_obesity_details);
+        }
+
         bmiTextView.setText(String.format("%.2f", bmi));
 
 
