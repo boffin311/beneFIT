@@ -357,7 +357,8 @@ public class MeasurementData extends Fragment implements View.OnClickListener
                         Integer.valueOf(heightField.getText().toString()),
                         Integer.valueOf(waistField.getText().toString()),
                         Integer.valueOf(neckField.getText().toString()),
-                        Integer.valueOf(hipField.getText().toString())
+                        Integer.valueOf(hipField.getText().toString()),
+                        db.getUserWeight()
                         );
 
                 updateUser(measurements,db.getUserToken());

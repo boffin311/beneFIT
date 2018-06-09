@@ -15,6 +15,7 @@ import rx.Observable;
 import tech.iosd.benefit.Model.Measurements;
 import tech.iosd.benefit.Model.Response;
 import tech.iosd.benefit.Model.ResponseForMeasurementsUpdate;
+import tech.iosd.benefit.Model.ResponseForMesurementsHistory;
 import tech.iosd.benefit.Model.ResponseForUpdate;
 import tech.iosd.benefit.Model.User;
 import tech.iosd.benefit.Model.UserDetails;
@@ -41,6 +42,10 @@ public interface RetrofitInterface {
 
     @GET("profile")
     Observable<UserDetails> getProfile(@Header("Authorization") String token);
+
+    @GET("profile/measurements/history")
+    Observable<ResponseForMesurementsHistory> getMeasurementsHistory(@Header("Authorization") String token);
+
     /*@GET("users/{email}")
     Observable<User> getProfile(@Path("email") String email);*/
 

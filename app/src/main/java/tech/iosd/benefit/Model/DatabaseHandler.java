@@ -95,7 +95,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public boolean updateUserMeasurements( ResponseForMeasurementsUpdate responseForUpdate) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(Constants.AGE,responseForUpdate.data.getAge());
+        //contentValues.put(Constants.AGE,responseForUpdate.data.getAge());
         contentValues.put(Constants.HEIGHT,responseForUpdate.data.getHeight());
         //Toast.makeText(context,"hgt: "+ responseForUpdate.data.getHeight(),Toast.LENGTH_SHORT).show();
 
