@@ -7,12 +7,13 @@ package tech.iosd.benefit.Model;
 public class ResponseForUpdate {
 
     private String message;
+    public Boolean success;
 
 
     public class Data{
         private String _id;
         private String name;
-        private String __v;
+        private int __v;
         private int age;
         private String gender;
 
@@ -33,11 +34,11 @@ public class ResponseForUpdate {
             this.name = name;
         }
 
-        public String get__v() {
+        public int get__v() {
             return __v;
         }
 
-        public void set__v(String __v) {
+        public void set__v(int __v) {
             this.__v = __v;
         }
 
@@ -57,7 +58,7 @@ public class ResponseForUpdate {
             this.gender = gender;
         }
 
-        public class Measurement{
+       /* public class Measurement{
             public int height;
             public int weight;
 
@@ -77,7 +78,7 @@ public class ResponseForUpdate {
                 this.weight = weight;
             }
         }
-        public Measurement measurements;
+        public Measurement measurements;*/
 
 
     }

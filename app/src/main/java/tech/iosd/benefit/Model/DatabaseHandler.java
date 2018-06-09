@@ -80,15 +80,15 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.close();
     }
 
-    public boolean updateUser( ResponseForUpdate responseForUpdate) {
+    public boolean updateUser(int age, int height, int weight , String gender) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(Constants.AGE,responseForUpdate.data.getAge());
-        contentValues.put(Constants.HEIGHT,responseForUpdate.data.measurements.height);
+        contentValues.put(Constants.AGE,age);
+        contentValues.put(Constants.HEIGHT,height);
         //Toast.makeText(context,"hgt: "+ responseForUpdate.data.getHeight(),Toast.LENGTH_SHORT).show();
 
-        contentValues.put(Constants.WEIGHT,responseForUpdate.data.measurements.weight);
-        contentValues.put(Constants.GENDER,responseForUpdate.data.getGender());
+        contentValues.put(Constants.WEIGHT,weight);
+        contentValues.put(Constants.GENDER,gender);
         db.update(Constants.TABLE_NAME, contentValues, "token is not null",null);
         return true;
     }

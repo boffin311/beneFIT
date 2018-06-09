@@ -495,17 +495,17 @@ public class Login extends Fragment implements View.OnClickListener
         if(activity != null)
         {
             try{
-                /*Bundle bundle =  getArguments();
-                ResponseForUpdate r = new ResponseForUpdate();
+                Bundle bundle =  getArguments();
+               // ResponseForUpdate r = new ResponseForUpdate();
                 int age = Integer.valueOf(bundle.getString("age"));
                 int height = Integer.valueOf(bundle.getString("height"));
                 int weight = Integer.valueOf(bundle.getString("weight"));
                 String gender = bundle.getString("gender");
-                r.setAge(age);
+               /* r.setAge(age);
                 r.setHeight(height);
                 r.setWeight(weight);
                 r.setGender(gender);*/
-                db.updateUser(responseForUpdate);
+                db.updateUser(age,height,weight,gender);
 
                 Toast.makeText(getContext(),"successfull operation",Toast.LENGTH_SHORT).show();
 

@@ -13,10 +13,14 @@ public class UserProfileUpdate {
     private String gender;
 
     public class Measurements{
-        @SerializedName("height")
         public int height;
-        @SerializedName("weight")
         public int weight;
+
+        public Measurements(int height, int weight) {
+            this.height = height;
+            this.weight = weight;
+        }
+
         public int getHeightCM() {
             return height;
         }
@@ -37,8 +41,8 @@ public class UserProfileUpdate {
 
     public UserProfileUpdate(int age, int heightCM, int weightKG, String gender) {
         this.age = age;
-        this.measurements.height = heightCM;
-        this.measurements.weight = weightKG;
+        this.measurements=new Measurements(heightCM,weightKG);
+
         this.gender = gender;
     }
 
