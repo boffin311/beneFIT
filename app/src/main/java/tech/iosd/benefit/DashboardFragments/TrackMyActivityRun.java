@@ -3,6 +3,7 @@ package tech.iosd.benefit.DashboardFragments;
 import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
@@ -44,6 +45,7 @@ import tech.iosd.benefit.R;
 import tech.iosd.benefit.Services.GPSTracker;
 import tech.iosd.benefit.Utils.Constants;
 
+import static android.content.Context.BIND_AUTO_CREATE;
 import static android.content.Context.LOCATION_SERVICE;
 
 public class TrackMyActivityRun extends Fragment implements View.OnClickListener
@@ -57,14 +59,111 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
     private View pauseBtn;
     private View stopBtn;
 
-    private GPSTracker gpsTracker;
+    private GPSTracker myService;
     private ArrayList<LatLng> points;
     private Polyline polyline;
-    private LocationManager mgr;
+
+    long startTime;
+     boolean status = false;
+    LocationManager locationManager;
     private boolean isgoogleMap = false;
-    boolean mServiceBound = false;
+    //boolean mServiceBound = false;
 
     private TextView distance;
+
+    private ServiceConnection sc = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            GPSTracker.LocalBinder binder = (GPSTracker.LocalBinder) service;
+            myService = binder.getService();
+            GPSTracker.LocalBinder myBinder = (GPSTracker.LocalBinder) service;
+            myService = myBinder.getService();
+            myService.setmContext(ctx);
+            Toast.makeText(getActivity().getApplicationContext(),"service connceted",Toast.LENGTH_LONG).show();
+            status = true;
+
+            if(isgoogleMap){
+                if(status ){
+                    locationManager = (LocationManager) getContext().getSystemService(LOCATION_SERVICE);
+
+                    LatLng myLocation = new LatLng(myService.getLatitude(), myService.getLongitude());
+
+                    CameraUpdate center=
+                            CameraUpdateFactory.newLatLng(myLocation);
+                    CameraUpdate zoom=CameraUpdateFactory.zoomTo(15);
+
+                    googleMap.moveCamera(center);
+                    googleMap.animateCamera(zoom);
+                }else if(status){
+//                    gpsTracker.showSettingsAlert();
+
+                }
+            }
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            status = false;
+        }
+    };
+
+    void bindService() {
+        if (status == true)
+            return;
+
+        Thread t = new Thread(){
+            public void run(){
+                Intent i = new Intent(getContext(), GPSTracker.class);
+                getContext().bindService(i, sc, BIND_AUTO_CREATE);
+                startTime = System.currentTimeMillis();
+            }
+        };
+
+        t.start();
+
+
+    }
+
+    void unbindService() {
+        if (status == false)
+            return;
+        Intent i = new Intent(getContext(), GPSTracker.class);
+        getContext().unbindService(sc);
+        status = false;
+    }
+    //This method leads you to the alert dialog box.
+    void checkGps() {
+        locationManager = (LocationManager) getContext().getSystemService(LOCATION_SERVICE);
+
+        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+
+
+            showGPSDisabledAlertToUser();
+        }
+    }
+
+    //This method configures the Alert Dialog box.
+    private void showGPSDisabledAlertToUser() {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
+        alertDialogBuilder.setMessage("Enable GPS to use application")
+                .setCancelable(false)
+                .setPositiveButton("Enable GPS",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                Intent callGPSSettingIntent = new Intent(
+                                        android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                                startActivity(callGPSSettingIntent);
+                            }
+                        });
+        alertDialogBuilder.setNegativeButton("Cancel",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog alert = alertDialogBuilder.create();
+        alert.show();
+    }
 
 
 
@@ -76,22 +175,20 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
 
         ctx = rootView.getContext();
 
-        Thread t = new Thread(){
+        bindService();
+
+        /*Thread t = new Thread(){
             public void run(){
                 ctx.bindService(
                         new Intent(getActivity().getApplicationContext(), GPSTracker.class),
-                        mServiceConnection,
-                        Context.BIND_AUTO_CREATE
+                        sc,
+                        BIND_AUTO_CREATE
                 );
             }
         };
-        t.start();
+        t.start();*/
 
-        ctx.bindService(
-                new Intent(getActivity().getApplicationContext(), GPSTracker.class),
-                mServiceConnection,
-                Context.BIND_AUTO_CREATE
-        );
+
 
         fm = getFragmentManager();
 
@@ -135,8 +232,8 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
 
                 }
 
-                if(mServiceBound && gpsTracker.canGetLocation()){
-                    LatLng myLocation = new LatLng(gpsTracker.getLatitude(), gpsTracker.getLongitude());
+               /* if(status ){
+                    LatLng myLocation = new LatLng(myService.getLatitude(), myService.getLongitude());
 
                     CameraUpdate center=
                             CameraUpdateFactory.newLatLng(myLocation);
@@ -144,10 +241,7 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
 
                     googleMap.moveCamera(center);
                     googleMap.animateCamera(zoom);
-                }else if(mServiceBound){
-                    gpsTracker.showSettingsAlert();
-
-                }
+                }*/
 
 
             }
@@ -195,7 +289,8 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
     public void onDestroy() {
         super.onDestroy();
         mMapView.onDestroy();
-        gpsTracker.onDestroy();
+        myService.unbindService(sc);
+        myService.onDestroy();
     }
 
     @Override
@@ -231,7 +326,7 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
             case R.id.dashboard_track_my_activity_running_resume:
             {
                 //gpsTracker.setPaused(false);
-                Toast.makeText(getActivity().getApplicationContext()," "+ gpsTracker.canGetLocation(),Toast.LENGTH_LONG).show();
+                //Toast.makeText(getActivity().getApplicationContext()," "+ myService.canGetLocation(),Toast.LENGTH_LONG).show();
 
                 break;
 
@@ -271,81 +366,42 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
         }
     }
 
-    private ServiceConnection mServiceConnection = new ServiceConnection() {
 
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            mServiceBound = false;
-            Toast.makeText(getActivity().getApplicationContext(),"service disconnceted",Toast.LENGTH_LONG).show();
-
-        }
-
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            GPSTracker.MyBinder myBinder = (GPSTracker.MyBinder) service;
-            gpsTracker = myBinder.getService();
-            mServiceBound = true;
-            //gpsTracker.setmContext(ctx);
-            Toast.makeText(getActivity().getApplicationContext(),"service connceted",Toast.LENGTH_LONG).show();
-
-            if(isgoogleMap){
-                if(mServiceBound && gpsTracker.canGetLocation()){
-                    LatLng myLocation = new LatLng(gpsTracker.getLatitude(), gpsTracker.getLongitude());
-
-                    CameraUpdate center=
-                            CameraUpdateFactory.newLatLng(myLocation);
-                    CameraUpdate zoom=CameraUpdateFactory.zoomTo(15);
-
-                    googleMap.moveCamera(center);
-                    googleMap.animateCamera(zoom);
-                }else if(mServiceBound){
-//                    gpsTracker.showSettingsAlert();
-
-                }
-            }
-
-
-
-
-        }
-    };
 
 
     private void startRunning() {
 
-        if (gpsTracker.canGetLocation())
-        {
-            String stringLongitude = String.valueOf(gpsTracker.getLongitude());
+
+            String stringLongitude = String.valueOf(myService.getLongitude());
 
             Toast.makeText(getActivity().getApplicationContext(),"Lat:"+stringLongitude+"\nLong"+stringLongitude,Toast.LENGTH_LONG).show();
 
-            LatLng sydney = new LatLng(gpsTracker.getLatitude(), gpsTracker.getLongitude());
+            LatLng sydney = new LatLng(myService.getLatitude(), myService.getLongitude());
             googleMap.addMarker(new MarkerOptions().position(sydney).title("Starting Point").snippet("You started your running journey from this point."));
 
             CameraPosition cameraPosition = new CameraPosition.Builder().target(sydney).zoom(30).build();
             googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
 
-        }
-        else
-        {
 
-            gpsTracker.showSettingsAlert();
-        }
 
     }
 
     private void redrawLine(){
 
-        points = gpsTracker.getPoints();
+        points = myService.getPoints();
 
         googleMap.clear();
+        CameraUpdate center=
+                CameraUpdateFactory.newLatLng(new LatLng(points.get(points.size()-1).latitude,points.get(points.size()-1).latitude));
+
+        googleMap.moveCamera(center);
+
 
         //distance.setText(String.format("%.2f", gpsTracker.getDistance()));
 
 
-        PolylineOptions options = new PolylineOptions().width(5).color(Color.BLUE).geodesic(true);
+        PolylineOptions options = new PolylineOptions().width(8).color(Color.BLACK).geodesic(true);
         for (int i = 0; i < points.size(); i++) {
             LatLng point = points.get(i);
             options.add(point);

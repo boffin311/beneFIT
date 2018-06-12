@@ -1,27 +1,47 @@
 package tech.iosd.benefit.DashboardFragments;
 
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.aigestudio.wheelpicker.WheelPicker;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 
 import devs.mulham.horizontalcalendar.HorizontalCalendar;
 import devs.mulham.horizontalcalendar.utils.HorizontalCalendarListener;
+import retrofit2.adapter.rxjava.HttpException;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
+import rx.subscriptions.CompositeSubscription;
+import tech.iosd.benefit.Model.DatabaseHandler;
+import tech.iosd.benefit.Model.MealLogFood;
+import tech.iosd.benefit.Model.Response;
+import tech.iosd.benefit.Model.ResponseForFoodSearch;
+import tech.iosd.benefit.Network.NetworkUtil;
 import tech.iosd.benefit.R;
 
 public class MealLog extends Fragment implements AdapterView.OnItemClickListener, View.OnClickListener
@@ -44,6 +64,15 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
     ArrayList<String> snacksIngredients;
     ListView dinnerListView;
     ArrayList<String> dinnerIngredients;
+    ArrayList<MealLogFood > listItems;
+    tech.iosd.benefit.Adapters.MealLog adapter ;
+
+    private CompositeSubscription mSubscriptions;
+
+    private DatabaseHandler db ;
+    RecyclerView recyclerView;
+
+
 
     @Nullable
     @Override
@@ -52,6 +81,14 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
         View rootView = inflater.inflate(R.layout.dashboard_meal_log, container, false);
         ctx = rootView.getContext();
         fm = getFragmentManager();
+
+        mSubscriptions = new CompositeSubscription();
+
+        db = new DatabaseHandler(getContext());
+
+        listItems = new ArrayList<>();
+
+
 
         Calendar startDate = Calendar.getInstance();
         startDate.add(Calendar.MONTH, -1);
@@ -87,12 +124,7 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
         ingredientsQty = new ArrayList<>();
         for (int i = 1; i < 100; i++)
             ingredientsQty.add(Integer.toString(i));
-        ingredientTyp.add("Banana ripe");
-        ingredientTyp.add("Samosa");
-        ingredientTyp.add("Orange");
-        ingredientTyp.add("Egg Rotis");
-        ingredientTyp.add("Rotis");
-        ingredientTyp.add("Glass of mix fruit juice");
+        ingredientTyp.add("Add a food");
 
         breakfastListView = rootView.findViewById(R.id.my_nutrition_breakfast);
         breakfastIngredients = new ArrayList<>();
@@ -161,12 +193,11 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
         Button dialogModify = mView.findViewById(R.id.dialog_modify);
         Button dialogRemove = mView.findViewById(R.id.dialog_remove);
         final WheelPicker wheelPickerQty = mView.findViewById(R.id.dialog_picker_ingredient_qty);
-        final WheelPicker wheelPickerTyp = mView.findViewById(R.id.dialog_picker_ingredient_typ);
         mBuilder.setView(mView);
         final AlertDialog dialog = mBuilder.create();
         dialog.show();
         wheelPickerQty.setData(ingredientsQty);
-        wheelPickerTyp.setData(ingredientTyp);
+        //wheelPickerTyp.setData(ingredientTyp);
 
         final int pos = i;
 
@@ -180,7 +211,7 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
                     @Override
                     public void onClick(View view)
                     {
-                        breakfastIngredients.set(pos, wheelPickerQty.getData().get(wheelPickerQty.getCurrentItemPosition()) + " " + wheelPickerTyp.getData().get(wheelPickerTyp.getCurrentItemPosition()));
+                        //breakfastIngredients.set(pos, wheelPickerQty.getData().get(wheelPickerQty.getCurrentItemPosition()) + " " + wheelPickerTyp.getData().get(wheelPickerTyp.getCurrentItemPosition()));
                         final ArrayAdapter<String> breakfastAdapter = new ArrayAdapter<>(ctx, R.layout.listview_text, breakfastIngredients);
                         breakfastListView.setAdapter(breakfastAdapter);
                         dialog.dismiss();
@@ -208,7 +239,7 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
                     @Override
                     public void onClick(View view)
                     {
-                        midMorningIngredients.set(pos, wheelPickerQty.getData().get(wheelPickerQty.getCurrentItemPosition()) + " " + wheelPickerTyp.getData().get(wheelPickerTyp.getCurrentItemPosition()));
+                       // midMorningIngredients.set(pos, wheelPickerQty.getData().get(wheelPickerQty.getCurrentItemPosition()) + " " + wheelPickerTyp.getData().get(wheelPickerTyp.getCurrentItemPosition()));
                         final ArrayAdapter<String> midMorningAdapter = new ArrayAdapter<>(ctx, R.layout.listview_text, midMorningIngredients);
                         midMorningListView.setAdapter(midMorningAdapter);
                         dialog.dismiss();
@@ -236,7 +267,8 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
                     @Override
                     public void onClick(View view)
                     {
-                        lunchIngredients.set(pos, wheelPickerQty.getData().get(wheelPickerQty.getCurrentItemPosition()) + " " + wheelPickerTyp.getData().get(wheelPickerTyp.getCurrentItemPosition()));
+                        //lunchIngredients.set(pos, wheelPickerQty.getData().get(wheelPickerQty.getCurrentItemPosition()) + " " +
+                        // .getData().get(wheelPickerTyp.getCurrentItemPosition()));
                         final ArrayAdapter<String> lunchAdapter = new ArrayAdapter<>(ctx, R.layout.listview_text, lunchIngredients);
                         lunchListView.setAdapter(lunchAdapter);
                         dialog.dismiss();
@@ -264,7 +296,7 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
                     @Override
                     public void onClick(View view)
                     {
-                        snacksIngredients.set(pos, wheelPickerQty.getData().get(wheelPickerQty.getCurrentItemPosition()) + " " + wheelPickerTyp.getData().get(wheelPickerTyp.getCurrentItemPosition()));
+                        //snacksIngredients.set(pos, wheelPickerQty.getData().get(wheelPickerQty.getCurrentItemPosition()) + " " + wheelPickerTyp.getData().get(wheelPickerTyp.getCurrentItemPosition()));
                         final ArrayAdapter<String> snacksAdapter = new ArrayAdapter<>(ctx, R.layout.listview_text, snacksIngredients);
                         snackListView.setAdapter(snacksAdapter);
                         dialog.dismiss();
@@ -292,7 +324,7 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
                     @Override
                     public void onClick(View view)
                     {
-                        dinnerIngredients.set(pos, wheelPickerQty.getData().get(wheelPickerQty.getCurrentItemPosition()) + " " + wheelPickerTyp.getData().get(wheelPickerTyp.getCurrentItemPosition()));
+                        //dinnerIngredients.set(pos, wheelPickerQty.getData().get(wheelPickerQty.getCurrentItemPosition()) + " " + wheelPickerTyp.getData().get(wheelPickerTyp.getCurrentItemPosition()));
                         final ArrayAdapter<String> dinnerAdapter = new ArrayAdapter<>(ctx, R.layout.listview_text, dinnerIngredients);
                         dinnerListView.setAdapter(dinnerAdapter);
                         dialog.dismiss();
@@ -327,19 +359,48 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
                 Button dialogAdd = mView.findViewById(R.id.dialog_add);
                 Button dialogCancel = mView.findViewById(R.id.dialog_cancel);
                 final WheelPicker wheelPickerQty = mView.findViewById(R.id.dialog_picker_ingredient_qty);
-                final WheelPicker wheelPickerTyp = mView.findViewById(R.id.dialog_picker_ingredient_typ);
+                //final WheelPicker wheelPickerTyp = mView.findViewById(R.id.dialog_picker_ingredient_typ);
                 mBuilder.setView(mView);
                 final AlertDialog dialog = mBuilder.create();
                 dialog.show();
-                wheelPickerQty.setData(ingredientsQty);
-                wheelPickerTyp.setData(ingredientTyp);
+                recyclerView = dialog.findViewById(R.id.dialog_picker_ingredient_recycler_view);
+                recyclerView.setHasFixedSize(false);
+                recyclerView.setLayoutManager(new LinearLayoutManager(dialog.getContext(), LinearLayoutManager.HORIZONTAL, false));
+                //recyclerView.setAdapter(adapter);
+                EditText foodName = (EditText)mView.findViewById(R.id.dialog_picker_ingredient_food_name);
+                (foodName).setOnEditorActionListener(
+                        new EditText.OnEditorActionListener() {
+                            @Override
+                            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                                if (actionId == EditorInfo.IME_ACTION_SEARCH ||
+                                        actionId == EditorInfo.IME_ACTION_DONE ||
+                                        event != null &&
+                                                event.getAction() == KeyEvent.ACTION_DOWN &&
+                                                event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
+                                    if (event == null || !event.isShiftPressed()) {
+
+                                        String name =  foodName.getText().toString();
+                                        Toast.makeText(getContext(),name,Toast.LENGTH_LONG).show();
+                                        adapter = new tech.iosd.benefit.Adapters.MealLog(getActivity(), listItems);
+
+                                        getSearchResult(name);
+                                        return true;
+                                    }
+                                }
+                                return false;
+                            }
+                        }
+                );
+
+                //wheelPickerQty.setData(ingredientsQty);
+                //wheelPickerTyp.setData(ingredientTyp);
 
                 dialogAdd.setOnClickListener(new View.OnClickListener()
                 {
                     @Override
                     public void onClick(View view)
                     {
-                        breakfastIngredients.add(wheelPickerQty.getData().get(wheelPickerQty.getCurrentItemPosition()) + " " + wheelPickerTyp.getData().get(wheelPickerTyp.getCurrentItemPosition()));
+                       // breakfastIngredients.add(wheelPickerQty.getData().get(wheelPickerQty.getCurrentItemPosition()) + " " + wheelPickerTyp.getData().get(wheelPickerTyp.getCurrentItemPosition()));
                         final ArrayAdapter<String> breakfastAdapter = new ArrayAdapter<>(ctx, R.layout.listview_text, breakfastIngredients);
                         breakfastListView.setAdapter(breakfastAdapter);
                         breakfastListView.getLayoutParams().height = 110 * breakfastIngredients.size();
@@ -356,6 +417,68 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
                 });
                 break;
             }
+        }
+    }
+
+    private void getSearchResult(String name) {
+
+        mSubscriptions.add(NetworkUtil.getRetrofit(db.getUserToken()).getFoodList(name,db.getUserToken())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(this::handleResponse,this::handleError));
+
+    }
+    private void handleResponse(ResponseForFoodSearch response) {
+
+        //Toast.makeText(getActivity().getApplicationContext(),token,Toast.LENGTH_SHORT).show();
+        listItems.clear();
+
+        listItems = response.getData();
+        listItems.add(response.getData().get(0));
+
+        Toast.makeText(getActivity().getApplicationContext(),String.valueOf(listItems.size()),Toast.LENGTH_SHORT).show();
+
+
+      //  adapter.notifyDataSetChanged();
+        Toast.makeText(getActivity().getApplicationContext(),"m"+String.valueOf(adapter.getItemCount()),Toast.LENGTH_SHORT).show();
+
+        recyclerView.setAdapter(adapter);
+
+        Toast.makeText(getActivity().getApplicationContext(),"mq"+String.valueOf(adapter.getItemCount()),Toast.LENGTH_SHORT).show();
+
+
+
+
+    }
+
+    private void handleError(Throwable error) {
+
+
+        if (error instanceof HttpException) {
+
+            Gson gson = new GsonBuilder().create();
+
+            try {
+
+                String errorBody = ((HttpException) error).response().errorBody().string();
+                Response response = gson.fromJson(errorBody,Response.class);
+                showSnackBarMessage(response.getMessage());
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            Log.d("error77",error.getMessage());
+
+            showSnackBarMessage("Network Error !");
+        }
+    }
+    private void showSnackBarMessage(String message) {
+
+        if (getView() != null) {
+
+            Snackbar.make(getView(),message, Snackbar.LENGTH_LONG).show();
+
         }
     }
 }

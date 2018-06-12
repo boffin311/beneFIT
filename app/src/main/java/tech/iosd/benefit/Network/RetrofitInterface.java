@@ -14,6 +14,7 @@ import rx.Observable;
 
 import tech.iosd.benefit.Model.Measurements;
 import tech.iosd.benefit.Model.Response;
+import tech.iosd.benefit.Model.ResponseForFoodSearch;
 import tech.iosd.benefit.Model.ResponseForMeasurementsUpdate;
 import tech.iosd.benefit.Model.ResponseForMesurementsHistory;
 import tech.iosd.benefit.Model.ResponseForUpdate;
@@ -45,6 +46,9 @@ public interface RetrofitInterface {
 
     @GET("profile/measurements/history")
     Observable<ResponseForMesurementsHistory> getMeasurementsHistory(@Header("Authorization") String token);
+
+    @GET("mealLog/food/search/{name}")
+    Observable<ResponseForFoodSearch> getFoodList(@Path("name") String name, @Header("Authorization") String token);
 
     /*@GET("users/{email}")
     Observable<User> getProfile(@Path("email") String email);*/

@@ -6,17 +6,22 @@ import java.util.List;
 import java.util.Locale;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.app.Service;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
 import android.util.Log;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -36,46 +41,71 @@ public class GPSTracker extends Service implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener {
-    private  Context mContext ;
+    private Context mContext;
+
+    private double latitude, longitude;
+
     private ArrayList<LatLng> points;
-    private IBinder mBinder = new MyBinder();
-    private boolean isPaused=false;
 
-    private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
-    private GoogleApiClient mGoogleApiClient;
-    private LocationRequest mLocationRequest;
-    private double currentLatitude;
-    private double currentLongitude;
-    private boolean locationAvailabe = false;
+    private boolean isPaused = false;
 
-    double latitude;
-    double longitude;
+    private final IBinder mBinder = new LocalBinder();
 
+
+    private static final long INTERVAL = 1000 * 2;
+    private static final long FASTEST_INTERVAL = 1000 * 1;
+    LocationRequest mLocationRequest;
+    GoogleApiClient mGoogleApiClient;
+    Location mCurrentLocation, lStart, lEnd;
+    static double distance = 0;
+    double speed;
+
+
+    protected void stopLocationUpdates() {
+        LocationServices.FusedLocationApi.removeLocationUpdates(
+                mGoogleApiClient, this);
+        distance = 0;
+    }
 
     @Override
     public void onCreate(){
         super.onCreate();
         points =  new ArrayList<>();
 
-
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .build();
-
-        // Create the LocationRequest object
-        mLocationRequest = LocationRequest.create()
-                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-                .setInterval(10 * 1000)        // 10 seconds, in milliseconds
-                .setFastestInterval(1 * 1000); // 1 second, in milliseconds
-
-
     }
 
 
+    public Context getmContext() {
+        return mContext;
+    }
 
+    public double getLatitude() {
+        return latitude;
+    }
 
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public void setPoints(ArrayList<LatLng> points) {
+        this.points = points;
+    }
+
+    public boolean isPaused() {
+        return isPaused;
+    }
+
+    public void setPaused(boolean paused) {
+        isPaused = paused;
+    }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -85,22 +115,11 @@ public class GPSTracker extends Service implements
 
     @Override
     public void onConnected(Bundle bundle) {
-        try{
-            Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-            locationAvailabe =true;
 
-            if (location == null) {
-                LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
-
-            } else {
-                //If everything went fine lets get latitude and longitude
-                currentLatitude = location.getLatitude();
-                currentLongitude = location.getLongitude();
-
-                Toast.makeText(this, currentLatitude + " WORKS " + currentLongitude + "", Toast.LENGTH_LONG).show();
-            }
-        }catch (Exception e){
-           // showSettingsAlert();
+        try {
+            LocationServices.FusedLocationApi.requestLocationUpdates(
+                    mGoogleApiClient, mLocationRequest, this);
+        } catch (SecurityException e) {
         }
 
     }
@@ -112,34 +131,40 @@ public class GPSTracker extends Service implements
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-         showSettingsAlert();
-        if (connectionResult.hasResolution()) {
-            try {
-                // Start an Activity that tries to resolve the error
-              //  connectionResult.startResolutionForResult(mContext, CONNECTION_FAILURE_RESOLUTION_REQUEST);
-                Toast.makeText(mContext,"Some error occured.\nRestarts App.",Toast.LENGTH_LONG).show();
 
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } else {
-
-            Log.e("LocationError", "Location services connection failed with code " + connectionResult.getErrorCode());
-        }
     }
     @Override
     public void onLocationChanged(Location location) {
-        currentLatitude = location.getLatitude();
-        latitude = location.getLatitude();
-        currentLongitude = location.getLongitude();
-        longitude =  location.getLongitude();
-        points.add(new LatLng(latitude,longitude));
+
+        mCurrentLocation = location;
+        /*
+        if (lStart == null) {
+            lStart = mCurrentLocation;
+            lEnd = mCurrentLocation;
+        } else
+            lEnd = mCurrentLocation;*/
+
+        latitude = mCurrentLocation.getLatitude();
+        longitude = mCurrentLocation.getLongitude();
+        points.add(new LatLng(mCurrentLocation.getLatitude(),mCurrentLocation.getLongitude()));
 
         Intent broadcastIntent = new Intent();
         broadcastIntent.setAction(Constants.GPS_UPDATE);
         sendBroadcast(broadcastIntent);
 
-        Toast.makeText(this, currentLatitude + " WORKS " + currentLongitude + "", Toast.LENGTH_LONG).show();
+        speed = location.getSpeed() * 18 / 5;
+
+
+        Toast.makeText(this, mCurrentLocation.getLatitude() + " WORKS " + mCurrentLocation.getLongitude()+ "", Toast.LENGTH_LONG).show();
+    }
+
+    public class LocalBinder extends Binder {
+
+        public GPSTracker getService() {
+            return GPSTracker.this;
+        }
+
+
     }
 
 
@@ -170,8 +195,28 @@ public class GPSTracker extends Service implements
         this.mContext = mContext;
     }
 
+    protected void createLocationRequest() {
+        mLocationRequest = new LocationRequest();
+        mLocationRequest.setInterval(INTERVAL);
+        mLocationRequest.setFastestInterval(FASTEST_INTERVAL);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        if(mLocationRequest != null){
+            Toast.makeText(this,"connected gps",Toast.LENGTH_LONG).show();
+            //latitude = mCurrentLocation.getLatitude();
+          //  longitude = mCurrentLocation.getLongitude();
+        }
+    }
+
     @Override
     public IBinder onBind(Intent intent) {
+
+        createLocationRequest();
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addApi(LocationServices.API)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .build();
+        mGoogleApiClient.connect();
         return mBinder;
     }
 
@@ -182,7 +227,14 @@ public class GPSTracker extends Service implements
 
     @Override
     public boolean onUnbind(Intent intent) {
-        return true;
+
+        stopLocationUpdates();
+        if (mGoogleApiClient.isConnected())
+            mGoogleApiClient.disconnect();
+        lStart = null;
+        lEnd = null;
+        distance = 0;
+        return super.onUnbind(intent);
     }
 
     @Override
@@ -191,15 +243,7 @@ public class GPSTracker extends Service implements
     }
 
 
-    public boolean canGetLocation(){
-        return locationAvailabe;
-    }
-    public double getLatitude(){
-        return longitude;
-    }
-    public double getLongitude(){
-        return longitude;
-    }
+
 
     public class MyBinder extends Binder {
         public GPSTracker getService() {

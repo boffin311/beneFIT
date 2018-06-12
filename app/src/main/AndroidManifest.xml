@@ -8,7 +8,6 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.LOCATION_HARDWARE" />
-
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
 
@@ -68,7 +67,7 @@
             android:enabled="true"
             android:name="tech.iosd.benefit.Services.GPSTracker">
             <intent-filter>
-                <action android:name="tech.ios.benefit.android.action.broadcast" />
+                <action android:name="tech.iosd.benefit.android.action.broadcast" />
             </intent-filter>
         </service>
 

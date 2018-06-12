@@ -23,11 +23,42 @@
 
     <LinearLayout
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            app:srcCompat="?android:attr/actionModeWebSearchDrawable" />
+
+        <EditText
+            android:id="@+id/dialog_picker_ingredient_food_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:fontFamily="@font/oswald"
+            android:hint="Click to search"
+            android:inputType="text"
+            android:textAlignment="center"
+            android:textAllCaps="true"
+            android:textColor="#000000"
+            android:textSize="26sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#a7a7a7" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
         <com.aigestudio.wheelpicker.WheelPicker
-            android:id="@+id/dialog_picker_ingredient_qty"
+            android:id="@+id/_qty"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -37,17 +68,24 @@
             app:wheel_item_text_color="#A7A7DB"
             app:wheel_item_text_size="24sp"
             app:wheel_selected_item_text_color="#536D8A" />
-        <com.aigestudio.wheelpicker.WheelPicker
-            android:id="@+id/dialog_picker_ingredient_typ"
+
+        <ScrollView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
-            app:wheel_atmospheric="true"
-            app:wheel_curved="true"
-            app:wheel_cyclic="true"
-            app:wheel_item_text_color="#A7A7DB"
-            app:wheel_item_text_size="24sp"
-            app:wheel_selected_item_text_color="#536D8A" />
+            android:layout_weight="2">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/dialog_picker_ingredient_recycler_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                />
+        </ScrollView>
+
+
+
+
+
     </LinearLayout>
 
     <LinearLayout
@@ -66,14 +104,14 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="26sp"
-                android:text="270"
-                android:textAllCaps="true"
+                android:layout_marginStart="10dp"
                 android:fontFamily="@font/oswald"
-                android:textColor="#000000"
-                android:textStyle="bold"
+                android:text="0"
                 android:textAlignment="center"
-                android:layout_marginStart="10dp"/>
+                android:textAllCaps="true"
+                android:textColor="#000000"
+                android:textSize="26sp"
+                android:textStyle="bold" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -101,14 +139,14 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="26sp"
-                android:text="35"
-                android:textAllCaps="true"
+                android:layout_marginStart="10dp"
                 android:fontFamily="@font/oswald"
-                android:textColor="#000000"
-                android:textStyle="bold"
+                android:text="0"
                 android:textAlignment="center"
-                android:layout_marginStart="10dp"/>
+                android:textAllCaps="true"
+                android:textColor="#000000"
+                android:textSize="26sp"
+                android:textStyle="bold" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -136,14 +174,14 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="26sp"
-                android:text="24"
-                android:textAllCaps="true"
+                android:layout_marginStart="10dp"
                 android:fontFamily="@font/oswald"
-                android:textColor="#000000"
-                android:textStyle="bold"
+                android:text="0"
                 android:textAlignment="center"
-                android:layout_marginStart="10dp"/>
+                android:textAllCaps="true"
+                android:textColor="#000000"
+                android:textSize="26sp"
+                android:textStyle="bold" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -171,14 +209,14 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="26sp"
-                android:text="24"
-                android:textAllCaps="true"
+                android:layout_marginStart="10dp"
                 android:fontFamily="@font/oswald"
-                android:textColor="#000000"
-                android:textStyle="bold"
+                android:text="0"
                 android:textAlignment="center"
-                android:layout_marginStart="10dp"/>
+                android:textAllCaps="true"
+                android:textColor="#000000"
+                android:textSize="26sp"
+                android:textStyle="bold" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
