@@ -44,7 +44,7 @@ import tech.iosd.benefit.Model.ResponseForFoodSearch;
 import tech.iosd.benefit.Network.NetworkUtil;
 import tech.iosd.benefit.R;
 
-public class MealLog extends Fragment implements AdapterView.OnItemClickListener, View.OnClickListener
+public class MealLog extends Fragment implements AdapterView.OnItemClickListener, View.OnClickListener, tech.iosd.benefit.Adapters.MealLog.AdapterCallback
 {
     public Calendar selDate;
 
@@ -67,10 +67,13 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
     ArrayList<MealLogFood > listItems;
     tech.iosd.benefit.Adapters.MealLog adapter ;
 
+    TextView dialogCarbs, dialogProtien, dialogCalorie, dialogFats;
+
     private CompositeSubscription mSubscriptions;
 
     private DatabaseHandler db ;
     RecyclerView recyclerView;
+    int position = -1;
 
 
 
@@ -88,9 +91,10 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
 
         listItems = new ArrayList<>();
         MealLogFood mealLogFood =  new MealLogFood();
-        mealLogFood.setName("ya");
+        mealLogFood.setName("Please search a food item");
         listItems.add(mealLogFood);
-        listItems.add(mealLogFood);
+
+
 
 
 
@@ -363,18 +367,24 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
                 View mView = getActivity().getLayoutInflater().inflate(R.layout.dialog_picker_ingredient_add, null);
                 Button dialogAdd = mView.findViewById(R.id.dialog_add);
                 Button dialogCancel = mView.findViewById(R.id.dialog_cancel);
-                final WheelPicker wheelPickerQty = mView.findViewById(R.id.dialog_picker_ingredient_qty);
+                final WheelPicker wheelPickerQty = mView.findViewById(R.id._qty);
+
                 //final WheelPicker wheelPickerTyp = mView.findViewById(R.id.dialog_picker_ingredient_typ);
                 mBuilder.setView(mView);
                 final AlertDialog dialog = mBuilder.create();
                 dialog.show();
-                recyclerView = dialog.findViewById(R.id.dialog_picker_ingredient_recycler_view);
+                dialogCarbs = (TextView)dialog.findViewById(R.id.dialog_picker_ingredient_add_carbs);
+                dialogFats = (TextView)dialog.findViewById(R.id.dialog_picker_ingredient_add_fats);
+                dialogCalorie = (TextView)dialog.findViewById(R.id.dialog_picker_ingredient_add_calories);
+                dialogProtien = (TextView)dialog.findViewById(R.id.dialog_picker_ingredient_add_protien);
+
+                recyclerView = dialog.findViewById(R.id.dialog_picker_ingredient_add_recycler_view);
                 recyclerView.setHasFixedSize(false);
                 recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-                adapter = new tech.iosd.benefit.Adapters.MealLog(dialog.getContext(), listItems, getActivity());
+                adapter = new tech.iosd.benefit.Adapters.MealLog(dialog.getContext(), listItems, getActivity(), this);
                 recyclerView.setAdapter(adapter);
 
-                EditText foodName = (EditText)mView.findViewById(R.id.dialog_picker_ingredient_food_name);
+                EditText foodName = (EditText)mView.findViewById(R.id.dialog_picker_ingredient_add_food_name);
                 (foodName).setOnEditorActionListener(
                         new EditText.OnEditorActionListener() {
                             @Override
@@ -398,7 +408,7 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
                         }
                 );
 
-                //wheelPickerQty.setData(ingredientsQty);
+                wheelPickerQty.setData(ingredientsQty);
                 //wheelPickerTyp.setData(ingredientTyp);
 
                 dialogAdd.setOnClickListener(new View.OnClickListener()
@@ -406,11 +416,17 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
                     @Override
                     public void onClick(View view)
                     {
-                       // breakfastIngredients.add(wheelPickerQty.getData().get(wheelPickerQty.getCurrentItemPosition()) + " " + wheelPickerTyp.getData().get(wheelPickerTyp.getCurrentItemPosition()));
-                        final ArrayAdapter<String> breakfastAdapter = new ArrayAdapter<>(ctx, R.layout.listview_text, breakfastIngredients);
-                        breakfastListView.setAdapter(breakfastAdapter);
-                        breakfastListView.getLayoutParams().height = 110 * breakfastIngredients.size();
-                        dialog.dismiss();
+                        if(position ==-1){
+                            Toast.makeText(getContext(),"Please select an input",Toast.LENGTH_LONG).show();
+                        }
+                        else {
+                            breakfastIngredients.add(wheelPickerQty.getData().get(wheelPickerQty.getCurrentItemPosition()) + " " + listItems.get(position).getName());
+                            final ArrayAdapter<String> breakfastAdapter = new ArrayAdapter<>(ctx, R.layout.listview_text, breakfastIngredients);
+                            breakfastListView.setAdapter(breakfastAdapter);
+                            breakfastListView.getLayoutParams().height = 110 * breakfastIngredients.size();
+                            dialog.dismiss();
+                        }
+
                     }
                 });
                 dialogCancel.setOnClickListener(new View.OnClickListener()
@@ -491,5 +507,16 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
             Snackbar.make(getView(),message, Snackbar.LENGTH_LONG).show();
 
         }
+    }
+
+    @Override
+    public void newItemSelected(int position) {
+
+        dialogProtien.setText(String.valueOf(listItems.get(position).getProteins()));
+        dialogCalorie.setText(String.valueOf(listItems.get(position).getCalories()));
+        dialogCarbs.setText(String.valueOf(listItems.get(position).getCarbs()));
+        dialogFats.setText(String.valueOf(listItems.get(position).getFats()));
+        this.position = position;
+
     }
 }

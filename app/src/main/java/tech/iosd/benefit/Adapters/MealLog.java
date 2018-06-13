@@ -27,11 +27,15 @@ public class MealLog extends RecyclerView.Adapter<MealLog.ViewHolder> {
     private Context context;
     private ArrayList<MealLogFood> listItems;
     private Activity activity;
+    private int itemSelected = -1;
+    private AdapterCallback mAdapterCallback;
 
-    public MealLog(Context context, ArrayList list, Activity activity){
+
+    public MealLog(Context context, ArrayList list, Activity activity, AdapterCallback c){
         this.context = context;
         this.listItems = list;
         this.activity = activity;
+        this.mAdapterCallback = c;
 
     }
 
@@ -51,6 +55,15 @@ public class MealLog extends RecyclerView.Adapter<MealLog.ViewHolder> {
 
 
         holder.name.setText(listItems.get(position).getName());
+        holder.view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                itemSelected = position;
+                mAdapterCallback.newItemSelected(position);
+
+
+            }
+        });
     }
 
     @Override
@@ -62,13 +75,18 @@ public class MealLog extends RecyclerView.Adapter<MealLog.ViewHolder> {
     public class ViewHolder extends RecyclerView.ViewHolder{
 
         public TextView name;
+        public View view;
 
         public ViewHolder(View itemView) {
             super(itemView);
             name = (TextView) itemView.findViewById(R.id.list_row_meal_log_name_textview);
+            view = itemView.findViewById(R.id.list_row_meal_log_name_view);
 
 
 
         }
+    }
+    public static interface AdapterCallback {
+        void newItemSelected(int position);
     }
 }
