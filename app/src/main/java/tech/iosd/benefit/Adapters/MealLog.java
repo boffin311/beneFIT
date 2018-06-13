@@ -35,9 +35,7 @@ public class MealLog extends RecyclerView.Adapter<MealLog.ViewHolder> {
 
     }
 
-    public void setListItems(ArrayList<MealLogFood> listItems) {
-        this.listItems = listItems;
-    }
+
 
     @Override
     public MealLog.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {

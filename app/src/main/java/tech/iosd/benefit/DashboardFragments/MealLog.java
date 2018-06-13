@@ -90,6 +90,8 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
         MealLogFood mealLogFood =  new MealLogFood();
         mealLogFood.setName("ya");
         listItems.add(mealLogFood);
+        listItems.add(mealLogFood);
+
 
 
 
@@ -368,7 +370,7 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
                 dialog.show();
                 recyclerView = dialog.findViewById(R.id.dialog_picker_ingredient_recycler_view);
                 recyclerView.setHasFixedSize(false);
-                recyclerView.setLayoutManager(new LinearLayoutManager(dialog.getContext(), LinearLayoutManager.HORIZONTAL, false));
+                recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
                 adapter = new tech.iosd.benefit.Adapters.MealLog(dialog.getContext(), listItems, getActivity());
                 recyclerView.setAdapter(adapter);
 
@@ -436,18 +438,22 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
 
         //Toast.makeText(getActivity().getApplicationContext(),token,Toast.LENGTH_SHORT).show();
         listItems.clear();
+        for(int i =0; i<response.getData().size(); i++){
+            listItems.add(response.getData().get(i));
+        }
+       // listItems = response.getData();
 
-        listItems = response.getData();
-        listItems.add(response.getData().get(0));
+        //listItems.add(response.getData().get(0));
 
         Toast.makeText(getActivity().getApplicationContext(),String.valueOf(listItems.size()),Toast.LENGTH_SHORT).show();
 
 
-        adapter.notifyDataSetChanged();
-        adapter.setListItems(listItems);
+        //adapter.setListItems(listItems);
         Toast.makeText(getActivity().getApplicationContext(),"m"+String.valueOf(adapter.getItemCount()),Toast.LENGTH_SHORT).show();
 
         recyclerView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+
 
         Toast.makeText(getActivity().getApplicationContext(),"mq"+String.valueOf(adapter.getItemCount()),Toast.LENGTH_SHORT).show();
 
