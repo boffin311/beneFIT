@@ -28,16 +28,21 @@ public class MealLog extends RecyclerView.Adapter<MealLog.ViewHolder> {
     private ArrayList<MealLogFood> listItems;
     private Activity activity;
 
-    public MealLog(Activity activity, ArrayList list){
-        this.activity = activity;
+    public MealLog(Context context, ArrayList list, Activity activity){
+        this.context = context;
         this.listItems = list;
+        this.activity = activity;
 
+    }
+
+    public void setListItems(ArrayList<MealLogFood> listItems) {
+        this.listItems = listItems;
     }
 
     @Override
     public MealLog.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        LayoutInflater inflater =activity.getLayoutInflater();
+        LayoutInflater inflater = activity.getLayoutInflater();
         View view =inflater.inflate(R.layout.list_row_meal_log, parent, false);
         ViewHolder viewHolder = new ViewHolder(view);
         return viewHolder;

@@ -146,13 +146,18 @@ public class GPSTracker extends Service implements
 
         latitude = mCurrentLocation.getLatitude();
         longitude = mCurrentLocation.getLongitude();
-        points.add(new LatLng(mCurrentLocation.getLatitude(),mCurrentLocation.getLongitude()));
+        if(isPaused()){
 
-        Intent broadcastIntent = new Intent();
-        broadcastIntent.setAction(Constants.GPS_UPDATE);
-        sendBroadcast(broadcastIntent);
+        }else {
+            points.add(new LatLng(mCurrentLocation.getLatitude(),mCurrentLocation.getLongitude()));
 
-        speed = location.getSpeed() * 18 / 5;
+            Intent broadcastIntent = new Intent();
+            broadcastIntent.setAction(Constants.GPS_UPDATE);
+            sendBroadcast(broadcastIntent);
+
+            speed = location.getSpeed() * 18 / 5;
+        }
+
 
 
         Toast.makeText(this, mCurrentLocation.getLatitude() + " WORKS " + mCurrentLocation.getLongitude()+ "", Toast.LENGTH_LONG).show();
@@ -228,12 +233,13 @@ public class GPSTracker extends Service implements
     @Override
     public boolean onUnbind(Intent intent) {
 
-        stopLocationUpdates();
         if (mGoogleApiClient.isConnected())
             mGoogleApiClient.disconnect();
         lStart = null;
         lEnd = null;
         distance = 0;
+        stopLocationUpdates();
+
         return super.onUnbind(intent);
     }
 

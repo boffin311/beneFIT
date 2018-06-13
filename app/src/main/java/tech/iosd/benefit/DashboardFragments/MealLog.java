@@ -87,6 +87,9 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
         db = new DatabaseHandler(getContext());
 
         listItems = new ArrayList<>();
+        MealLogFood mealLogFood =  new MealLogFood();
+        mealLogFood.setName("ya");
+        listItems.add(mealLogFood);
 
 
 
@@ -366,7 +369,9 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
                 recyclerView = dialog.findViewById(R.id.dialog_picker_ingredient_recycler_view);
                 recyclerView.setHasFixedSize(false);
                 recyclerView.setLayoutManager(new LinearLayoutManager(dialog.getContext(), LinearLayoutManager.HORIZONTAL, false));
-                //recyclerView.setAdapter(adapter);
+                adapter = new tech.iosd.benefit.Adapters.MealLog(dialog.getContext(), listItems, getActivity());
+                recyclerView.setAdapter(adapter);
+
                 EditText foodName = (EditText)mView.findViewById(R.id.dialog_picker_ingredient_food_name);
                 (foodName).setOnEditorActionListener(
                         new EditText.OnEditorActionListener() {
@@ -381,7 +386,6 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
 
                                         String name =  foodName.getText().toString();
                                         Toast.makeText(getContext(),name,Toast.LENGTH_LONG).show();
-                                        adapter = new tech.iosd.benefit.Adapters.MealLog(getActivity(), listItems);
 
                                         getSearchResult(name);
                                         return true;
@@ -439,7 +443,8 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
         Toast.makeText(getActivity().getApplicationContext(),String.valueOf(listItems.size()),Toast.LENGTH_SHORT).show();
 
 
-      //  adapter.notifyDataSetChanged();
+        adapter.notifyDataSetChanged();
+        adapter.setListItems(listItems);
         Toast.makeText(getActivity().getApplicationContext(),"m"+String.valueOf(adapter.getItemCount()),Toast.LENGTH_SHORT).show();
 
         recyclerView.setAdapter(adapter);

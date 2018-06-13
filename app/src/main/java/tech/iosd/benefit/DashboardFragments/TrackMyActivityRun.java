@@ -74,6 +74,8 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
 
     private TextView distance;
     double distace_paused = 0;
+    double distace_total= 0;
+    double lastDistance =0;
 
     private ServiceConnection sc = new ServiceConnection() {
         @Override
@@ -311,11 +313,12 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
             case R.id.dashboard_track_my_activity_running_resume:
             {
                 //gpsTracker.setPaused(false);
-                //Toast.makeText(getActivity().getApplicationContext()," "+ myService.canGetLocation(),Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity().getApplicationContext(),"rrere",Toast.LENGTH_LONG).show();
                 startBtn.setVisibility(View.VISIBLE);
                 pauseBtn.setVisibility(View.GONE);
                 stopBtn.setVisibility(View.GONE);
                 discardBtn.setVisibility(View.GONE);
+                myService.setPaused(false);
 
                 break;
 
@@ -340,11 +343,17 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
                     public void onClick(View view)
                     {
                         dialog.dismiss();
+                        startBtn.setVisibility(View.VISIBLE);
+                        pauseBtn.setVisibility(View.GONE);
+                        stopBtn.setVisibility(View.GONE);
+                        discardBtn.setVisibility(View.GONE);
+                        myService.setPaused(true);
                     }
                 });
                 dialogCancel.setOnClickListener(new View.OnClickListener()
                 {
                     @Override
+
                     public void onClick(View view)
                     {
                         dialog.dismiss();
@@ -359,9 +368,8 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
 
 
     private void startRunning() {
-
-
             String stringLongitude = String.valueOf(myService.getLongitude());
+            myService.setPaused(false);
 
             Toast.makeText(getActivity().getApplicationContext(),"Lat:"+stringLongitude+"\nLong"+stringLongitude,Toast.LENGTH_LONG).show();
 
@@ -427,11 +435,16 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
 
         polyline = googleMap.addPolyline(options); //add Polyline
         double distance_number = SphericalUtil.computeLength(points);
-        if(myService.isPaused()){
-            distace_paused = distace_paused - distance_number;
+        if(!myService.isPaused()){
+            lastDistance = distance_number - lastDistance;
+            distance_number = distance_number - distace_paused;
+            distace_total = distance_number;
+
+        }else {
+            distace_paused = distace_paused + lastDistance;
 
         }
-        distance_number = distance_number - distace_paused;
+        distace_total = distance_number;
         distance.setText(String.valueOf(distance_number));
 
     }
