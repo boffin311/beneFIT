@@ -1,27 +1,19 @@
 package tech.iosd.benefit.Services;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
 
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.app.Service;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentSender;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
+import android.support.annotation.Nullable;
 import android.util.Log;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -49,7 +41,6 @@ public class GPSTracker extends Service implements
 
     private boolean isPaused = false;
 
-    private final IBinder mBinder = new LocalBinder();
 
 
     private static final long INTERVAL = 1000 * 2;
@@ -60,11 +51,17 @@ public class GPSTracker extends Service implements
     static double distance = 0;
     double speed;
 
+    private final IBinder mBinder = new LocalBinder();
 
-    protected void stopLocationUpdates() {
+
+
+    public void stopLocationUpdates() {
+        Toast.makeText(this,"stopeed",Toast.LENGTH_LONG).show();
+
         LocationServices.FusedLocationApi.removeLocationUpdates(
                 mGoogleApiClient, this);
         distance = 0;
+
     }
 
     @Override
@@ -119,6 +116,15 @@ public class GPSTracker extends Service implements
         try {
             LocationServices.FusedLocationApi.requestLocationUpdates(
                     mGoogleApiClient, mLocationRequest, this);
+            Toast.makeText(this,"onconnecyed",Toast.LENGTH_LONG).show();
+            if (mGoogleApiClient.isConnected()) {
+                Toast.makeText(this,"GoogleApiClient  connected",Toast.LENGTH_LONG).show();
+
+                //mGoogleApiClient.connect(); // connect it here..
+
+            }
+
+
         } catch (SecurityException e) {
         }
 
@@ -131,7 +137,8 @@ public class GPSTracker extends Service implements
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-
+        Toast.makeText(this,connectionResult.getErrorMessage(),Toast.LENGTH_LONG).show();
+        Log.d("error77", connectionResult.getErrorMessage());
     }
     @Override
     public void onLocationChanged(Location location) {
@@ -154,13 +161,12 @@ public class GPSTracker extends Service implements
             Intent broadcastIntent = new Intent();
             broadcastIntent.setAction(Constants.GPS_UPDATE);
             sendBroadcast(broadcastIntent);
-
             speed = location.getSpeed() * 18 / 5;
         }
 
 
 
-        Toast.makeText(this, mCurrentLocation.getLatitude() + " WORKS " + mCurrentLocation.getLongitude()+ "", Toast.LENGTH_LONG).show();
+       // Toast.makeText(this, mCurrentLocation.getLatitude() + " WORKS " + mCurrentLocation.getLongitude()+ "", Toast.LENGTH_LONG).show();
     }
 
     public class LocalBinder extends Binder {
@@ -212,6 +218,7 @@ public class GPSTracker extends Service implements
         }
     }
 
+    @Nullable
     @Override
     public IBinder onBind(Intent intent) {
 
@@ -222,6 +229,16 @@ public class GPSTracker extends Service implements
                 .addOnConnectionFailedListener(this)
                 .build();
         mGoogleApiClient.connect();
+
+        if (!mGoogleApiClient.isConnected()) {
+            Toast.makeText(this,"GoogleApiClient not yet connected",Toast.LENGTH_LONG).show();
+
+            mGoogleApiClient.connect(); // connect it here..
+
+        } else {
+            //og.e(TAG,"GoogleApiClient connected");
+
+        }
         return mBinder;
     }
 
@@ -232,13 +249,13 @@ public class GPSTracker extends Service implements
 
     @Override
     public boolean onUnbind(Intent intent) {
+        stopLocationUpdates();
 
-        if (mGoogleApiClient.isConnected())
+        //if (mGoogleApiClient.isConnected())
             mGoogleApiClient.disconnect();
         lStart = null;
         lEnd = null;
         distance = 0;
-        stopLocationUpdates();
 
         return super.onUnbind(intent);
     }
@@ -246,15 +263,6 @@ public class GPSTracker extends Service implements
     @Override
     public void onDestroy() {
         super.onDestroy();
-    }
-
-
-
-
-    public class MyBinder extends Binder {
-        public GPSTracker getService() {
-            return GPSTracker.this;
-        }
     }
 }
 

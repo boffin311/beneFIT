@@ -51,9 +51,9 @@ import static android.content.Context.LOCATION_SERVICE;
 
 public class TrackMyActivityRun extends Fragment implements View.OnClickListener
 {
-    Context ctx;
-    FragmentManager fm;
-    MapView mMapView;
+    private Context ctx;
+    private FragmentManager fm;
+    private MapView mMapView;
 
     private GoogleMap googleMap;
     private View startBtn;
@@ -68,7 +68,7 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
 
     long startTime;
      boolean status = false;
-    LocationManager locationManager;
+    private LocationManager locationManager;
     private boolean isgoogleMap = false;
     //boolean mServiceBound = false;
 
@@ -110,6 +110,7 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
+
             status = false;
         }
     };
@@ -121,8 +122,11 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
         Thread t = new Thread(){
             public void run(){
                 Intent i = new Intent(getContext(), GPSTracker.class);
-                getContext().bindService(i, sc, BIND_AUTO_CREATE);
+                getContext().startService(i);
+
+                getContext().bindService(i, sc, Context.BIND_AUTO_CREATE);
                 startTime = System.currentTimeMillis();
+                status = true;
             }
         };
 
@@ -133,10 +137,13 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
 
     void unbindService() {
         if (status == false)
-            return;
+           return;
         Intent i = new Intent(getContext(), GPSTracker.class);
+        getContext().stopService(i);
         getContext().unbindService(sc);
         status = false;
+        Toast.makeText(getActivity().getApplicationContext(),"service disconnceted",Toast.LENGTH_LONG).show();
+
     }
     //This method leads you to the alert dialog box.
     void checkGps() {
@@ -184,19 +191,6 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
         distance = rootView.findViewById(R.id.dashboard_track_my_activity_distance_textview);
 
         bindService();
-
-        /*Thread t = new Thread(){
-            public void run(){
-                ctx.bindService(
-                        new Intent(getActivity().getApplicationContext(), GPSTracker.class),
-                        sc,
-                        BIND_AUTO_CREATE
-                );
-            }
-        };
-        t.start();*/
-
-
 
         fm = getFragmentManager();
 
@@ -275,9 +269,20 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
     @Override
     public void onDestroy() {
         super.onDestroy();
+
+
         mMapView.onDestroy();
-        myService.unbindService(sc);
-        myService.onDestroy();
+
+        if (status == true){
+            //myService.stopLocationUpdates();
+            unbindService();
+            myService.onDestroy();
+
+        }
+        fm.popBackStack();
+
+
+
     }
 
     @Override
@@ -292,6 +297,7 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
         switch (view.getId())
         {
             case R.id.back_icon:
+
                 fm.popBackStack();
                 break;
             case R.id.dashboard_track_my_activity_running_start:
@@ -390,7 +396,7 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
 
             @Override
             public void onReceive(Context context, Intent intent) {
-                Toast.makeText(context,"activity",Toast.LENGTH_LONG).show();
+           //     Toast.makeText(context,"activity",Toast.LENGTH_LONG).show();
 
             /*
 
@@ -402,7 +408,8 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
                 if (intent.getAction().equals(Constants.GPS_UPDATE)) {
                     //intent.getExtras();
                     redrawLine();
-                    Toast.makeText(getActivity().getApplicationContext(),"activity",Toast.LENGTH_LONG).show();
+                    //Toast.makeText(getContext(),"activity",Toast.LENGTH_LONG).show();
+
                 }
             }
         };

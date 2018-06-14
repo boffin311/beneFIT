@@ -1,16 +1,20 @@
 package tech.iosd.benefit.OnBoardingFragments;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,6 +53,7 @@ public class GetStarted extends Fragment implements View.OnClickListener
 
 
 
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState)
@@ -57,7 +62,9 @@ public class GetStarted extends Fragment implements View.OnClickListener
         ctx = rootView.getContext();
         fm = getFragmentManager();
 
+
         db = new DatabaseHandler(getContext());
+
 
 
         ImageView motto_guy = rootView.findViewById(R.id.get_started_motto_logo);
@@ -171,6 +178,7 @@ public class GetStarted extends Fragment implements View.OnClickListener
 
         }
     }
+
 
     private void showSnackBarMessage(String message) {
 
