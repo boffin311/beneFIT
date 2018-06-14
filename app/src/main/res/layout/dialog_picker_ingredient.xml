@@ -37,10 +37,22 @@
             app:wheel_item_text_color="#A7A7DB"
             app:wheel_item_text_size="24sp"
             app:wheel_selected_item_text_color="#536D8A" />
+
+        <com.aigestudio.wheelpicker.WheelPicker
+            android:id="@+id/dialog_picker_ingredient_type"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:wheel_atmospheric="true"
+            app:wheel_curved="true"
+            app:wheel_cyclic="false"
+            app:wheel_item_text_color="#A7A7DB"
+            app:wheel_item_text_size="24sp"
+            app:wheel_selected_item_text_color="#536D8A" />
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_marginTop="10dp"
@@ -48,7 +60,8 @@
         android:layout_gravity="center">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
@@ -56,7 +69,6 @@
                 android:id="@+id/dialog_picker_ingredient_calories"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
                 android:fontFamily="@font/oswald"
                 android:text="0"
                 android:textAlignment="center"
@@ -65,26 +77,26 @@
                 android:textSize="26sp"
                 android:textStyle="bold" />
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
                 android:text="Calories"
+                android:textAlignment="center"
                 android:textAllCaps="true"
                 android:fontFamily="@font/oswald"
                 android:textColor="#565656"
                 android:textStyle="bold"
-                android:layout_marginStart="10dp"/>
+                />
         </LinearLayout>
 
         <ImageView
             android:layout_width="1dp"
             android:layout_height="match_parent"
-            android:layout_marginStart="18dp"
-            android:layout_marginEnd="10dp"
             android:background="#b3b3b3"/>
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
@@ -92,7 +104,6 @@
                 android:id="@+id/dialog_picker_ingredient_carbs"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
                 android:fontFamily="@font/oswald"
                 android:text="0"
                 android:textAlignment="center"
@@ -101,26 +112,26 @@
                 android:textSize="26sp"
                 android:textStyle="bold" />
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
                 android:text="Carbs"
+                android:textAlignment="center"
                 android:textAllCaps="true"
                 android:fontFamily="@font/oswald"
                 android:textColor="#565656"
                 android:textStyle="bold"
-                android:layout_marginStart="10dp"/>
+                />
         </LinearLayout>
 
         <ImageView
             android:layout_width="1dp"
             android:layout_height="match_parent"
-            android:layout_marginStart="18dp"
-            android:layout_marginEnd="10dp"
             android:background="#b3b3b3"/>
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
@@ -128,7 +139,6 @@
                 android:id="@+id/dialog_picker_ingredient_protien"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
                 android:fontFamily="@font/oswald"
                 android:text="0"
                 android:textAlignment="center"
@@ -137,26 +147,26 @@
                 android:textSize="26sp"
                 android:textStyle="bold" />
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
                 android:text="Protein"
+                android:textAlignment="center"
                 android:textAllCaps="true"
                 android:fontFamily="@font/oswald"
                 android:textColor="#565656"
                 android:textStyle="bold"
-                android:layout_marginStart="10dp"/>
+                />
         </LinearLayout>
 
         <ImageView
             android:layout_width="1dp"
             android:layout_height="match_parent"
-            android:layout_marginStart="18dp"
-            android:layout_marginEnd="10dp"
             android:background="#b3b3b3"/>
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
@@ -164,7 +174,6 @@
                 android:id="@+id/dialog_picker_ingredient_fats"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
                 android:fontFamily="@font/oswald"
                 android:text="0"
                 android:textAlignment="center"
@@ -174,11 +183,11 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
                 android:fontFamily="@font/oswald"
                 android:text="fats"
+                android:textAlignment="center"
                 android:textAllCaps="true"
                 android:textColor="#565656"
                 android:textSize="16sp"
