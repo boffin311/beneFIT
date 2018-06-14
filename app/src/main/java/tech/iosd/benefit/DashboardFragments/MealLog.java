@@ -117,8 +117,8 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
                 .datesNumberOnScreen(7)
                 .mode(HorizontalCalendar.Mode.DAYS)
                 .configure()
-                .formatMiddleText("EEE\n").sizeMiddleText(12)
-                .formatBottomText("dd").sizeBottomText(26)
+                .formatMiddleText("EEEEE\n").sizeMiddleText(12)
+                .formatBottomText("dd").sizeBottomText(18)
                 .showTopText(false)
                 .end()
                 .build();
@@ -140,7 +140,9 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
         ingredientsQty = new ArrayList<>();
         for (int i = 1; i < 100; i++)
             ingredientsQty.add(Integer.toString(i));
-        ingredientTyp.add("Add a food");
+        ingredientTyp.add("gram");
+        ingredientTyp.add("bowl");
+        ingredientTyp.add("each");
 
         breakfastListView = rootView.findViewById(R.id.my_nutrition_breakfast);
         breakfastIngredients = new ArrayList<>();
@@ -209,11 +211,14 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
         Button dialogModify = mView.findViewById(R.id.dialog_modify);
         Button dialogRemove = mView.findViewById(R.id.dialog_remove);
         final WheelPicker wheelPickerQty = mView.findViewById(R.id.dialog_picker_ingredient_qty);
+        final WheelPicker wheelPickerTyp = mView.findViewById(R.id.dialog_picker_ingredient_type);
+
         mBuilder.setView(mView);
         final AlertDialog dialog = mBuilder.create();
         dialog.show();
         wheelPickerQty.setData(ingredientsQty);
-        //wheelPickerTyp.setData(ingredientTyp);
+        wheelPickerTyp.setData(ingredientTyp);
+        wheelPickerTyp.setSelectedItemPosition(1);
 
         final int pos = i;
 
@@ -386,7 +391,6 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
                 dialogProtien = (TextView)dialog.findViewById(R.id.dialog_picker_ingredient_add_protien);
 
                 recyclerView = dialog.findViewById(R.id.dialog_picker_ingredient_add_recycler_view);
-                recyclerView.setHasFixedSize(false);
                 recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
                 adapter = new tech.iosd.benefit.Adapters.MealLog(dialog.getContext(), listItems, getActivity(), this);
                 recyclerView.setAdapter(adapter);
