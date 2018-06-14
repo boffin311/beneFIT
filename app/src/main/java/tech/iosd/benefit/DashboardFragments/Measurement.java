@@ -65,6 +65,7 @@ public class Measurement extends Fragment
 
     List<PointValue> bmi_entries;
     LineChartView bmi_chart;
+    LineChartView fat_chart;
 
 
     @Nullable
@@ -115,7 +116,7 @@ public class Measurement extends Fragment
         Random rand = new Random();
         bmi_chart = rootView.findViewById(R.id.dashboard_measurement_bmi_graph);
         LineChartView basal_chart = rootView.findViewById(R.id.dashboard_measurement_basal_graph);
-        LineChartView fat_chart = rootView.findViewById(R.id.dashboard_measurement_fat_graph);
+        fat_chart = rootView.findViewById(R.id.dashboard_measurement_fat_graph);
 
 
 
@@ -134,19 +135,7 @@ public class Measurement extends Fragment
         basal_data.setAxisYLeft(basal_axisY);
         basal_chart.setLineChartData(basal_data);
 
-        fat_chart.setInteractive(false);
-        List<PointValue> fat_entries = new ArrayList<>();
-        for(int i=0; i<10; i++) fat_entries.add((new PointValue(i, rand.nextInt(30))));
-        Line fat_line = new Line(fat_entries).setColor(Color.BLUE).setCubic(true);
-        List<Line> fat_lines = new ArrayList<>();
-        fat_lines.add(fat_line);
-        LineChartData fat_data = new LineChartData();
-        Axis fat_axisX = new Axis().setHasLines(true).setName("Axis X");
-        Axis fat_axisY = new Axis().setHasLines(true).setName("Axis Y");
-        fat_data.setLines(fat_lines);
-        fat_data.setAxisXBottom(fat_axisX);
-        fat_data.setAxisYLeft(fat_axisY);
-        fat_chart.setLineChartData(fat_data);
+
 
         getUserHistory(db.getUserToken());
 
@@ -191,7 +180,32 @@ public class Measurement extends Fragment
         //Toast.makeText(getActivity().getApplicationContext(),token,Toast.LENGTH_SHORT).show();
         showSnackBarMessage("updating graph");
         updateGraphBMI(response.data );
+        updateGraphFat(response.data);
 
+    }
+
+    private void updateGraphFat(ArrayList<Data> data) {
+        fat_chart.setInteractive(false);
+        List<PointValue> fat_entries = new ArrayList<>();
+       // for(int i=0; i<10; i++) fat_entries.add((new PointValue(i, rand.nextInt(30))));
+        showSnackBarMessage("size"+data.size());
+        for(int i=0; i<data.size(); i++){
+            double bmiTemp = calculateBMI(data.get(i).getHeight(),data.get(i).getWeight());
+            double fatTemp = getFatPercentage(bmiTemp, db.getUserAge(),db.getUserGender());
+            fat_entries.add((new PointValue(i+1,(float)fatTemp)));
+           // showSnackBarMessage("bmi i"+ i+ " " +bmiTemp);
+            //Toast.makeText(getContext(),"i "+i +" hgt"+ data.get(i).getHeight()+" wgt "+ data.get(i).getWeight()+"\nbmi "+ bmiTemp,Toast.LENGTH_SHORT).show();
+        }
+        Line fat_line = new Line(fat_entries).setColor(Color.BLUE).setCubic(true);
+        List<Line> fat_lines = new ArrayList<>();
+        fat_lines.add(fat_line);
+        LineChartData fat_data = new LineChartData();
+        Axis fat_axisX = new Axis().setHasLines(true).setName("Axis X");
+        Axis fat_axisY = new Axis().setHasLines(true).setName("Axis Y");
+        fat_data.setLines(fat_lines);
+        fat_data.setAxisXBottom(fat_axisX);
+        fat_data.setAxisYLeft(fat_axisY);
+        fat_chart.setLineChartData(fat_data);
     }
 
     private void updateGraphBMI(ArrayList<Data> data) {
@@ -202,8 +216,8 @@ public class Measurement extends Fragment
         for(int i=0; i<data.size(); i++){
             double bmiTemp = calculateBMI(data.get(i).getHeight(),data.get(i).getWeight());
             bmi_entries.add((new PointValue(i+1,(float)bmiTemp)));
-            showSnackBarMessage("bmi i"+ i+ " " +bmiTemp);
-            Toast.makeText(getContext(),"i "+i +" hgt"+ data.get(i).getHeight()+" wgt "+ data.get(i).getWeight()+"\nbmi "+ bmiTemp,Toast.LENGTH_SHORT).show();
+          //  showSnackBarMessage("bmi i"+ i+ " " +bmiTemp);
+           // Toast.makeText(getContext(),"i "+i +" hgt"+ data.get(i).getHeight()+" wgt "+ data.get(i).getWeight()+"\nbmi "+ bmiTemp,Toast.LENGTH_SHORT).show();
         }
         Line bmi_line = new Line(bmi_entries).setColor(Color.BLUE).setCubic(true);
         List<Line> bmi_lines = new ArrayList<>();
