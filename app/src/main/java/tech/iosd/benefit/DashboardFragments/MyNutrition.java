@@ -25,7 +25,9 @@ import devs.mulham.horizontalcalendar.HorizontalCalendar;
 import devs.mulham.horizontalcalendar.utils.HorizontalCalendarListener;
 import tech.iosd.benefit.R;
 
-public class MyNutrition extends Fragment implements AdapterView.OnItemClickListener, View.OnClickListener
+//public class MyNutrition extends Fragment implements AdapterView.OnItemClickListener, View.OnClickListener
+public class MyNutrition extends Fragment
+
 {
     public Calendar selDate;
 
@@ -87,7 +89,7 @@ public class MyNutrition extends Fragment implements AdapterView.OnItemClickList
 
         return rootView;
     }
-
+/*
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l)
     {
@@ -97,12 +99,12 @@ public class MyNutrition extends Fragment implements AdapterView.OnItemClickList
         Button dialogModify = mView.findViewById(R.id.dialog_modify);
         Button dialogRemove = mView.findViewById(R.id.dialog_remove);
         final WheelPicker wheelPickerQty = mView.findViewById(R.id.dialog_picker_ingredient_qty);
-        final WheelPicker wheelPickerTyp = mView.findViewById(R.id.dialog_picker_ingredient_typ);
+        //final WheelPicker wheelPickerTyp = mView.findViewById(R.id.dialog_picker_ingredient_typ);
         mBuilder.setView(mView);
         final AlertDialog dialog = mBuilder.create();
         dialog.show();
         wheelPickerQty.setData(ingredientsQty);
-        wheelPickerTyp.setData(ingredientTyp);
+        //wheelPickerTyp.setData(ingredientTyp);
 
         final int pos = i;
 
@@ -293,5 +295,5 @@ public class MyNutrition extends Fragment implements AdapterView.OnItemClickList
                 break;
             }
         }
-    }
+    }*/
 }

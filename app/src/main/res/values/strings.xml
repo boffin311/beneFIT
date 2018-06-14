@@ -51,4 +51,16 @@
     <string name="alert_discard_activity">Are you sure you want to discard this activity?</string>
     <string name="alert_get_back_shortly">Thank you for reaching out to us. We will get back to you shortly.</string>
     <string name="alert_get_chat_plan">Chat is a paid feature, Get a coach add a personalized plans to chat now.</string>
+
+    <string name="facebook_app_id">715649728825438</string>
+    <string name="fb_login_protocol_scheme">fb715649728825438</string>
+
+    <string name="server_client_id">352356064520-t1o0oplr8ij3v4tk9hi8f43siqee95sg.apps.googleusercontent.com</string>
+    <string name="bmi_underweight">UNDERWEIGHT</string>
+    <string name="bmi_underweight_details"><![CDATA[Advise - Eat nutrient dense food & strengthen your muscles]]></string>
+    <string name="bmi_overweight">OVERWEIGHT</string>
+    <string name="bmi_overweight_details">Advise - Make healthy food choices and participate in regular physical activity to be more fit and in shape.</string>
+    <string name="bmi_obesity">OBESITY</string>
+    <string name="bmi_obesity_details">Advise - Increase physical activity and improve diet.  D. Range 30.0 and above Advise - Shed some weight down, limit your calorie intake, Exercise regular and improve your metabolism.</string>
+
 </resources>

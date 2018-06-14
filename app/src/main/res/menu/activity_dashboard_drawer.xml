@@ -8,5 +8,10 @@
             android:id="@+id/nav_dashboard"
             android:icon="@drawable/ic_my_workout_24dp"
             android:title="Dashboard" />
+        <item
+            android:title="Logout"
+            android:id="@+id/nav_logout"
+            android:icon="@drawable/ic_my_workout_24dp"
+            ></item>
     </group>
 </menu>

@@ -10,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
+
 import java.util.ArrayList;
 import tech.iosd.benefit.Adapters.Goals;
 import tech.iosd.benefit.R;
@@ -18,6 +20,12 @@ public class ChooseAGoal extends Fragment implements ViewPager.OnPageChangeListe
 {
     FragmentManager fm;
     ArrayList<ImageView> pagerIndicator;
+    int goalID =0;
+    /*
+    0:
+    1:
+    2:
+     */
 
     @Nullable
     @Override
@@ -52,10 +60,12 @@ public class ChooseAGoal extends Fragment implements ViewPager.OnPageChangeListe
             pagerIndicator.get(i).setColorFilter(getResources().getColor(R.color.pageIndicatorNotSelected));
 
         pagerIndicator.get(position).setColorFilter(getResources().getColor(R.color.pageIndicatorSelected));
+        goalID = position;
     }
 
     @Override
-    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) { }
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+    }
 
     @Override
     public void onPageScrollStateChanged(int state) { }
@@ -67,7 +77,12 @@ public class ChooseAGoal extends Fragment implements ViewPager.OnPageChangeListe
         {
             case R.id.get_started_continue:
             {
-                fm.beginTransaction().replace(R.id.onboarding_content, new SetupProfile())
+
+                SetupProfile setupProfile = new SetupProfile();
+                Bundle bundle = new Bundle();
+                bundle.putInt("goalID",goalID);
+                setupProfile.setArguments(bundle);
+                fm.beginTransaction().replace(R.id.onboarding_content, setupProfile)
                         .addToBackStack(null)
                         .commit();
                 break;
