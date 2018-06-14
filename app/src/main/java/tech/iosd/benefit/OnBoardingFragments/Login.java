@@ -408,10 +408,19 @@ public class Login extends Fragment implements View.OnClickListener
 
 
         try{
-            db.addUser(response);
+            if (response.getSuccess()){
+                db.addUser(response);
 
-            Toast.makeText(getContext(),"successfull operation",Toast.LENGTH_SHORT).show();
-            Log.e("login"," Token: "+response.token.token);
+                Toast.makeText(getContext(),"successfull operation",Toast.LENGTH_SHORT).show();
+                Log.e("login"," Token: "+response.token.token);
+                updateProfile(response.token.token);
+                showSnackBarMessage("Sending user details..");
+
+
+            }else if(!response.getSuccess()){
+                showSnackBarMessage(response.getMessage());
+            }
+
 
 
         }catch (Exception e){
@@ -421,9 +430,7 @@ public class Login extends Fragment implements View.OnClickListener
         }
 
 
-        showSnackBarMessage("Sending user details..");
 
-        updateProfile(response.token.token);
 
 
     }
@@ -529,6 +536,7 @@ public class Login extends Fragment implements View.OnClickListener
     }
     private void handleErrorUpdate(Throwable error) {
 
+        db.userLogOut();
 
         if (error instanceof HttpException) {
 
