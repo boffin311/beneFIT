@@ -110,6 +110,7 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
+
             status = false;
         }
     };
@@ -121,8 +122,9 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
         Thread t = new Thread(){
             public void run(){
                 Intent i = new Intent(getContext(), GPSTracker.class);
-                getContext().bindService(i, sc, BIND_AUTO_CREATE);
+                getContext().bindService(i, sc, Context.BIND_AUTO_CREATE);
                 startTime = System.currentTimeMillis();
+                status = true;
             }
         };
 
@@ -133,8 +135,8 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
 
     void unbindService() {
         if (status == false)
-            return;
-        Intent i = new Intent(getContext(), GPSTracker.class);
+           //return;
+        //Intent i = new Intent(getContext(), GPSTracker.class);
         getContext().unbindService(sc);
         status = false;
     }
@@ -275,9 +277,11 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
     @Override
     public void onDestroy() {
         super.onDestroy();
+
         mMapView.onDestroy();
-        myService.unbindService(sc);
-        myService.onDestroy();
+        if (status == true){
+            unbindService();
+        }
     }
 
     @Override
