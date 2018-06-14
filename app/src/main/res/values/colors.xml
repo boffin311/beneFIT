@@ -18,4 +18,7 @@
     <color name="FABIndicatorNotSelected">#ffffff</color>
     <color name="FABIndicatorBGSelected">#70cceb</color>
     <color name="FABIndicatorBGNotSelected">#dfdfdf</color>
+
+    <color name="colorSelectedIcon">#fcde95</color>
+
 </resources>
