@@ -116,8 +116,19 @@ public class Main extends Fragment implements View.OnTouchListener
             case MotionEvent.ACTION_UP:
             {
                 view.startAnimation(scaleOutAnimation);
-                final Handler handler = new Handler();
-                handler.postDelayed(new Runnable() { @Override public void run() { onClick(view); } }, 200);
+                if(motionEvent.getX()<view.getRight()&&
+                        motionEvent.getX()>view.getLeft()&&
+                        motionEvent.getY()>view.getTop()&&
+                        motionEvent.getY()<view.getBottom()
+                        ) {
+                    final Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            onClick(view);
+                        }
+                    }, 200);
+                }
                 break;
             }
         }

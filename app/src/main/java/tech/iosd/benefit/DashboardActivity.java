@@ -71,8 +71,10 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
                 FloatingActionButton contactBtn = findViewById(R.id.dashboard_contact);
                 if(contactBtn != null)
                 {
-                    contactBtn.startAnimation(AnimationUtils.loadAnimation(ctx, R.anim.top_down));
-                    contactBtn.setVisibility(View.INVISIBLE);
+                    if(contactBtn.getVisibility()==View.VISIBLE) {
+                        contactBtn.startAnimation(AnimationUtils.loadAnimation(ctx, R.anim.top_down));
+                        contactBtn.setVisibility(View.INVISIBLE);
+                    }
                 }
             }
         });
@@ -87,8 +89,10 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
                 FloatingActionButton contactBtn = findViewById(R.id.dashboard_contact);
                 if(contactBtn != null)
                 {
-                    contactBtn.startAnimation(AnimationUtils.loadAnimation(ctx, R.anim.top_down));
-                    contactBtn.setVisibility(View.INVISIBLE);
+                    if(contactBtn.getVisibility()==View.VISIBLE) {
+                        contactBtn.startAnimation(AnimationUtils.loadAnimation(ctx, R.anim.top_down));
+                        contactBtn.setVisibility(View.INVISIBLE);
+                    }
                 }
             }
         });

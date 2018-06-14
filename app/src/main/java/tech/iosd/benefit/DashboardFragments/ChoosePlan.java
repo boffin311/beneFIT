@@ -36,7 +36,7 @@ public class ChoosePlan extends Fragment implements ViewPager.OnPageChangeListen
                                 "Train smarter with our coach. Get personalized plan that suits your lifestyle.",
                                 "Personally meet with coaches. Note - terms and conditions apply.",
                                 "Assured results"};
-
+    ImageView icon;
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState)
     {
@@ -83,6 +83,7 @@ public class ChoosePlan extends Fragment implements ViewPager.OnPageChangeListen
         }, DELAY_MS, PERIOD_MS);
 
         rootView.findViewById(R.id.choose_a_plan_intro_plans).setOnClickListener(this);
+        icon = getActivity().findViewById(R.id.navigation_dashboard_coach);
 
         return rootView;
     }
@@ -115,6 +116,21 @@ public class ChoosePlan extends Fragment implements ViewPager.OnPageChangeListen
                         .commit();
                 break;
             }
+        }
+    }
+    @Override
+    public void onStart() {
+        super.onStart();
+        if(icon!=null){
+            icon.setColorFilter(getResources().getColor(R.color.colorSelectedIcon));
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if(icon!=null){
+            icon.setColorFilter(null);
         }
     }
 }
