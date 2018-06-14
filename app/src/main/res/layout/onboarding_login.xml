@@ -98,10 +98,10 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textStyle="bold"
                 android:fontFamily="@font/proxima_nova"
+                android:text="Email"
                 android:textColor="@color/colorPrimary"
-                android:text="@string/lbl_username"/>
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/get_started_login_invalid"

@@ -68,6 +68,8 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
     tech.iosd.benefit.Adapters.MealLog adapter ;
 
     TextView dialogCarbs, dialogProtien, dialogCalorie, dialogFats;
+    TextView breakfastCarbs, breakfastProtien,breakfastCalorie, breakfastFats;
+
 
     private CompositeSubscription mSubscriptions;
 
@@ -93,6 +95,11 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
         MealLogFood mealLogFood =  new MealLogFood();
         mealLogFood.setName("Please search a food item");
         listItems.add(mealLogFood);
+
+        breakfastCalorie = rootView.findViewById(R.id.meal_log_breakfast_calorie);
+        breakfastProtien = rootView.findViewById(R.id.meal_log_breakfast_protien);
+        breakfastCarbs = rootView.findViewById(R.id.meal_log_breakfast_carb);
+        breakfastFats = rootView.findViewById(R.id.meal_log_breakfast_fat);
 
 
 
@@ -421,6 +428,11 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
                         }
                         else {
                             breakfastIngredients.add(wheelPickerQty.getData().get(wheelPickerQty.getCurrentItemPosition()) + " " + listItems.get(position).getName());
+                            breakfastCalorie.setText(String.valueOf(Float.parseFloat(breakfastCalorie.getText().toString())+ (wheelPickerQty.getCurrentItemPosition() + 1) * listItems.get(position).getCalories()));
+                            breakfastProtien.setText(String.valueOf(Float.parseFloat(breakfastProtien.getText().toString())+ (wheelPickerQty.getCurrentItemPosition() + 1) * listItems.get(position).getProteins()));
+                            breakfastFats.setText(String.valueOf(Float.parseFloat(breakfastFats.getText().toString())+ (wheelPickerQty.getCurrentItemPosition() + 1) * listItems.get(position).getFats()));
+                            breakfastCarbs.setText(String.valueOf(Float.parseFloat(breakfastCarbs.getText().toString())+ (wheelPickerQty.getCurrentItemPosition() + 1) * listItems.get(position).getCarbs()));
+
                             final ArrayAdapter<String> breakfastAdapter = new ArrayAdapter<>(ctx, R.layout.listview_text, breakfastIngredients);
                             breakfastListView.setAdapter(breakfastAdapter);
                             breakfastListView.getLayoutParams().height = 110 * breakfastIngredients.size();
