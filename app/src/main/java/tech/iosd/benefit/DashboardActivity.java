@@ -128,9 +128,10 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
             }
             case R.id.nav_logout:
             {
-                SharedPreferences.Editor editor = mSharedPreferences.edit();
+               /* SharedPreferences.Editor editor = mSharedPreferences.edit();
                 editor.putString(Constants.TOKEN,"");
-                editor.apply();
+                editor.apply();*/
+                db.userLogOut();
                 startActivity(new Intent(
                         DashboardActivity.this,OnBoardingActivity.class
                 ));
