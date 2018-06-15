@@ -1,7 +1,5 @@
 package tech.iosd.benefit.Model;
 
-import android.app.Activity;
-
 import java.util.ArrayList;
 
 /**
@@ -21,7 +19,7 @@ public class ResponseForGetMeal {
         private String date;
         private String type;
 
-        public ArrayList<food> food;
+        public ArrayList<Food> food;
 
 
         public String get_id() {
@@ -56,18 +54,23 @@ public class ResponseForGetMeal {
             this.type = type;
         }
 
-        public ArrayList<ResponseForGetMeal.food> getFood() {
+        public ArrayList<Food> getFood() {
             return food;
         }
 
-        public void setFood(ArrayList<ResponseForGetMeal.food> food) {
+        public void setFood(ArrayList<Food> food) {
             this.food = food;
         }
     }
-    public class food{
+    public static class Food {
         private int quantity;
         private MealLogFood item;
         private String id;
+
+        public Food(int quantity, MealLogFood item) {
+            this.quantity = quantity;
+            this.item = item;
+        }
 
         public int getQuantity() {
             return quantity;
@@ -110,5 +113,13 @@ public class ResponseForGetMeal {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+    public boolean removeMealAt(int position){
+        if (position<0 || position > data.getFood().size() ){
+            return false;
+        }else {
+            data.getFood().remove(position);
+            return true;
+        }
     }
 }

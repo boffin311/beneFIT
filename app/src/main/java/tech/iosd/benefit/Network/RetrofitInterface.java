@@ -49,7 +49,7 @@ public interface RetrofitInterface {
     @GET("profile/measurements/history")
     Observable<ResponseForMesurementsHistory> getMeasurementsHistory(@Header("Authorization") String token);
 
-    @GET("mealLog/food/search/{name}")
+    @GET("mealLog/Food/search/{name}")
     Observable<ResponseForFoodSearch> getFoodList(@Path("name") String name, @Header("Authorization") String token);
 
     @GET("mealLog/details")

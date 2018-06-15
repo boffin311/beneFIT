@@ -47,7 +47,7 @@ import tech.iosd.benefit.Model.ResponseForFoodSearch;
 import tech.iosd.benefit.Model.ResponseForGetMeal;
 import tech.iosd.benefit.Network.NetworkUtil;
 import tech.iosd.benefit.R;
-import tech.iosd.benefit.Services.GPSTracker;
+import tech.iosd.benefit.Model.ResponseForGetMeal.Food;
 
 public class MealLog extends Fragment implements AdapterView.OnItemClickListener, View.OnClickListener, tech.iosd.benefit.Adapters.MealLog.AdapterCallback
 {
@@ -110,7 +110,7 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
 
         listItems = new ArrayList<>();
         MealLogFood mealLogFood =  new MealLogFood();
-        mealLogFood.setName("Please search a food item");
+        mealLogFood.setName("Please search a Food item");
         listItems.add(mealLogFood);
 
         breakfastCalorie = rootView.findViewById(R.id.meal_log_breakfast_calorie);
@@ -239,7 +239,7 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
         for (int i = 0; i< response.getData().getFood().size(); i++){
             breakfastIngredients.add(response.getData().getFood().get(i).getQuantity() + " " + response.getData().getFood().get(i).getItem().getName());
             Toast.makeText(getContext(),"value added"+response.getData().getFood().get(i).getQuantity() + " "+ response.getData().getFood().get(i).getItem().getName(),Toast.LENGTH_LONG).show();
-            mealLogBreakfast.addMeal(response.getData().getFood().get(i).getItem());
+            mealLogBreakfast.addMeal(new Food(response.getData().getFood().get(i).getQuantity(),response.getData().getFood().get(i).getItem()));
             mealLogBreakfast.setBreakfastCalorie(mealLogBreakfast.getBreakfastCalorie()+response.getData().getFood().get(i).getItem().getCalories() * response.getData().getFood().get(i).getQuantity());
             mealLogBreakfast.setBreakfastCarbs(mealLogBreakfast.getBreakfastCarbs()+response.getData().getFood().get(i).getItem().getCarbs()* response.getData().getFood().get(i).getQuantity());
             mealLogBreakfast.setBreakfastFat(mealLogBreakfast.getBreakfastFat()+response.getData().getFood().get(i).getItem().getFats()* response.getData().getFood().get(i).getQuantity());
@@ -358,6 +358,7 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
                     public void onClick(View view)
                     {
                         midMorningIngredients.remove(pos);
+                        mealLogBreakfast.removeMealAt(pos);
                         final ArrayAdapter<String> midMorningAdapter = new ArrayAdapter<>(ctx, R.layout.listview_text, midMorningIngredients);
                         midMorningListView.setAdapter(midMorningAdapter);
                         midMorningListView.getLayoutParams().height = 110 * midMorningIngredients.size();
@@ -523,6 +524,7 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
                             breakfastFats.setText(String.valueOf(Float.parseFloat(breakfastFats.getText().toString())+ (wheelPickerQty.getCurrentItemPosition() + 1) * listItems.get(position).getFats()));
                             breakfastCarbs.setText(String.valueOf(Float.parseFloat(breakfastCarbs.getText().toString())+ (wheelPickerQty.getCurrentItemPosition() + 1) * listItems.get(position).getCarbs()));
 
+                            mealLogBreakfast.addMeal(new Food(wheelPickerQty.getCurrentItemPosition() + 1,listItems.get(position)) );
                             final ArrayAdapter<String> breakfastAdapter = new ArrayAdapter<>(ctx, R.layout.listview_text, breakfastIngredients);
                             breakfastListView.setAdapter(breakfastAdapter);
                             breakfastListView.getLayoutParams().height = 110 * breakfastIngredients.size();
@@ -542,6 +544,13 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
                 break;
             }
         }
+    }
+
+    private void uploadBreakfastToServer(){
+        mSubscriptions.add(NetworkUtil.getRetrofit(db.getUserToken()).getFoodList(name,db.getUserToken())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(this::handleResponse,this::handleError));
     }
 
     private void getSearchResult(String name) {

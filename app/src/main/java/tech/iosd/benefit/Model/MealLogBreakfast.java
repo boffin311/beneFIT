@@ -7,7 +7,7 @@ import java.util.ArrayList;
  */
 
 public class MealLogBreakfast {
-    private ArrayList<MealLogFood> breakfast;
+    private ArrayList<ResponseForGetMeal.Food> breakfast;
     private float breakfastCalorie;
     private float breakfastCarbs;
     private float breakfastFat;
@@ -21,15 +21,24 @@ public class MealLogBreakfast {
         breakfast =  new ArrayList<>();
     }
 
-    public boolean addMeal(MealLogFood mealLogFood){
-        breakfast.add(mealLogFood);
+    public boolean removeMealAt(int position){
+        if (position<0 || position > breakfast.size() ){
+            return false;
+        }else {
+            breakfast.remove(position);
+            return true;
+        }
+    }
+
+    public boolean addMeal(ResponseForGetMeal.Food Food){
+        breakfast.add(Food);
         return true;
     }
-    public ArrayList<MealLogFood> getBreakfast() {
+    public ArrayList<ResponseForGetMeal.Food> getBreakfast() {
         return breakfast;
     }
 
-    public void setBreakfast(ArrayList<MealLogFood> breakfast) {
+    public void setBreakfast(ArrayList<ResponseForGetMeal.Food> breakfast) {
         this.breakfast = breakfast;
     }
 
