@@ -40,6 +40,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 import tech.iosd.benefit.Model.DatabaseHandler;
+import tech.iosd.benefit.Model.MealLogBreakfast;
 import tech.iosd.benefit.Model.MealLogFood;
 import tech.iosd.benefit.Model.Response;
 import tech.iosd.benefit.Model.ResponseForFoodSearch;
@@ -84,6 +85,7 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
     private DatabaseHandler db ;
     RecyclerView recyclerView;
     int position = -1;
+    MealLogBreakfast mealLogBreakfast;
 
 
 
@@ -97,6 +99,7 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
         dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 
         mSubscriptions = new CompositeSubscription();
+        mealLogBreakfast = new MealLogBreakfast();
 
         db = new DatabaseHandler(getContext());
         progressDialog =  new ProgressDialog(getContext());
@@ -230,9 +233,24 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
 
 
 
+
+
+
         for (int i = 0; i< response.getData().getFood().size(); i++){
             breakfastIngredients.add(response.getData().getFood().get(i).getQuantity() + " " + response.getData().getFood().get(i).getItem().getName());
             Toast.makeText(getContext(),"value added"+response.getData().getFood().get(i).getQuantity() + " "+ response.getData().getFood().get(i).getItem().getName(),Toast.LENGTH_LONG).show();
+            mealLogBreakfast.addMeal(response.getData().getFood().get(i).getItem());
+            mealLogBreakfast.setBreakfastCalorie(mealLogBreakfast.getBreakfastCalorie()+response.getData().getFood().get(i).getItem().getCalories() * response.getData().getFood().get(i).getQuantity());
+            mealLogBreakfast.setBreakfastCarbs(mealLogBreakfast.getBreakfastCarbs()+response.getData().getFood().get(i).getItem().getCarbs()* response.getData().getFood().get(i).getQuantity());
+            mealLogBreakfast.setBreakfastFat(mealLogBreakfast.getBreakfastFat()+response.getData().getFood().get(i).getItem().getFats()* response.getData().getFood().get(i).getQuantity());
+            mealLogBreakfast.setBreakfastProtien(mealLogBreakfast.getBreakfastProtien()+response.getData().getFood().get(i).getItem().getProteins()* response.getData().getFood().get(i).getQuantity());
+
+            breakfastCalorie.setText(String.valueOf(mealLogBreakfast.getBreakfastCalorie()));
+            breakfastProtien.setText(String.valueOf(mealLogBreakfast.getBreakfastProtien()));
+            breakfastFats.setText(String.valueOf(mealLogBreakfast.getBreakfastFat()));
+            breakfastCarbs.setText(String.valueOf(mealLogBreakfast.getBreakfastCarbs()));
+
+
 
         }
         final ArrayAdapter<String> breakfastAdapter = new ArrayAdapter<>(ctx, R.layout.listview_text, breakfastIngredients);
