@@ -1,5 +1,6 @@
 package tech.iosd.benefit.DashboardFragments;
 
+import android.app.ProgressDialog;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -28,6 +29,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -41,12 +43,15 @@ import tech.iosd.benefit.Model.DatabaseHandler;
 import tech.iosd.benefit.Model.MealLogFood;
 import tech.iosd.benefit.Model.Response;
 import tech.iosd.benefit.Model.ResponseForFoodSearch;
+import tech.iosd.benefit.Model.ResponseForGetMeal;
 import tech.iosd.benefit.Network.NetworkUtil;
 import tech.iosd.benefit.R;
+import tech.iosd.benefit.Services.GPSTracker;
 
 public class MealLog extends Fragment implements AdapterView.OnItemClickListener, View.OnClickListener, tech.iosd.benefit.Adapters.MealLog.AdapterCallback
 {
     public Calendar selDate;
+    SimpleDateFormat dateFormat;
 
     String[] months = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
     ArrayList<String> ingredientTyp = new ArrayList<>();
@@ -70,6 +75,9 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
     TextView dialogCarbs, dialogProtien, dialogCalorie, dialogFats;
     TextView breakfastCarbs, breakfastProtien,breakfastCalorie, breakfastFats;
 
+    private ProgressDialog progressDialog;
+
+
 
     private CompositeSubscription mSubscriptions;
 
@@ -83,13 +91,19 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState)
     {
-        View rootView = inflater.inflate(R.layout.dashboard_meal_log, container, false);
+        rootView = inflater.inflate(R.layout.dashboard_meal_log, container, false);
         ctx = rootView.getContext();
         fm = getFragmentManager();
+        dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 
         mSubscriptions = new CompositeSubscription();
 
         db = new DatabaseHandler(getContext());
+        progressDialog =  new ProgressDialog(getContext());
+        progressDialog.show();
+        progressDialog.setMessage("getting Food details..");
+
+        progressDialog.setCancelable(false);
 
         listItems = new ArrayList<>();
         MealLogFood mealLogFood =  new MealLogFood();
@@ -146,14 +160,11 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
 
         breakfastListView = rootView.findViewById(R.id.my_nutrition_breakfast);
         breakfastIngredients = new ArrayList<>();
-        breakfastIngredients.add("2 Egg Whites");
+        getBreakFastData();
+        /*breakfastIngredients.add("2 Egg Whites");
         breakfastIngredients.add("4 Rotis");
-        breakfastIngredients.add("1 Glass of mix fruit juice");
-        final ArrayAdapter<String> breakfastAdapter = new ArrayAdapter<>(ctx, R.layout.listview_text, breakfastIngredients);
-        breakfastListView.setAdapter(breakfastAdapter);
-        breakfastListView.setOnItemClickListener(this);
-        breakfastListView.getLayoutParams().height = 110 * breakfastIngredients.size();
-        rootView.findViewById(R.id.my_nutrition_breakfast_add).setOnClickListener(this);
+        breakfastIngredients.add("1 Glass of mix fruit juice");*/
+
 
         midMorningListView = rootView.findViewById(R.id.my_nutrition_mid_morning);
         midMorningIngredients = new ArrayList<>();
@@ -200,6 +211,63 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
         rootView.findViewById(R.id.my_nutrition_dinner_add).setOnClickListener(this);
 
         return rootView;
+    }
+
+    private void getBreakFastData() {
+
+        mSubscriptions.add(NetworkUtil.getRetrofit(db.getUserToken()).getFoodMeal("date","breakfast",db.getUserToken())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(this::handleResponseGetMeal,this::handleErrorGetMeal));
+    }
+
+    private void handleResponseGetMeal(ResponseForGetMeal response) {
+
+        Toast.makeText(getContext(),"",Toast.LENGTH_LONG).show();
+        //Log.d("error77",response.getMessage());
+
+        progressDialog.hide();
+
+
+
+        for (int i = 0; i< response.getData().getFood().size(); i++){
+            breakfastIngredients.add(response.getData().getFood().get(i).getQuantity() + " " + response.getData().getFood().get(i).getItem().getName());
+            Toast.makeText(getContext(),"value added"+response.getData().getFood().get(i).getQuantity() + " "+ response.getData().getFood().get(i).getItem().getName(),Toast.LENGTH_LONG).show();
+
+        }
+        final ArrayAdapter<String> breakfastAdapter = new ArrayAdapter<>(ctx, R.layout.listview_text, breakfastIngredients);
+        breakfastListView.setAdapter(breakfastAdapter);
+        breakfastListView.setOnItemClickListener(this);
+        breakfastListView.getLayoutParams().height = 110 * breakfastIngredients.size();
+        rootView.findViewById(R.id.my_nutrition_breakfast_add).setOnClickListener(this);
+
+
+    }
+
+    private void handleErrorGetMeal(Throwable error) {
+
+        Log.d("error77",error.getMessage());
+
+
+        if (error instanceof HttpException) {
+
+            Gson gson = new GsonBuilder().create();
+
+            try {
+
+                String errorBody = ((HttpException) error).response().errorBody().string();
+                Response response = gson.fromJson(errorBody,Response.class);
+                showSnackBarMessage(response.getMessage());
+                fm.popBackStack();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            Log.d("error77",error.getMessage());
+
+            showSnackBarMessage("Network Error !");
+        }
     }
 
     @Override
