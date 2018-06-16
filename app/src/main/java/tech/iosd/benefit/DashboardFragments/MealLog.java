@@ -91,6 +91,7 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
     RecyclerView recyclerView;
     int position = -1;
     MealLogForOneMeal mealLogBreakfast;
+    private String selectedDate;
 
 
 
@@ -129,36 +130,8 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
 
 
 
-        Calendar startDate = Calendar.getInstance();
-        startDate.add(Calendar.MONTH, -1);
 
-        Calendar endDate = Calendar.getInstance();
-        endDate.add(Calendar.MONTH, 1);
 
-        HorizontalCalendar horizontalCalendar = new HorizontalCalendar.Builder(rootView, R.id.meal_log_calendar)
-                .range(startDate, endDate)
-                .datesNumberOnScreen(7)
-                .mode(HorizontalCalendar.Mode.DAYS)
-                .configure()
-                .formatMiddleText("EEEEE\n").sizeMiddleText(12)
-                .formatBottomText("dd").sizeBottomText(18)
-                .showTopText(false)
-                .end()
-                .build();
-
-        final TextView lbl_year = rootView.findViewById(R.id.meal_log_calendar_year);
-        final TextView lbl_month = rootView.findViewById(R.id.meal_log_calendar_month);
-
-        horizontalCalendar.setCalendarListener(new HorizontalCalendarListener()
-        {
-            @Override
-            public void onDateSelected(Calendar date, int position)
-            {
-                selDate = date;
-                lbl_year.setText(String.valueOf(selDate.get(Calendar.YEAR)));
-                lbl_month.setText(months[selDate.get(Calendar.MONTH)]);
-            }
-        });
 
         ingredientsQty = new ArrayList<>();
         for (int i = 1; i < 100; i++)
@@ -169,9 +142,11 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
 
         breakfastListView = rootView.findViewById(R.id.my_nutrition_breakfast);
         breakfastIngredients = new ArrayList<>();
-        /*breakfastIngredients.add("2 Egg Whites");
-        breakfastIngredients.add("4 Rotis");
-        breakfastIngredients.add("1 Glass of mix fruit juice");*/
+        final ArrayAdapter<String> breakfastAdapter = new ArrayAdapter<>(ctx, R.layout.listview_text, breakfastIngredients);
+        breakfastListView.setAdapter(breakfastAdapter);
+        breakfastListView.setOnItemClickListener(this);
+        breakfastListView.getLayoutParams().height = 110 * breakfastIngredients.size();
+        rootView.findViewById(R.id.my_nutrition_breakfast_add).setOnClickListener(this);
 
 
         midMorningListView = rootView.findViewById(R.id.my_nutrition_mid_morning);
@@ -217,19 +192,67 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
         dinnerListView.setOnItemClickListener(this);
         dinnerListView.getLayoutParams().height = 110 * dinnerIngredients.size();
         rootView.findViewById(R.id.my_nutrition_dinner_add).setOnClickListener(this);
-        getBreakFastData();
+
+        Calendar startDate = Calendar.getInstance();
+        startDate.add(Calendar.MONTH, -1);
+
+        Calendar endDate = Calendar.getInstance();
+        endDate.add(Calendar.MONTH, 1);
+        selectedDate = dateFormat.format(Calendar.getInstance().getTime());
+
+        HorizontalCalendar horizontalCalendar = new HorizontalCalendar.Builder(rootView, R.id.meal_log_calendar)
+                .range(startDate, endDate)
+                .datesNumberOnScreen(7)
+                .mode(HorizontalCalendar.Mode.DAYS)
+                .configure()
+                .formatMiddleText("EEEEE\n").sizeMiddleText(12)
+                .formatBottomText("dd").sizeBottomText(18)
+                .showTopText(false)
+                .end()
+                .build();
+
+        final TextView lbl_year = rootView.findViewById(R.id.meal_log_calendar_year);
+        final TextView lbl_month = rootView.findViewById(R.id.meal_log_calendar_month);
+        lbl_year.setText(String.valueOf(Calendar.getInstance().get(Calendar.YEAR)));
+        lbl_month.setText(months[Calendar.getInstance().get(Calendar.MONTH)]);
+
+        horizontalCalendar.setCalendarListener(new HorizontalCalendarListener()
+        {
+            @Override
+            public void onDateSelected(Calendar date, int position)
+            {
+                progressDialog.show();
+                selDate = date;
+                selectedDate = dateFormat.format(date.getTime());
+                lbl_year.setText(String.valueOf(selDate.get(Calendar.YEAR)));
+                lbl_month.setText(months[selDate.get(Calendar.MONTH)]);
+                breakfastIngredients.clear();
+                mealLogBreakfast.onDateChange();
+                final ArrayAdapter<String> breakfastAdapter = new ArrayAdapter<>(ctx, R.layout.listview_text, breakfastIngredients);
+                breakfastListView.setAdapter(breakfastAdapter);
+                breakfastListView.getLayoutParams().height = 110 * breakfastIngredients.size();
+                getMealData("breakfast");
+                updateUI("breakfast");
+            }
+        });
+
+
+        getMealData("breakfast");
         updateUI("breakfast");
 
 
         return rootView;
     }
 
-    private void getBreakFastData() {
+    private void getMealData(String meal) {
 
-        mSubscriptions.add(NetworkUtil.getRetrofit(db.getUserToken()).getFoodMeal("date","breakfast",db.getUserToken())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(this::handleResponseGetMeal,this::handleErrorGetMeal));
+        if(meal.equalsIgnoreCase("breakfast")){
+            mSubscriptions.add(NetworkUtil.getRetrofit(db.getUserToken()).getFoodMeal(selectedDate,meal,db.getUserToken())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe(this::handleResponseGetMeal,this::handleErrorGetMeal));
+        }
+
     }
 
     private void handleResponseGetMeal(ResponseForGetMeal response) {
@@ -241,34 +264,30 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
 
 
 
-        /*if(response.getData()==null)
-            return;*/
+        if(response.isSuccess()){
+            for (int i = 0; i< response.getData().getFood().size(); i++){
+                breakfastIngredients.add(response.getData().getFood().get(i).getQuantity() + " " + response.getData().getFood().get(i).getItem().getName());
+                Toast.makeText(getContext(),"value added"+response.getData().getFood().get(i).getQuantity() + " "+ response.getData().getFood().get(i).getItem().getName(),Toast.LENGTH_LONG).show();
+                mealLogBreakfast.addMeal(new Food(response.getData().getFood().get(i).getQuantity(),response.getData().getFood().get(i).getItem()));
+                mealLogBreakfast.setMealCalorie(mealLogBreakfast.getMealCalorie()+response.getData().getFood().get(i).getItem().getCalories() * response.getData().getFood().get(i).getQuantity());
+                mealLogBreakfast.setMealCarbs(mealLogBreakfast.getMealCarbs()+response.getData().getFood().get(i).getItem().getCarbs()* response.getData().getFood().get(i).getQuantity());
+                mealLogBreakfast.setMealFat(mealLogBreakfast.getMealFat()+response.getData().getFood().get(i).getItem().getFats()* response.getData().getFood().get(i).getQuantity());
+                mealLogBreakfast.setMealProtien(mealLogBreakfast.getMealProtien()+response.getData().getFood().get(i).getItem().getProteins()* response.getData().getFood().get(i).getQuantity());
 
 
+                updateUI("breakfast");
 
-        for (int i = 0; i< response.getData().getFood().size(); i++){
-            breakfastIngredients.add(response.getData().getFood().get(i).getQuantity() + " " + response.getData().getFood().get(i).getItem().getName());
-            Toast.makeText(getContext(),"value added"+response.getData().getFood().get(i).getQuantity() + " "+ response.getData().getFood().get(i).getItem().getName(),Toast.LENGTH_LONG).show();
-            mealLogBreakfast.addMeal(new Food(response.getData().getFood().get(i).getQuantity(),response.getData().getFood().get(i).getItem()));
-            mealLogBreakfast.setMealCalorie(mealLogBreakfast.getMealCalorie()+response.getData().getFood().get(i).getItem().getCalories() * response.getData().getFood().get(i).getQuantity());
-            mealLogBreakfast.setMealCarbs(mealLogBreakfast.getMealCarbs()+response.getData().getFood().get(i).getItem().getCarbs()* response.getData().getFood().get(i).getQuantity());
-            mealLogBreakfast.setMealFat(mealLogBreakfast.getMealFat()+response.getData().getFood().get(i).getItem().getFats()* response.getData().getFood().get(i).getQuantity());
-            mealLogBreakfast.setMealProtien(mealLogBreakfast.getMealProtien()+response.getData().getFood().get(i).getItem().getProteins()* response.getData().getFood().get(i).getQuantity());
-
-            /*breakfastCalorie.setText(String.valueOf(mealLogBreakfast.getMealCalorie()));
-            breakfastProtien.setText(String.valueOf(mealLogBreakfast.getMealProtien()));
-            breakfastFats.setText(String.valueOf(mealLogBreakfast.getMealFat()));
-            breakfastCarbs.setText(String.valueOf(mealLogBreakfast.getMealCarbs()));*/
-            updateUI("breakfast");
-
-
-
+            }
         }
+
+
+
+
+
         final ArrayAdapter<String> breakfastAdapter = new ArrayAdapter<>(ctx, R.layout.listview_text, breakfastIngredients);
         breakfastListView.setAdapter(breakfastAdapter);
-        breakfastListView.setOnItemClickListener(this);
         breakfastListView.getLayoutParams().height = 110 * breakfastIngredients.size();
-        rootView.findViewById(R.id.my_nutrition_breakfast_add).setOnClickListener(this);
+
 
 
     }
@@ -601,7 +620,7 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
             Log.d("error77","breakfast found");
         }
 
-        BodyForMealLog bodyForMealLog = new BodyForMealLog("date",meal, food1);
+        BodyForMealLog bodyForMealLog = new BodyForMealLog(selectedDate,meal, food1);
         mSubscriptions.add(NetworkUtil.getRetrofit(db.getUserToken()).sendFoodMeal(bodyForMealLog,db.getUserToken())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())

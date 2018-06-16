@@ -20,6 +20,13 @@ public class MealLogForOneMeal {
         mealProtien = 0;
         meal =  new ArrayList<>();
     }
+    public void onDateChange(){
+        mealCalorie = 0;
+        mealCarbs = 0;
+        mealFat = 0;
+        mealProtien = 0;
+        meal.clear();
+    }
 
     public boolean removeMealAt(int position){
         if (position<0 || position > meal.size() ){
