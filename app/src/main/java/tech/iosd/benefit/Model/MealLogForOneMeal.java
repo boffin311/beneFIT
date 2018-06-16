@@ -7,70 +7,70 @@ import java.util.ArrayList;
  */
 
 public class MealLogForOneMeal {
-    private ArrayList<ResponseForGetMeal.Food> breakfast;
-    private float breakfastCalorie;
-    private float breakfastCarbs;
-    private float breakfastFat;
-    private float breakfastProtien;
+    private ArrayList<ResponseForGetMeal.Food> meal;
+    private float mealCalorie;
+    private float mealCarbs;
+    private float mealFat;
+    private float mealProtien;
 
     public MealLogForOneMeal() {
-        breakfastCalorie = 0;
-        breakfastCarbs = 0;
-        breakfastFat = 0;
-        breakfastProtien = 0;
-        breakfast =  new ArrayList<>();
+        mealCalorie = 0;
+        mealCarbs = 0;
+        mealFat = 0;
+        mealProtien = 0;
+        meal =  new ArrayList<>();
     }
 
     public boolean removeMealAt(int position){
-        if (position<0 || position > breakfast.size() ){
+        if (position<0 || position > meal.size() ){
             return false;
         }else {
-            breakfast.remove(position);
+            meal.remove(position);
             return true;
         }
     }
 
     public boolean addMeal(ResponseForGetMeal.Food Food){
-        breakfast.add(Food);
+        meal.add(Food);
         return true;
     }
-    public ArrayList<ResponseForGetMeal.Food> getBreakfast() {
-        return breakfast;
+    public ArrayList<ResponseForGetMeal.Food> getMeal() {
+        return meal;
     }
 
-    public void setBreakfast(ArrayList<ResponseForGetMeal.Food> breakfast) {
-        this.breakfast = breakfast;
+    public void setMeal(ArrayList<ResponseForGetMeal.Food> meal) {
+        this.meal = meal;
     }
 
-    public float getBreakfastCalorie() {
-        return breakfastCalorie;
+    public float getMealCalorie() {
+        return mealCalorie;
     }
 
-    public void setBreakfastCalorie(float breakfastCalorie) {
-        this.breakfastCalorie = breakfastCalorie;
+    public void setMealCalorie(float mealCalorie) {
+        this.mealCalorie = mealCalorie;
     }
 
-    public float getBreakfastCarbs() {
-        return breakfastCarbs;
+    public float getMealCarbs() {
+        return mealCarbs;
     }
 
-    public void setBreakfastCarbs(float breakfastCarbs) {
-        this.breakfastCarbs = breakfastCarbs;
+    public void setMealCarbs(float mealCarbs) {
+        this.mealCarbs = mealCarbs;
     }
 
-    public float getBreakfastFat() {
-        return breakfastFat;
+    public float getMealFat() {
+        return mealFat;
     }
 
-    public void setBreakfastFat(float breakfastFat) {
-        this.breakfastFat = breakfastFat;
+    public void setMealFat(float mealFat) {
+        this.mealFat = mealFat;
     }
 
-    public float getBreakfastProtien() {
-        return breakfastProtien;
+    public float getMealProtien() {
+        return mealProtien;
     }
 
-    public void setBreakfastProtien(float breakfastProtien) {
-        this.breakfastProtien = breakfastProtien;
+    public void setMealProtien(float mealProtien) {
+        this.mealProtien = mealProtien;
     }
 }

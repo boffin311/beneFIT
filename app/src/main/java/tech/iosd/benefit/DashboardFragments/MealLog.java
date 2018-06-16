@@ -90,7 +90,7 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
     private DatabaseHandler db ;
     RecyclerView recyclerView;
     int position = -1;
-    MealLogForOneMeal mealLogForOneMeal;
+    MealLogForOneMeal mealLogBreakfast;
 
 
 
@@ -105,7 +105,7 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
 
         mSubscriptions = new CompositeSubscription();
         mSubscriptionsSearch = new CompositeSubscription();
-        mealLogForOneMeal = new MealLogForOneMeal();
+        mealLogBreakfast = new MealLogForOneMeal();
 
         db = new DatabaseHandler(getContext());
         progressDialog =  new ProgressDialog(getContext());
@@ -218,6 +218,7 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
         dinnerListView.getLayoutParams().height = 110 * dinnerIngredients.size();
         rootView.findViewById(R.id.my_nutrition_dinner_add).setOnClickListener(this);
         getBreakFastData();
+        updateUI("breakfast");
 
 
         return rootView;
@@ -240,24 +241,25 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
 
 
 
-        if(response.getData()==null)
-            return;
+        /*if(response.getData()==null)
+            return;*/
 
 
 
         for (int i = 0; i< response.getData().getFood().size(); i++){
             breakfastIngredients.add(response.getData().getFood().get(i).getQuantity() + " " + response.getData().getFood().get(i).getItem().getName());
             Toast.makeText(getContext(),"value added"+response.getData().getFood().get(i).getQuantity() + " "+ response.getData().getFood().get(i).getItem().getName(),Toast.LENGTH_LONG).show();
-            mealLogForOneMeal.addMeal(new Food(response.getData().getFood().get(i).getQuantity(),response.getData().getFood().get(i).getItem()));
-            mealLogForOneMeal.setBreakfastCalorie(mealLogForOneMeal.getBreakfastCalorie()+response.getData().getFood().get(i).getItem().getCalories() * response.getData().getFood().get(i).getQuantity());
-            mealLogForOneMeal.setBreakfastCarbs(mealLogForOneMeal.getBreakfastCarbs()+response.getData().getFood().get(i).getItem().getCarbs()* response.getData().getFood().get(i).getQuantity());
-            mealLogForOneMeal.setBreakfastFat(mealLogForOneMeal.getBreakfastFat()+response.getData().getFood().get(i).getItem().getFats()* response.getData().getFood().get(i).getQuantity());
-            mealLogForOneMeal.setBreakfastProtien(mealLogForOneMeal.getBreakfastProtien()+response.getData().getFood().get(i).getItem().getProteins()* response.getData().getFood().get(i).getQuantity());
+            mealLogBreakfast.addMeal(new Food(response.getData().getFood().get(i).getQuantity(),response.getData().getFood().get(i).getItem()));
+            mealLogBreakfast.setMealCalorie(mealLogBreakfast.getMealCalorie()+response.getData().getFood().get(i).getItem().getCalories() * response.getData().getFood().get(i).getQuantity());
+            mealLogBreakfast.setMealCarbs(mealLogBreakfast.getMealCarbs()+response.getData().getFood().get(i).getItem().getCarbs()* response.getData().getFood().get(i).getQuantity());
+            mealLogBreakfast.setMealFat(mealLogBreakfast.getMealFat()+response.getData().getFood().get(i).getItem().getFats()* response.getData().getFood().get(i).getQuantity());
+            mealLogBreakfast.setMealProtien(mealLogBreakfast.getMealProtien()+response.getData().getFood().get(i).getItem().getProteins()* response.getData().getFood().get(i).getQuantity());
 
-            breakfastCalorie.setText(String.valueOf(mealLogForOneMeal.getBreakfastCalorie()));
-            breakfastProtien.setText(String.valueOf(mealLogForOneMeal.getBreakfastProtien()));
-            breakfastFats.setText(String.valueOf(mealLogForOneMeal.getBreakfastFat()));
-            breakfastCarbs.setText(String.valueOf(mealLogForOneMeal.getBreakfastCarbs()));
+            /*breakfastCalorie.setText(String.valueOf(mealLogBreakfast.getMealCalorie()));
+            breakfastProtien.setText(String.valueOf(mealLogBreakfast.getMealProtien()));
+            breakfastFats.setText(String.valueOf(mealLogBreakfast.getMealFat()));
+            breakfastCarbs.setText(String.valueOf(mealLogBreakfast.getMealCarbs()));*/
+            updateUI("breakfast");
 
 
 
@@ -338,13 +340,22 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
                     @Override
                     public void onClick(View view)
                     {
-                        breakfastCalorie.setText(String.valueOf(Float.parseFloat(breakfastCalorie.getText().toString())- (mealLogForOneMeal.getBreakfast().get(pos).getQuantity()) * mealLogForOneMeal.getBreakfast().get(pos).getItem().getCalories()));
-                        breakfastProtien.setText(String.valueOf(Float.parseFloat(breakfastProtien.getText().toString())- (mealLogForOneMeal.getBreakfast().get(pos).getQuantity()) * mealLogForOneMeal.getBreakfast().get(pos).getItem().getProteins()));
-                        breakfastFats.setText(String.valueOf(Float.parseFloat(breakfastFats.getText().toString()) - (mealLogForOneMeal.getBreakfast().get(pos).getQuantity()) * mealLogForOneMeal.getBreakfast().get(pos).getItem().getFats()));
-                        breakfastCarbs.setText(String.valueOf(Float.parseFloat(breakfastCarbs.getText().toString()) - (mealLogForOneMeal.getBreakfast().get(pos).getQuantity()) * mealLogForOneMeal.getBreakfast().get(pos).getItem().getCarbs()));
-
+                        /*breakfastCalorie.setText(String.valueOf(Float.parseFloat(breakfastCalorie.getText().toString())- (mealLogBreakfast.getMeal().get(pos).getQuantity()) * mealLogBreakfast.getMeal().get(pos).getItem().getCalories()));
+                        breakfastProtien.setText(String.valueOf(Float.parseFloat(breakfastProtien.getText().toString())- (mealLogBreakfast.getMeal().get(pos).getQuantity()) * mealLogBreakfast.getMeal().get(pos).getItem().getProteins()));
+                        breakfastFats.setText(String.valueOf(Float.parseFloat(breakfastFats.getText().toString()) - (mealLogBreakfast.getMeal().get(pos).getQuantity()) * mealLogBreakfast.getMeal().get(pos).getItem().getFats()));
+                        breakfastCarbs.setText(String.valueOf(Float.parseFloat(breakfastCarbs.getText().toString()) - (mealLogBreakfast.getMeal().get(pos).getQuantity()) * mealLogBreakfast.getMeal().get(pos).getItem().getCarbs()));*/
                         breakfastIngredients.remove(pos);
-                        mealLogForOneMeal.removeMealAt(pos);
+
+                        mealLogBreakfast.setMealCalorie(mealLogBreakfast.getMealCalorie()- (mealLogBreakfast.getMeal().get(pos).getQuantity()) * mealLogBreakfast.getMeal().get(pos).getItem().getCalories());
+                        mealLogBreakfast.setMealCarbs(mealLogBreakfast.getMealCarbs()- (mealLogBreakfast.getMeal().get(pos).getQuantity()) * mealLogBreakfast.getMeal().get(pos).getItem().getCarbs());
+                        mealLogBreakfast.setMealProtien(mealLogBreakfast.getMealProtien()- (mealLogBreakfast.getMeal().get(pos).getQuantity()) * mealLogBreakfast.getMeal().get(pos).getItem().getProteins());
+                        mealLogBreakfast.setMealFat(mealLogBreakfast.getMealFat()- (mealLogBreakfast.getMeal().get(pos).getQuantity()) * mealLogBreakfast.getMeal().get(pos).getItem().getFats());
+
+                        mealLogBreakfast.removeMealAt(pos);
+
+                        updateUI("breakfast");
+
+
                         final ArrayAdapter<String> breakfastAdapter = new ArrayAdapter<>(ctx, R.layout.listview_text, breakfastIngredients);
                         breakfastListView.setAdapter(breakfastAdapter);
                         breakfastListView.getLayoutParams().height = 110 * breakfastIngredients.size();
@@ -534,15 +545,15 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
                         }
                         else {
                             breakfastIngredients.add(wheelPickerQty.getData().get(wheelPickerQty.getCurrentItemPosition()) + " " + listItems.get(position).getName());
-                            breakfastCalorie.setText(String.valueOf(Float.parseFloat(breakfastCalorie.getText().toString())+ (wheelPickerQty.getCurrentItemPosition() + 1) * listItems.get(position).getCalories()));
-                            breakfastProtien.setText(String.valueOf(Float.parseFloat(breakfastProtien.getText().toString())+ (wheelPickerQty.getCurrentItemPosition() + 1) * listItems.get(position).getProteins()));
-                            breakfastFats.setText(String.valueOf(Float.parseFloat(breakfastFats.getText().toString())+ (wheelPickerQty.getCurrentItemPosition() + 1) * listItems.get(position).getFats()));
-                            breakfastCarbs.setText(String.valueOf(Float.parseFloat(breakfastCarbs.getText().toString())+ (wheelPickerQty.getCurrentItemPosition() + 1) * listItems.get(position).getCarbs()));
-
-                            mealLogForOneMeal.addMeal(new ResponseForGetMeal.Food(wheelPickerQty.getCurrentItemPosition() + 1,listItems.get(position)) );
+                            mealLogBreakfast.addMeal(new ResponseForGetMeal.Food(wheelPickerQty.getCurrentItemPosition() + 1,listItems.get(position)) );
                             final ArrayAdapter<String> breakfastAdapter = new ArrayAdapter<>(ctx, R.layout.listview_text, breakfastIngredients);
                             breakfastListView.setAdapter(breakfastAdapter);
                             breakfastListView.getLayoutParams().height = 110 * breakfastIngredients.size();
+                            mealLogBreakfast.setMealCalorie(mealLogBreakfast.getMealCalorie()+ (wheelPickerQty.getCurrentItemPosition() + 1) * listItems.get(position).getCalories());
+                            mealLogBreakfast.setMealProtien(mealLogBreakfast.getMealProtien()+ (wheelPickerQty.getCurrentItemPosition() + 1) * listItems.get(position).getProteins());
+                            mealLogBreakfast.setMealCarbs(mealLogBreakfast.getMealCarbs()+ (wheelPickerQty.getCurrentItemPosition() + 1) * listItems.get(position).getCarbs());
+                            mealLogBreakfast.setMealFat(mealLogBreakfast.getMealFat()+ (wheelPickerQty.getCurrentItemPosition() + 1) * listItems.get(position).getFats());
+                            updateUI("breakfast");
                             uploadMealLogToServer("breakfast");
 
                             dialog.dismiss();
@@ -562,15 +573,24 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
             }
         }
     }
+    private void updateUI(String meal){
+        if(meal.equalsIgnoreCase("breakfast")){
+            breakfastCalorie.setText(String.valueOf(mealLogBreakfast.getMealCalorie()));
+            breakfastProtien.setText(String.valueOf(mealLogBreakfast.getMealProtien()));
+            breakfastFats.setText(String.valueOf(mealLogBreakfast.getMealFat()));
+            breakfastCarbs.setText(String.valueOf(mealLogBreakfast.getMealCarbs()));
+        }
+
+    }
 
     private void uploadMealLogToServer(String meal){
         ArrayList<BodyForMealLog.Food> food1 =  new ArrayList<>();
         progressDialog.show();
 
         if(meal.equalsIgnoreCase("breakfast")){
-            for(int i = 0; i< mealLogForOneMeal.getBreakfast().size(); i++){
-                String id = mealLogForOneMeal.getBreakfast().get(i).getItem().getId();
-                int quantity = mealLogForOneMeal.getBreakfast().get(i).getQuantity();
+            for(int i = 0; i< mealLogBreakfast.getMeal().size(); i++){
+                String id = mealLogBreakfast.getMeal().get(i).getItem().getId();
+                int quantity = mealLogBreakfast.getMeal().get(i).getQuantity();
                 food1.add(new BodyForMealLog.Food(id,quantity));
                 Log.d("error77",String.valueOf(i));
 //                Log.d("error77",id);
