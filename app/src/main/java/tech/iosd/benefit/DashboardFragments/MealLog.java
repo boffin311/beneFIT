@@ -39,12 +39,14 @@ import retrofit2.adapter.rxjava.HttpException;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
+import tech.iosd.benefit.Model.BodyForMealLog;
 import tech.iosd.benefit.Model.DatabaseHandler;
-import tech.iosd.benefit.Model.MealLogBreakfast;
+import tech.iosd.benefit.Model.MealLogForOneMeal;
 import tech.iosd.benefit.Model.MealLogFood;
 import tech.iosd.benefit.Model.Response;
 import tech.iosd.benefit.Model.ResponseForFoodSearch;
 import tech.iosd.benefit.Model.ResponseForGetMeal;
+import tech.iosd.benefit.Model.ResponseForSuccess;
 import tech.iosd.benefit.Network.NetworkUtil;
 import tech.iosd.benefit.R;
 import tech.iosd.benefit.Model.ResponseForGetMeal.Food;
@@ -81,11 +83,14 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
 
 
     private CompositeSubscription mSubscriptions;
+    private CompositeSubscription mSubscriptionsSearch;
+
+
 
     private DatabaseHandler db ;
     RecyclerView recyclerView;
     int position = -1;
-    MealLogBreakfast mealLogBreakfast;
+    MealLogForOneMeal mealLogForOneMeal;
 
 
 
@@ -99,12 +104,13 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
         dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 
         mSubscriptions = new CompositeSubscription();
-        mealLogBreakfast = new MealLogBreakfast();
+        mSubscriptionsSearch = new CompositeSubscription();
+        mealLogForOneMeal = new MealLogForOneMeal();
 
         db = new DatabaseHandler(getContext());
         progressDialog =  new ProgressDialog(getContext());
         progressDialog.show();
-        progressDialog.setMessage("getting Food details..");
+        progressDialog.setMessage("Please Wait..");
 
         progressDialog.setCancelable(false);
 
@@ -163,7 +169,6 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
 
         breakfastListView = rootView.findViewById(R.id.my_nutrition_breakfast);
         breakfastIngredients = new ArrayList<>();
-        getBreakFastData();
         /*breakfastIngredients.add("2 Egg Whites");
         breakfastIngredients.add("4 Rotis");
         breakfastIngredients.add("1 Glass of mix fruit juice");*/
@@ -212,6 +217,8 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
         dinnerListView.setOnItemClickListener(this);
         dinnerListView.getLayoutParams().height = 110 * dinnerIngredients.size();
         rootView.findViewById(R.id.my_nutrition_dinner_add).setOnClickListener(this);
+        getBreakFastData();
+
 
         return rootView;
     }
@@ -233,22 +240,24 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
 
 
 
+        if(response.getData()==null)
+            return;
 
 
 
         for (int i = 0; i< response.getData().getFood().size(); i++){
             breakfastIngredients.add(response.getData().getFood().get(i).getQuantity() + " " + response.getData().getFood().get(i).getItem().getName());
             Toast.makeText(getContext(),"value added"+response.getData().getFood().get(i).getQuantity() + " "+ response.getData().getFood().get(i).getItem().getName(),Toast.LENGTH_LONG).show();
-            mealLogBreakfast.addMeal(new Food(response.getData().getFood().get(i).getQuantity(),response.getData().getFood().get(i).getItem()));
-            mealLogBreakfast.setBreakfastCalorie(mealLogBreakfast.getBreakfastCalorie()+response.getData().getFood().get(i).getItem().getCalories() * response.getData().getFood().get(i).getQuantity());
-            mealLogBreakfast.setBreakfastCarbs(mealLogBreakfast.getBreakfastCarbs()+response.getData().getFood().get(i).getItem().getCarbs()* response.getData().getFood().get(i).getQuantity());
-            mealLogBreakfast.setBreakfastFat(mealLogBreakfast.getBreakfastFat()+response.getData().getFood().get(i).getItem().getFats()* response.getData().getFood().get(i).getQuantity());
-            mealLogBreakfast.setBreakfastProtien(mealLogBreakfast.getBreakfastProtien()+response.getData().getFood().get(i).getItem().getProteins()* response.getData().getFood().get(i).getQuantity());
+            mealLogForOneMeal.addMeal(new Food(response.getData().getFood().get(i).getQuantity(),response.getData().getFood().get(i).getItem()));
+            mealLogForOneMeal.setBreakfastCalorie(mealLogForOneMeal.getBreakfastCalorie()+response.getData().getFood().get(i).getItem().getCalories() * response.getData().getFood().get(i).getQuantity());
+            mealLogForOneMeal.setBreakfastCarbs(mealLogForOneMeal.getBreakfastCarbs()+response.getData().getFood().get(i).getItem().getCarbs()* response.getData().getFood().get(i).getQuantity());
+            mealLogForOneMeal.setBreakfastFat(mealLogForOneMeal.getBreakfastFat()+response.getData().getFood().get(i).getItem().getFats()* response.getData().getFood().get(i).getQuantity());
+            mealLogForOneMeal.setBreakfastProtien(mealLogForOneMeal.getBreakfastProtien()+response.getData().getFood().get(i).getItem().getProteins()* response.getData().getFood().get(i).getQuantity());
 
-            breakfastCalorie.setText(String.valueOf(mealLogBreakfast.getBreakfastCalorie()));
-            breakfastProtien.setText(String.valueOf(mealLogBreakfast.getBreakfastProtien()));
-            breakfastFats.setText(String.valueOf(mealLogBreakfast.getBreakfastFat()));
-            breakfastCarbs.setText(String.valueOf(mealLogBreakfast.getBreakfastCarbs()));
+            breakfastCalorie.setText(String.valueOf(mealLogForOneMeal.getBreakfastCalorie()));
+            breakfastProtien.setText(String.valueOf(mealLogForOneMeal.getBreakfastProtien()));
+            breakfastFats.setText(String.valueOf(mealLogForOneMeal.getBreakfastFat()));
+            breakfastCarbs.setText(String.valueOf(mealLogForOneMeal.getBreakfastCarbs()));
 
 
 
@@ -329,10 +338,17 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
                     @Override
                     public void onClick(View view)
                     {
+                        breakfastCalorie.setText(String.valueOf(Float.parseFloat(breakfastCalorie.getText().toString())- (mealLogForOneMeal.getBreakfast().get(pos).getQuantity()) * mealLogForOneMeal.getBreakfast().get(pos).getItem().getCalories()));
+                        breakfastProtien.setText(String.valueOf(Float.parseFloat(breakfastProtien.getText().toString())- (mealLogForOneMeal.getBreakfast().get(pos).getQuantity()) * mealLogForOneMeal.getBreakfast().get(pos).getItem().getProteins()));
+                        breakfastFats.setText(String.valueOf(Float.parseFloat(breakfastFats.getText().toString()) - (mealLogForOneMeal.getBreakfast().get(pos).getQuantity()) * mealLogForOneMeal.getBreakfast().get(pos).getItem().getFats()));
+                        breakfastCarbs.setText(String.valueOf(Float.parseFloat(breakfastCarbs.getText().toString()) - (mealLogForOneMeal.getBreakfast().get(pos).getQuantity()) * mealLogForOneMeal.getBreakfast().get(pos).getItem().getCarbs()));
+
                         breakfastIngredients.remove(pos);
+                        mealLogForOneMeal.removeMealAt(pos);
                         final ArrayAdapter<String> breakfastAdapter = new ArrayAdapter<>(ctx, R.layout.listview_text, breakfastIngredients);
                         breakfastListView.setAdapter(breakfastAdapter);
                         breakfastListView.getLayoutParams().height = 110 * breakfastIngredients.size();
+                        uploadMealLogToServer("breakfast");
                         dialog.dismiss();
                     }
                 });
@@ -358,7 +374,6 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
                     public void onClick(View view)
                     {
                         midMorningIngredients.remove(pos);
-                        mealLogBreakfast.removeMealAt(pos);
                         final ArrayAdapter<String> midMorningAdapter = new ArrayAdapter<>(ctx, R.layout.listview_text, midMorningIngredients);
                         midMorningListView.setAdapter(midMorningAdapter);
                         midMorningListView.getLayoutParams().height = 110 * midMorningIngredients.size();
@@ -524,10 +539,12 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
                             breakfastFats.setText(String.valueOf(Float.parseFloat(breakfastFats.getText().toString())+ (wheelPickerQty.getCurrentItemPosition() + 1) * listItems.get(position).getFats()));
                             breakfastCarbs.setText(String.valueOf(Float.parseFloat(breakfastCarbs.getText().toString())+ (wheelPickerQty.getCurrentItemPosition() + 1) * listItems.get(position).getCarbs()));
 
-                            mealLogBreakfast.addMeal(new Food(wheelPickerQty.getCurrentItemPosition() + 1,listItems.get(position)) );
+                            mealLogForOneMeal.addMeal(new ResponseForGetMeal.Food(wheelPickerQty.getCurrentItemPosition() + 1,listItems.get(position)) );
                             final ArrayAdapter<String> breakfastAdapter = new ArrayAdapter<>(ctx, R.layout.listview_text, breakfastIngredients);
                             breakfastListView.setAdapter(breakfastAdapter);
                             breakfastListView.getLayoutParams().height = 110 * breakfastIngredients.size();
+                            uploadMealLogToServer("breakfast");
+
                             dialog.dismiss();
                         }
 
@@ -546,16 +563,40 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
         }
     }
 
-    private void uploadBreakfastToServer(){
-        mSubscriptions.add(NetworkUtil.getRetrofit(db.getUserToken()).getFoodList(name,db.getUserToken())
+    private void uploadMealLogToServer(String meal){
+        ArrayList<BodyForMealLog.Food> food1 =  new ArrayList<>();
+        progressDialog.show();
+
+        if(meal.equalsIgnoreCase("breakfast")){
+            for(int i = 0; i< mealLogForOneMeal.getBreakfast().size(); i++){
+                String id = mealLogForOneMeal.getBreakfast().get(i).getItem().getId();
+                int quantity = mealLogForOneMeal.getBreakfast().get(i).getQuantity();
+                food1.add(new BodyForMealLog.Food(id,quantity));
+                Log.d("error77",String.valueOf(i));
+//                Log.d("error77",id);
+
+
+            }
+
+            Log.d("error77","breakfast found");
+        }
+
+        BodyForMealLog bodyForMealLog = new BodyForMealLog("date",meal, food1);
+        mSubscriptions.add(NetworkUtil.getRetrofit(db.getUserToken()).sendFoodMeal(bodyForMealLog,db.getUserToken())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(this::handleResponse,this::handleError));
+                .subscribe(this::handleResponseSendMealLog,this::handleError));
+    }
+
+    private void handleResponseSendMealLog(ResponseForSuccess responseForSuccess){
+        showSnackBarMessage("Data saved to server.");
+
+        progressDialog.hide();
     }
 
     private void getSearchResult(String name) {
 
-        mSubscriptions.add(NetworkUtil.getRetrofit(db.getUserToken()).getFoodList(name,db.getUserToken())
+        mSubscriptionsSearch.add(NetworkUtil.getRetrofit(db.getUserToken()).getFoodList(name,db.getUserToken())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(this::handleResponse,this::handleError));
@@ -595,12 +636,14 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
         if (error instanceof HttpException) {
 
             Gson gson = new GsonBuilder().create();
+            showSnackBarMessage("Network Error !");
+            Log.d("error77",error.getMessage());
 
             try {
 
                 String errorBody = ((HttpException) error).response().errorBody().string();
-                Response response = gson.fromJson(errorBody,Response.class);
-                showSnackBarMessage(response.getMessage());
+                /*Response response = gson.fromJson(errorBody,Response.class);
+                showSnackBarMessage(response.getMessage());*/
 
             } catch (IOException e) {
                 e.printStackTrace();

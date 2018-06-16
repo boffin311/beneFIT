@@ -7,7 +7,7 @@ package tech.iosd.benefit.Model;
 public class MealLogFood {
 
 
-    private String id;
+    private String _id;
     private String name;
     private float calories;
     private float proteins;
@@ -32,11 +32,11 @@ public class MealLogFood {
     }
 
     public String getId() {
-        return id;
+        return _id;
     }
 
     public void setId(String id) {
-        this.id = id;
+        this._id = id;
     }
 
     public float getCalories() {

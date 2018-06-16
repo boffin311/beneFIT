@@ -6,14 +6,14 @@ import java.util.ArrayList;
  * Created by SAM33R on 16-06-2018.
  */
 
-public class MealLogBreakfast {
+public class MealLogForOneMeal {
     private ArrayList<ResponseForGetMeal.Food> breakfast;
     private float breakfastCalorie;
     private float breakfastCarbs;
     private float breakfastFat;
     private float breakfastProtien;
 
-    public MealLogBreakfast() {
+    public MealLogForOneMeal() {
         breakfastCalorie = 0;
         breakfastCarbs = 0;
         breakfastFat = 0;
