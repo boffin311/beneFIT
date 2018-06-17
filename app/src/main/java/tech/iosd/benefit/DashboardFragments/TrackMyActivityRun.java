@@ -8,8 +8,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.graphics.Color;
-import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.IBinder;
 import android.support.v4.app.Fragment;
@@ -46,7 +44,6 @@ import tech.iosd.benefit.R;
 import tech.iosd.benefit.Services.GPSTracker;
 import tech.iosd.benefit.Utils.Constants;
 
-import static android.content.Context.BIND_AUTO_CREATE;
 import static android.content.Context.LOCATION_SERVICE;
 
 public class TrackMyActivityRun extends Fragment implements View.OnClickListener
@@ -56,11 +53,12 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
     private MapView mMapView;
 
     private GoogleMap googleMap;
-    private View startBtn;
-    private View pauseBtn;
-    private View stopBtn;
+    private View startLayout;
+    private View pauseLayout;
+    private View stopLayout;
     private View discardBtn;
-
+    private View resumeBtn;
+    private View doneBtn;
 
     private GPSTracker myService;
     private ArrayList<LatLng> points;
@@ -194,17 +192,21 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
 
         fm = getFragmentManager();
 
-        startBtn = rootView.findViewById(R.id.dashboard_track_my_activity_running_start);
-        pauseBtn = rootView.findViewById(R.id.dashboard_track_my_activity_running_pause);
-        stopBtn = rootView.findViewById(R.id.dashboard_track_my_activity_running_stop);
+        startLayout = rootView.findViewById(R.id.dashboard_track_my_activity_running_start);
+        pauseLayout = rootView.findViewById(R.id.dashboard_track_my_activity_running_pause);
+        stopLayout = rootView.findViewById(R.id.dashboard_track_my_activity_running_stop);
         discardBtn = rootView.findViewById(R.id.dashboard_track_my_activity_running_discard);
+        resumeBtn = rootView.findViewById(R.id.dashboard_track_my_activity_running_resume);
+        doneBtn = rootView.findViewById(R.id.dashboard_track_my_activity_running_done);
+
         distance = (TextView)rootView.findViewById(R.id.dashboard_track_my_activity_distance_textview);
 
-
         rootView.findViewById(R.id.back_icon).setOnClickListener(this);
-        rootView.findViewById(R.id.dashboard_track_my_activity_running_discard).setOnClickListener(this);
-        startBtn.setOnClickListener(this);
-        pauseBtn.setOnClickListener(this);
+        discardBtn.setOnClickListener(this);
+        resumeBtn.setOnClickListener(this);
+        doneBtn.setOnClickListener(this);
+        startLayout.setOnClickListener(this);
+        pauseLayout.setOnClickListener(this);
 
         mMapView = rootView.findViewById(R.id.track_running_map);
         mMapView.onCreate(savedInstanceState);
@@ -302,17 +304,17 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
                 break;
             case R.id.dashboard_track_my_activity_running_start:
             {
-                startBtn.setVisibility(View.GONE);
-                pauseBtn.setVisibility(View.VISIBLE);
-                stopBtn.setVisibility(View.GONE);
+                startLayout.setVisibility(View.GONE);
+                pauseLayout.setVisibility(View.VISIBLE);
+                stopLayout.setVisibility(View.GONE);
                 startRunning();
                 break;
             }
             case R.id.dashboard_track_my_activity_running_pause:
             {
-                startBtn.setVisibility(View.GONE);
-                pauseBtn.setVisibility(View.GONE);
-                stopBtn.setVisibility(View.VISIBLE);
+                startLayout.setVisibility(View.GONE);
+                pauseLayout.setVisibility(View.GONE);
+                stopLayout.setVisibility(View.VISIBLE);
                 myService.setPaused(true);
                 break;
             }
@@ -320,9 +322,9 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
             {
                 //gpsTracker.setPaused(false);
                 Toast.makeText(getActivity().getApplicationContext(),"rrere",Toast.LENGTH_LONG).show();
-                startBtn.setVisibility(View.VISIBLE);
-                pauseBtn.setVisibility(View.GONE);
-                stopBtn.setVisibility(View.GONE);
+                startLayout.setVisibility(View.VISIBLE);
+                pauseLayout.setVisibility(View.GONE);
+                stopLayout.setVisibility(View.GONE);
                 discardBtn.setVisibility(View.GONE);
                 myService.setPaused(false);
 
@@ -349,9 +351,9 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
                     public void onClick(View view)
                     {
                         dialog.dismiss();
-                        startBtn.setVisibility(View.VISIBLE);
-                        pauseBtn.setVisibility(View.GONE);
-                        stopBtn.setVisibility(View.GONE);
+                        startLayout.setVisibility(View.VISIBLE);
+                        pauseLayout.setVisibility(View.GONE);
+                        stopLayout.setVisibility(View.GONE);
                         discardBtn.setVisibility(View.GONE);
                         myService.setPaused(true);
                     }
