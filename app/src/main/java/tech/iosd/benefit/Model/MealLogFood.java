@@ -24,10 +24,15 @@ public class MealLogFood {
         public int piece;
         public int bowl;
         public int katori;
-        public int sever;
+        public int serve;
+        public int gram;
 
         public Size() {
-
+            this.piece = 0;
+            this.bowl = 0;
+            this.katori = 0;
+            this.serve = 0;
+            this.gram = 0;
         }
     }
 

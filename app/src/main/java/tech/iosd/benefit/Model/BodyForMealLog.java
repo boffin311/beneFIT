@@ -9,6 +9,7 @@ import java.util.ArrayList;
 public class BodyForMealLog {
     private String date;
     private String type;
+    private String unit;
     private ArrayList<Food> food;
 
     public BodyForMealLog(String date, String type, ArrayList<Food> food1) {
@@ -41,6 +42,14 @@ public class BodyForMealLog {
         public void setQuantity(int quantity) {
             this.quantity = quantity;
         }
+    }
+
+    public String getUnit() {
+        return unit;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
     }
 
     public String getDate() {

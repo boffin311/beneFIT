@@ -137,8 +137,11 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
         for (int i = 1; i < 100; i++)
             ingredientsQty.add(Integer.toString(i));
         ingredientTyp.add("gram");
+        ingredientTyp.add("piece");
         ingredientTyp.add("bowl");
-        ingredientTyp.add("each");
+        ingredientTyp.add("katori");
+        ingredientTyp.add("serve");
+
 
         breakfastListView = rootView.findViewById(R.id.my_nutrition_breakfast);
         breakfastIngredients = new ArrayList<>();
@@ -266,7 +269,7 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
 
         if(response.isSuccess()){
             for (int i = 0; i< response.getData().getFood().size(); i++){
-                breakfastIngredients.add(response.getData().getFood().get(i).getQuantity() + " " + response.getData().getFood().get(i).getItem().getName());
+                breakfastIngredients.add(response.getData().getFood().get(i).getQuantity() + " " +response.getData().getFood().get(i).getItem().getUnit()+" "+ response.getData().getFood().get(i).getItem().getName());
                 Toast.makeText(getContext(),"value added"+response.getData().getFood().get(i).getQuantity() + " "+ response.getData().getFood().get(i).getItem().getName(),Toast.LENGTH_LONG).show();
                 mealLogBreakfast.addMeal(new Food(response.getData().getFood().get(i).getQuantity(),response.getData().getFood().get(i).getItem()));
                 mealLogBreakfast.setMealCalorie(mealLogBreakfast.getMealCalorie()+response.getData().getFood().get(i).getItem().getCalories() * response.getData().getFood().get(i).getQuantity());
@@ -343,13 +346,44 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
             case R.id.my_nutrition_breakfast:
             {
                 dialogTitle.setText(breakfastIngredients.get(pos));
+                String unit = mealLogBreakfast.getMeal().get(pos).getItem().getUnit();
+                int quantity = mealLogBreakfast.getMeal().get(pos).getQuantity();
+                if(unit.equalsIgnoreCase("gram")){
+
+                    wheelPickerTyp.setSelectedItemPosition(0);
+
+                }else if(unit.equalsIgnoreCase("piece")){
+
+                    wheelPickerTyp.setSelectedItemPosition(1);
+
+                }else if(unit.equalsIgnoreCase("bowl")){
+
+                    wheelPickerTyp.setSelectedItemPosition(2);
+
+                }else if(unit.equalsIgnoreCase("katori")){
+
+                    wheelPickerTyp.setSelectedItemPosition(3);
+
+                }else if(unit.equalsIgnoreCase("serve size")){
+
+                    wheelPickerTyp.setSelectedItemPosition(4);
+
+                }else {
+                    Toast.makeText(getContext(),"new unit found"+" "+ unit,Toast.LENGTH_LONG).show();
+                    fm.popBackStack();
+                }
+                wheelPickerQty.setSelectedItemPosition(quantity-1);
+
                 dialogModify.setOnClickListener(new View.OnClickListener()
                 {
                     @Override
                     public void onClick(View view)
                     {
                         //breakfastIngredients.set(pos, wheelPickerQty.getData().get(wheelPickerQty.getCurrentItemPosition()) + " " + wheelPickerTyp.getData().get(wheelPickerTyp.getCurrentItemPosition()));
+
+
                         final ArrayAdapter<String> breakfastAdapter = new ArrayAdapter<>(ctx, R.layout.listview_text, breakfastIngredients);
+                        int quantity = wheelPickerQty.getCurrentItemPosition()+ 1;
                         breakfastListView.setAdapter(breakfastAdapter);
                         dialog.dismiss();
                     }
