@@ -43,8 +43,8 @@ public class GPSTracker extends Service implements
 
 
 
-    private static final long INTERVAL = 1000 * 2;
-    private static final long FASTEST_INTERVAL = 1000 * 1;
+    private static final long INTERVAL = 1000 * 10;
+    private static final long FASTEST_INTERVAL = 1000 * 5;
     LocationRequest mLocationRequest;
     GoogleApiClient mGoogleApiClient;
     Location mCurrentLocation, lStart, lEnd;
@@ -154,7 +154,12 @@ public class GPSTracker extends Service implements
         latitude = mCurrentLocation.getLatitude();
         longitude = mCurrentLocation.getLongitude();
         if(isPaused()){
+            points.add(new LatLng(mCurrentLocation.getLatitude(),mCurrentLocation.getLongitude()));
 
+            Intent broadcastIntent = new Intent();
+            broadcastIntent.setAction(Constants.GPS_UPDATE);
+            sendBroadcast(broadcastIntent);
+            speed = 0;
         }else {
             points.add(new LatLng(mCurrentLocation.getLatitude(),mCurrentLocation.getLongitude()));
 

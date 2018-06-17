@@ -71,9 +71,10 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
     //boolean mServiceBound = false;
 
     private TextView distance;
-    double distace_paused = 0;
-    double distace_total= 0;
+    double distaceBeforePause = 0;
+    double distace_paused= 0;
     double lastDistance =0;
+    private boolean fistPuase = true;
 
     private ServiceConnection sc = new ServiceConnection() {
         @Override
@@ -315,6 +316,8 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
                 startLayout.setVisibility(View.GONE);
                 pauseLayout.setVisibility(View.GONE);
                 stopLayout.setVisibility(View.VISIBLE);
+                discardBtn.setVisibility(View.VISIBLE);
+
                 myService.setPaused(true);
                 break;
             }
@@ -322,8 +325,8 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
             {
                 //gpsTracker.setPaused(false);
                 Toast.makeText(getActivity().getApplicationContext(),"rrere",Toast.LENGTH_LONG).show();
-                startLayout.setVisibility(View.VISIBLE);
-                pauseLayout.setVisibility(View.GONE);
+                startLayout.setVisibility(View.GONE);
+                pauseLayout.setVisibility(View.VISIBLE);
                 stopLayout.setVisibility(View.GONE);
                 discardBtn.setVisibility(View.GONE);
                 myService.setPaused(false);
@@ -427,34 +430,48 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
 
         points = myService.getPoints();
 
-        googleMap.clear();
-        CameraUpdate center=
-                CameraUpdateFactory.newLatLng(new LatLng(myService.getLatitude(),myService.getLongitude()));
+        double distance_number ;
+        distance_number = SphericalUtil.computeLength(points);
 
-        googleMap.moveCamera(center);
-
-        //distance.setText(String.format("%.2f", gpsTracker.getDistance()));
-
-
-        PolylineOptions options = new PolylineOptions().width(8).color(Color.BLACK).geodesic(true);
-        for (int i = 0; i < points.size(); i++) {
-            LatLng point = points.get(i);
-            options.add(point);
-        }
-
-        polyline = googleMap.addPolyline(options); //add Polyline
-        double distance_number = SphericalUtil.computeLength(points);
+        //lastDistance = distance_number - distace_paused;
+        //distance_number = distance_number - distace_paused;
+        //distace_total = distance_number;
         if(!myService.isPaused()){
-            lastDistance = distance_number - lastDistance;
-            distance_number = distance_number - distace_paused;
-            distace_total = distance_number;
+
+            googleMap.clear();
+
+            CameraUpdate center=
+                    CameraUpdateFactory.newLatLng(new LatLng(myService.getLatitude(),myService.getLongitude()));
+
+            googleMap.moveCamera(center);
+
+            //distance.setText(String.format("%.2f", gpsTracker.getDistance()));
+
+
+            PolylineOptions options = new PolylineOptions().width(8).color(Color.BLACK).geodesic(true);
+            for (int i = 0; i < points.size(); i++) {
+                LatLng point = points.get(i);
+                options.add(point);
+            }
+
+            if(!fistPuase){
+                distace_paused = distace_paused + (distance_number - distaceBeforePause);
+
+            }
+            fistPuase =true;
+            polyline = googleMap.addPolyline(options); //add Polyline
+
+            distance.setText(String.valueOf(distance_number-distace_paused));
 
         }else {
-            distace_paused = distace_paused + lastDistance;
+            if (fistPuase){
+                fistPuase = false;
+                distaceBeforePause = distance_number;
+            }
+
 
         }
-        distace_total = distance_number;
-        distance.setText(String.valueOf(distance_number));
+
 
     }
 
