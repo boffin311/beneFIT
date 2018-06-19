@@ -28,12 +28,16 @@ public class MealLogFood {
         public int gram;
 
         public Size() {
-            this.piece = 0;
-            this.bowl = 0;
-            this.katori = 0;
-            this.serve = 0;
-            this.gram = 0;
+            this.piece = -1;
+            this.bowl = -1;
+            this.katori = -1;
+            this.serve = -1;
+            this.gram = -1;
         }
+    }
+
+    public Size getSize() {
+        return size;
     }
 
     public String getId() {
@@ -93,7 +97,30 @@ public class MealLogFood {
     }
 
     public String getUnit() {
-        return unit;
+        if(size.gram != -1){
+            return "gram";
+        }else if(size.bowl!= -1){
+            return "bowl";
+        }else if(size.katori!= -1){
+            return "katori";
+        }else if(size.piece!= -1){
+            return "piece";
+        }else{
+            return "serve";
+        }
+    }
+    public int getDefaultSize(){
+        if(size.gram != -1){
+            return size.gram;
+        }else if(size.bowl!= -1){
+            return size.bowl;
+        }else if(size.katori!= -1){
+            return size.katori;
+        }else if(size.piece!= -1){
+            return size.piece;
+        }else{
+            return size.serve;
+        }
     }
 
     public void setUnit(String unit) {

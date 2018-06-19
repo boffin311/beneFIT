@@ -1,6 +1,7 @@
 package tech.iosd.benefit.DashboardFragments;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.DialogInterface;
@@ -65,7 +66,7 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
     private Polyline polyline;
 
     long startTime;
-     boolean status = false;
+    boolean isServiceConnected = false;
     private LocationManager locationManager;
     private boolean isgoogleMap = false;
     //boolean mServiceBound = false;
@@ -75,6 +76,7 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
     double distace_paused= 0;
     double lastDistance =0;
     private boolean fistPuase = true;
+    private ProgressDialog progressDialog;
 
     private ServiceConnection sc = new ServiceConnection() {
         @Override
@@ -85,11 +87,12 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
             myService = myBinder.getService();
             myService.setmContext(ctx);
             Toast.makeText(getActivity().getApplicationContext(),"service connceted",Toast.LENGTH_LONG).show();
-            status = true;
+
+            locationManager = (LocationManager) getContext().getSystemService(LOCATION_SERVICE);
+
+            isServiceConnected = true;
 
             if(isgoogleMap){
-                if(status ){
-                    locationManager = (LocationManager) getContext().getSystemService(LOCATION_SERVICE);
 
                     LatLng myLocation = new LatLng(myService.getLatitude(), myService.getLongitude());
 
@@ -100,22 +103,23 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
                     googleMap.moveCamera(center);
                     googleMap.animateCamera(zoom);
                     googleMap.setMyLocationEnabled(true);
-                }else if(status){
-//                    gpsTracker.showSettingsAlert();
+                    progressDialog.hide();
+                    //gpsTracker.showSettingsAlert();
 
-                }
+
             }
+
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
 
-            status = false;
+            isServiceConnected = false;
         }
     };
 
     void bindService() {
-        if (status == true)
+        if (isServiceConnected == true)
             return;
 
         Thread t = new Thread(){
@@ -125,7 +129,7 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
 
                 getContext().bindService(i, sc, Context.BIND_AUTO_CREATE);
                 startTime = System.currentTimeMillis();
-                status = true;
+                //isServiceConnected = true;
             }
         };
 
@@ -135,12 +139,12 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
     }
 
     void unbindService() {
-        if (status == false)
+        if (isServiceConnected == false)
            return;
         Intent i = new Intent(getContext(), GPSTracker.class);
         getContext().stopService(i);
         getContext().unbindService(sc);
-        status = false;
+        isServiceConnected = false;
         Toast.makeText(getActivity().getApplicationContext(),"service disconnceted",Toast.LENGTH_LONG).show();
 
     }
@@ -184,6 +188,10 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState)
     {
+        progressDialog = new ProgressDialog(getContext());
+        progressDialog.setMessage("Loading GPS and Maps.");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
         View rootView = inflater.inflate(R.layout.dashboard_track_my_activity_run, container, false);
 
         ctx = rootView.getContext();
@@ -230,6 +238,18 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
                 isgoogleMap=true;
                 googleMap = mMap;
 
+                if (isServiceConnected){
+                    progressDialog.hide();
+                    LatLng myLocation = new LatLng(myService.getLatitude(), myService.getLongitude());
+
+                    CameraUpdate center=
+                            CameraUpdateFactory.newLatLng(myLocation);
+                    CameraUpdate zoom=CameraUpdateFactory.zoomTo(30);
+
+                    googleMap.moveCamera(center);
+                    googleMap.animateCamera(zoom);
+                    googleMap.setMyLocationEnabled(true);
+                }
 
                 // For showing a move to my location button
                 if (ActivityCompat.checkSelfPermission(ctx, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(ctx, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
@@ -238,7 +258,7 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
 
                 }
 
-               /* if(status ){
+               /* if(isServiceConnected ){
                     LatLng myLocation = new LatLng(myService.getLatitude(), myService.getLongitude());
 
                     CameraUpdate center=
@@ -276,7 +296,7 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
 
         mMapView.onDestroy();
 
-        if (status == true){
+        if (isServiceConnected == true){
             //myService.stopLocationUpdates();
             unbindService();
             myService.onDestroy();
@@ -358,7 +378,9 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
                         pauseLayout.setVisibility(View.GONE);
                         stopLayout.setVisibility(View.GONE);
                         discardBtn.setVisibility(View.GONE);
-                        myService.setPaused(true);
+                        myService.stoptacking();
+                        distance.setText(String.valueOf(0));
+
                     }
                 });
                 dialogCancel.setOnClickListener(new View.OnClickListener()

@@ -64,12 +64,23 @@ public class ResponseForGetMeal {
     }
     public static class Food {
         private int quantity;
+        private String unit;
+        private int unitInt;
         private MealLogFood item;
         private String id;
+
 
         public Food(int quantity, MealLogFood item) {
             this.quantity = quantity;
             this.item = item;
+        }
+
+        public String getUnit() {
+            return unit;
+        }
+
+        public void setUnit(String unit) {
+            this.unit = unit;
         }
 
         public int getQuantity() {

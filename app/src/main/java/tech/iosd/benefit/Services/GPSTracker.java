@@ -3,6 +3,7 @@ package tech.iosd.benefit.Services;
 import java.util.ArrayList;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.app.Service;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -23,6 +24,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 
 import com.google.android.gms.location.LocationListener;
+import com.google.maps.android.SphericalUtil;
 
 import tech.iosd.benefit.Utils.Constants;
 
@@ -40,6 +42,7 @@ public class GPSTracker extends Service implements
     private ArrayList<LatLng> points;
 
     private boolean isPaused = false;
+    ProgressDialog progressDialog;
 
 
 
@@ -49,6 +52,7 @@ public class GPSTracker extends Service implements
     GoogleApiClient mGoogleApiClient;
     Location mCurrentLocation, lStart, lEnd;
     static double distance = 0;
+    private double lastDistance = 0;
     double speed;
 
     private final IBinder mBinder = new LocalBinder();
@@ -142,36 +146,48 @@ public class GPSTracker extends Service implements
     }
     @Override
     public void onLocationChanged(Location location) {
-
         mCurrentLocation = location;
-        /*
-        if (lStart == null) {
-            lStart = mCurrentLocation;
-            lEnd = mCurrentLocation;
-        } else
-            lEnd = mCurrentLocation;*/
 
         latitude = mCurrentLocation.getLatitude();
         longitude = mCurrentLocation.getLongitude();
-        if(isPaused()){
-            points.add(new LatLng(mCurrentLocation.getLatitude(),mCurrentLocation.getLongitude()));
+        Toast.makeText(this, "Location accuracy: "+String.valueOf(location.getAccuracy()), Toast.LENGTH_LONG).show();
 
-            Intent broadcastIntent = new Intent();
-            broadcastIntent.setAction(Constants.GPS_UPDATE);
-            sendBroadcast(broadcastIntent);
-            speed = 0;
+
+        if(isPaused){
+            progressDialog.hide();
+        }
+        if(location.getAccuracy()<20){
+           // progressDialog.hide();
+            double dist = SphericalUtil.computeLength(points);
+            if(dist - lastDistance <1.3){
+                return;
+            }
+            lastDistance = dist;
+
+
+            if(isPaused()){
+                points.add(new LatLng(mCurrentLocation.getLatitude(),mCurrentLocation.getLongitude()));
+
+                Intent broadcastIntent = new Intent();
+                broadcastIntent.setAction(Constants.GPS_UPDATE);
+                sendBroadcast(broadcastIntent);
+                speed = 0;
+            }else {
+                points.add(new LatLng(mCurrentLocation.getLatitude(),mCurrentLocation.getLongitude()));
+
+                Intent broadcastIntent = new Intent();
+                broadcastIntent.setAction(Constants.GPS_UPDATE);
+                sendBroadcast(broadcastIntent);
+                speed = location.getSpeed() * 18 / 5;
+            }
         }else {
-            points.add(new LatLng(mCurrentLocation.getLatitude(),mCurrentLocation.getLongitude()));
-
-            Intent broadcastIntent = new Intent();
-            broadcastIntent.setAction(Constants.GPS_UPDATE);
-            sendBroadcast(broadcastIntent);
-            speed = location.getSpeed() * 18 / 5;
+             progressDialog.show();
         }
 
 
 
-       // Toast.makeText(this, mCurrentLocation.getLatitude() + " WORKS " + mCurrentLocation.getLongitude()+ "", Toast.LENGTH_LONG).show();
+
+
     }
 
     public class LocalBinder extends Binder {
@@ -206,9 +222,18 @@ public class GPSTracker extends Service implements
     public ArrayList getPoints(){
         return points;
     }
+    public void stoptacking(){
+        points.clear();
+        isPaused = true;
+    }
 
     public void setmContext(Context mContext) {
+
         this.mContext = mContext;
+        progressDialog = new ProgressDialog(mContext);
+        progressDialog.setCancelable(false);
+        progressDialog.setMessage("move to a place with higher GPS accuracy\nPlease use this feature outside.");
+        //progressDialog.show();
     }
 
     protected void createLocationRequest() {

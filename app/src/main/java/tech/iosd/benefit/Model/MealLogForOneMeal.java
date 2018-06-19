@@ -2,6 +2,8 @@ package tech.iosd.benefit.Model;
 
 import java.util.ArrayList;
 
+import tech.iosd.benefit.Utils.Constants;
+
 /**
  * Created by SAM33R on 16-06-2018.
  */
@@ -20,6 +22,7 @@ public class MealLogForOneMeal {
         mealProtien = 0;
         meal =  new ArrayList<>();
     }
+
     public void onDateChange(){
         mealCalorie = 0;
         mealCarbs = 0;
@@ -37,8 +40,33 @@ public class MealLogForOneMeal {
         }
     }
 
-    public boolean addMeal(ResponseForGetMeal.Food Food){
-        meal.add(Food);
+    public boolean addMeal(ResponseForGetMeal.Food food,int quantity,String unit){
+        food.setUnit(unit);
+        food.setQuantity(quantity);
+
+        if(unit.equalsIgnoreCase("gram")){
+
+            mealCalorie = mealCalorie + (quantity * food.getItem().getCalories())/food.getItem().getDefaultSize();
+
+        }else if(unit.equalsIgnoreCase("piece")){
+
+            mealCalorie = mealCalorie + (quantity * food.getItem().getCalories()* food.getItem().getSize().piece)/food.getItem().getDefaultSize();
+
+        }else if(unit.equalsIgnoreCase("bowl")){
+
+            mealCalorie = mealCalorie + (quantity * food.getItem().getCalories()* Constants.BOWL_GRAM)/food.getItem().getDefaultSize();
+
+        }else if(unit.equalsIgnoreCase("katori")){
+
+            mealCalorie = mealCalorie + (quantity * food.getItem().getCalories()* Constants.KATORI_GRAM)/food.getItem().getDefaultSize();
+
+        }else if(unit.equalsIgnoreCase("serve")){
+
+            mealCalorie = mealCalorie + (quantity * food.getItem().getCalories()* food.getItem().getSize().serve)/food.getItem().getDefaultSize();
+
+        }
+        meal.add(food);
+
         return true;
     }
     public ArrayList<ResponseForGetMeal.Food> getMeal() {
