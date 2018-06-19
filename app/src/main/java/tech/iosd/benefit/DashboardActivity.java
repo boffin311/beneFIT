@@ -141,6 +141,20 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
                 ));
                 finish();
             }
+            case R.id.nav_account:
+            {
+                DrawerLayout drawer = findViewById(R.id.drawer_layout);
+                drawer.closeDrawer(GravityCompat.START);
+                fm.beginTransaction().replace(R.id.dashboard_content, new AccountFragment()).addToBackStack(null).commit();
+                FloatingActionButton contactBtn = findViewById(R.id.dashboard_contact);
+                if(contactBtn != null)
+                {
+                    if(contactBtn.getVisibility()==View.VISIBLE) {
+                        contactBtn.startAnimation(AnimationUtils.loadAnimation(ctx, R.anim.top_down));
+                        contactBtn.setVisibility(View.INVISIBLE);
+                    }
+                }
+            }
             break;
         }
 
