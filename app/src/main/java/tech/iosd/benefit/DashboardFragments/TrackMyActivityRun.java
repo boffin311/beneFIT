@@ -302,7 +302,6 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
             myService.onDestroy();
 
         }
-        fm.popBackStack();
 
 
 
@@ -328,6 +327,7 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
                 startLayout.setVisibility(View.GONE);
                 pauseLayout.setVisibility(View.VISIBLE);
                 stopLayout.setVisibility(View.GONE);
+                myService.setPaused(false);
                 startRunning();
                 break;
             }
@@ -401,29 +401,13 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
 
 
     private void startRunning() {
-            String stringLongitude = String.valueOf(myService.getLongitude());
-            myService.setPaused(false);
-
-            Toast.makeText(getActivity().getApplicationContext(),"Lat:"+stringLongitude+"\nLong"+stringLongitude,Toast.LENGTH_LONG).show();
-
-            LatLng sydney = new LatLng(myService.getLatitude(), myService.getLongitude());
-            googleMap.addMarker(new MarkerOptions().position(sydney).title("Starting Point").snippet("You started your running journey from this point."));
-
-            CameraPosition cameraPosition = new CameraPosition.Builder().target(sydney).zoom(30).build();
-            googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-        CameraUpdate zoom=CameraUpdateFactory.zoomTo(30);
-        googleMap.animateCamera(zoom);
-
-       /* points.clear();
-        myService.setPoints(points);*/
-
         IntentFilter intentFilter = new IntentFilter(Constants.GPS_UPDATE);
 
         BroadcastReceiver mReceiver = new BroadcastReceiver() {
 
             @Override
             public void onReceive(Context context, Intent intent) {
-           //     Toast.makeText(context,"activity",Toast.LENGTH_LONG).show();
+                //     Toast.makeText(context,"activity",Toast.LENGTH_LONG).show();
 
             /*
 
@@ -441,6 +425,23 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
             }
         };
         getActivity().getApplicationContext().registerReceiver(mReceiver, intentFilter);
+
+        String stringLongitude = String.valueOf(myService.getLongitude());
+            myService.setPaused(false);
+
+            Toast.makeText(getActivity().getApplicationContext(),"Lat:"+stringLongitude+"\nLong"+stringLongitude,Toast.LENGTH_LONG).show();
+
+            LatLng sydney = new LatLng(myService.getLatitude(), myService.getLongitude());
+            googleMap.addMarker(new MarkerOptions().position(sydney).title("Starting Point").snippet("You started your running journey from this point."));
+
+            CameraPosition cameraPosition = new CameraPosition.Builder().target(sydney).zoom(30).build();
+            googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+        CameraUpdate zoom=CameraUpdateFactory.zoomTo(30);
+        googleMap.animateCamera(zoom);
+
+       /* points.clear();
+        myService.setPoints(points);*/
+
 
 
 

@@ -40,6 +40,7 @@ public class GPSTracker extends Service implements
     private double latitude, longitude;
 
     private ArrayList<LatLng> points;
+    private ArrayList<LatLng> pointsForLastDistance;
 
     private boolean isPaused = false;
     ProgressDialog progressDialog;
@@ -53,6 +54,8 @@ public class GPSTracker extends Service implements
     Location mCurrentLocation, lStart, lEnd;
     static double distance = 0;
     private double lastDistance = 0;
+    private double lastLongitude =0;
+    private double lastLatitude =0;
     double speed;
 
     private final IBinder mBinder = new LocalBinder();
@@ -72,6 +75,7 @@ public class GPSTracker extends Service implements
     public void onCreate(){
         super.onCreate();
         points =  new ArrayList<>();
+        pointsForLastDistance =  new ArrayList<>();
 
     }
 
@@ -124,6 +128,7 @@ public class GPSTracker extends Service implements
             if (mGoogleApiClient.isConnected()) {
                 Toast.makeText(this,"GoogleApiClient  connected",Toast.LENGTH_LONG).show();
 
+
                 //mGoogleApiClient.connect(); // connect it here..
 
             }
@@ -150,19 +155,30 @@ public class GPSTracker extends Service implements
 
         latitude = mCurrentLocation.getLatitude();
         longitude = mCurrentLocation.getLongitude();
-        Toast.makeText(this, "Location accuracy: "+String.valueOf(location.getAccuracy()), Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "Location accuracy: "+String.valueOf(location.getAccuracy()), Toast.LENGTH_SHORT).show();
 
 
         if(isPaused){
             progressDialog.hide();
         }
         if(location.getAccuracy()<20){
-           // progressDialog.hide();
-            double dist = SphericalUtil.computeLength(points);
-            if(dist - lastDistance <1.3){
+            progressDialog.hide();
+            pointsForLastDistance.clear();
+            pointsForLastDistance.add(new LatLng(latitude,longitude));
+            pointsForLastDistance.add(new LatLng(lastLatitude,lastLongitude));
+
+            double dist = SphericalUtil.computeLength(pointsForLastDistance);
+            if(Math.abs(dist - lastDistance) <1){
+                Toast.makeText(this, "user not moving "+ dist +"-"+ lastDistance+"="+(dist - lastDistance), Toast.LENGTH_SHORT).show();
+                lastDistance = dist;
+                lastLatitude =  latitude;
+                lastLongitude =  longitude;
+
                 return;
             }
             lastDistance = dist;
+            lastLatitude =  latitude;
+            lastLongitude =  longitude;
 
 
             if(isPaused()){
@@ -243,8 +259,8 @@ public class GPSTracker extends Service implements
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         if(mLocationRequest != null){
             Toast.makeText(this,"connected gps",Toast.LENGTH_LONG).show();
-            //latitude = mCurrentLocation.getLatitude();
-          //  longitude = mCurrentLocation.getLongitude();
+           // latitude = mCurrentLocation.getLatitude();
+        //    longitude = mCurrentLocation.getLongitude();
         }
     }
 
