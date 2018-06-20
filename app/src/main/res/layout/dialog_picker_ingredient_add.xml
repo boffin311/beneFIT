@@ -71,11 +71,15 @@
             android:paddingStart="20dp"
             android:paddingEnd="20dp"/>
 
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/dialog_picker_ingredient_add_recycler_view"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                />
+                android:layout_height="wrap_content" />
+        </ScrollView>
 
     </LinearLayout>
 

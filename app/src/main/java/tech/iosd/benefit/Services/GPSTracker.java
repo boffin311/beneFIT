@@ -3,6 +3,7 @@ package tech.iosd.benefit.Services;
 import java.util.ArrayList;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.app.Service;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -23,6 +24,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 
 import com.google.android.gms.location.LocationListener;
+import com.google.maps.android.SphericalUtil;
 
 import tech.iosd.benefit.Utils.Constants;
 
@@ -38,17 +40,22 @@ public class GPSTracker extends Service implements
     private double latitude, longitude;
 
     private ArrayList<LatLng> points;
+    private ArrayList<LatLng> pointsForLastDistance;
 
     private boolean isPaused = false;
+    ProgressDialog progressDialog;
 
 
 
-    private static final long INTERVAL = 1000 * 2;
-    private static final long FASTEST_INTERVAL = 1000 * 1;
+    private static final long INTERVAL = 1000 * 10;
+    private static final long FASTEST_INTERVAL = 1000 * 5;
     LocationRequest mLocationRequest;
     GoogleApiClient mGoogleApiClient;
     Location mCurrentLocation, lStart, lEnd;
     static double distance = 0;
+    private double lastDistance = 0;
+    private double lastLongitude =0;
+    private double lastLatitude =0;
     double speed;
 
     private final IBinder mBinder = new LocalBinder();
@@ -68,6 +75,7 @@ public class GPSTracker extends Service implements
     public void onCreate(){
         super.onCreate();
         points =  new ArrayList<>();
+        pointsForLastDistance =  new ArrayList<>();
 
     }
 
@@ -120,6 +128,7 @@ public class GPSTracker extends Service implements
             if (mGoogleApiClient.isConnected()) {
                 Toast.makeText(this,"GoogleApiClient  connected",Toast.LENGTH_LONG).show();
 
+
                 //mGoogleApiClient.connect(); // connect it here..
 
             }
@@ -142,31 +151,59 @@ public class GPSTracker extends Service implements
     }
     @Override
     public void onLocationChanged(Location location) {
-
         mCurrentLocation = location;
-        /*
-        if (lStart == null) {
-            lStart = mCurrentLocation;
-            lEnd = mCurrentLocation;
-        } else
-            lEnd = mCurrentLocation;*/
 
         latitude = mCurrentLocation.getLatitude();
         longitude = mCurrentLocation.getLongitude();
-        if(isPaused()){
+        Toast.makeText(this, "Location accuracy: "+String.valueOf(location.getAccuracy()), Toast.LENGTH_SHORT).show();
 
+
+        if(isPaused){
+            progressDialog.hide();
+        }
+        if(location.getAccuracy()<20){
+            progressDialog.hide();
+            pointsForLastDistance.clear();
+            pointsForLastDistance.add(new LatLng(latitude,longitude));
+            pointsForLastDistance.add(new LatLng(lastLatitude,lastLongitude));
+
+            double dist = SphericalUtil.computeLength(pointsForLastDistance);
+            if(Math.abs(dist - lastDistance) <1){
+                Toast.makeText(this, "user not moving "+ dist +"-"+ lastDistance+"="+(dist - lastDistance), Toast.LENGTH_SHORT).show();
+                lastDistance = dist;
+                lastLatitude =  latitude;
+                lastLongitude =  longitude;
+
+                return;
+            }
+            lastDistance = dist;
+            lastLatitude =  latitude;
+            lastLongitude =  longitude;
+
+
+            if(isPaused()){
+                points.add(new LatLng(mCurrentLocation.getLatitude(),mCurrentLocation.getLongitude()));
+
+                Intent broadcastIntent = new Intent();
+                broadcastIntent.setAction(Constants.GPS_UPDATE);
+                sendBroadcast(broadcastIntent);
+                speed = 0;
+            }else {
+                points.add(new LatLng(mCurrentLocation.getLatitude(),mCurrentLocation.getLongitude()));
+
+                Intent broadcastIntent = new Intent();
+                broadcastIntent.setAction(Constants.GPS_UPDATE);
+                sendBroadcast(broadcastIntent);
+                speed = location.getSpeed() * 18 / 5;
+            }
         }else {
-            points.add(new LatLng(mCurrentLocation.getLatitude(),mCurrentLocation.getLongitude()));
-
-            Intent broadcastIntent = new Intent();
-            broadcastIntent.setAction(Constants.GPS_UPDATE);
-            sendBroadcast(broadcastIntent);
-            speed = location.getSpeed() * 18 / 5;
+             progressDialog.show();
         }
 
 
 
-       // Toast.makeText(this, mCurrentLocation.getLatitude() + " WORKS " + mCurrentLocation.getLongitude()+ "", Toast.LENGTH_LONG).show();
+
+
     }
 
     public class LocalBinder extends Binder {
@@ -201,9 +238,18 @@ public class GPSTracker extends Service implements
     public ArrayList getPoints(){
         return points;
     }
+    public void stoptacking(){
+        points.clear();
+        isPaused = true;
+    }
 
     public void setmContext(Context mContext) {
+
         this.mContext = mContext;
+        progressDialog = new ProgressDialog(mContext);
+        progressDialog.setCancelable(false);
+        progressDialog.setMessage("move to a place with higher GPS accuracy\nPlease use this feature outside.");
+        //progressDialog.show();
     }
 
     protected void createLocationRequest() {
@@ -213,8 +259,8 @@ public class GPSTracker extends Service implements
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         if(mLocationRequest != null){
             Toast.makeText(this,"connected gps",Toast.LENGTH_LONG).show();
-            //latitude = mCurrentLocation.getLatitude();
-          //  longitude = mCurrentLocation.getLongitude();
+           // latitude = mCurrentLocation.getLatitude();
+        //    longitude = mCurrentLocation.getLongitude();
         }
     }
 

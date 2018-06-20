@@ -10,13 +10,17 @@ import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 import rx.Observable;
 
+import tech.iosd.benefit.Model.BodyForMealLog;
 import tech.iosd.benefit.Model.Measurements;
 import tech.iosd.benefit.Model.Response;
 import tech.iosd.benefit.Model.ResponseForFoodSearch;
+import tech.iosd.benefit.Model.ResponseForGetMeal;
 import tech.iosd.benefit.Model.ResponseForMeasurementsUpdate;
 import tech.iosd.benefit.Model.ResponseForMesurementsHistory;
+import tech.iosd.benefit.Model.ResponseForSuccess;
 import tech.iosd.benefit.Model.ResponseForUpdate;
 import tech.iosd.benefit.Model.User;
 import tech.iosd.benefit.Model.UserDetails;
@@ -49,6 +53,12 @@ public interface RetrofitInterface {
 
     @GET("mealLog/food/search/{name}")
     Observable<ResponseForFoodSearch> getFoodList(@Path("name") String name, @Header("Authorization") String token);
+
+    @GET("mealLog/details")
+    Observable<ResponseForGetMeal> getFoodMeal(@Query("date") String date, @Query("type") String type, @Header("Authorization") String token);
+
+    @POST("mealLog/details")
+    Observable<ResponseForSuccess> sendFoodMeal(@Body BodyForMealLog bodyForMealLog, @Header("Authorization") String token);
 
     /*@GET("users/{email}")
     Observable<User> getProfile(@Path("email") String email);*/

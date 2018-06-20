@@ -40,7 +40,7 @@ public class MealLogFullDay {
     private int dinnerCalorie;
     private int dinnerCarbs;
     private int dinnerFat;
-    private int dinnerProtien;
+    private int dinner0Protien;
 
 
 

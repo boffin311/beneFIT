@@ -81,7 +81,7 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="10dp"
                     android:fontFamily="@font/proxima_nova"
-                    android:text="Make healthy food choices and participate in regular physical activity to be more fit and in shape."
+                    android:text="Make healthy Food choices and participate in regular physical activity to be more fit and in shape."
                     android:textAlignment="center"
                     android:textColor="#3b3b3b"
                     android:textSize="18sp" />
