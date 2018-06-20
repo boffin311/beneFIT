@@ -25,6 +25,8 @@ public class Constants {
     public static final float BOWL_GRAM = 40;
     public static final float KATORI_GRAM = 40;
 
+    public static final int ADD_DATA_REQUEST_OK = 300;
+
 
 
 
