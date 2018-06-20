@@ -55,6 +55,8 @@ import tech.iosd.benefit.Model.ResponseForGetMeal.Food;
 
 public class MealLog extends Fragment implements AdapterView.OnItemClickListener, View.OnClickListener, tech.iosd.benefit.Adapters.MealLog.AdapterCallback
 {
+    //private class MealUpdateThenUpload;
+
     public Calendar selDate;
     SimpleDateFormat dateFormat;
 
@@ -79,6 +81,8 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
 
     TextView dialogCarbs, dialogProtien, dialogCalorie, dialogFats;
     TextView breakfastCarbs, breakfastProtien,breakfastCalorie, breakfastFats;
+    TextView midmorningCarbs, midmorningProtien,midmorningCalorie, midmorningFats;
+
 
     private ProgressDialog progressDialog;
 
@@ -93,6 +97,7 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
     RecyclerView recyclerView;
     int position = -1;
     MealLogForOneMeal mealLogBreakfast;
+    MealLogForOneMeal mealLogMidmorning;
     private String selectedDate;
 
 
@@ -109,6 +114,7 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
         mSubscriptions = new CompositeSubscription();
         mSubscriptionsSearch = new CompositeSubscription();
         mealLogBreakfast = new MealLogForOneMeal(getContext());
+        mealLogMidmorning = new MealLogForOneMeal(getContext());
 
         db = new DatabaseHandler(getContext());
         progressDialog =  new ProgressDialog(getContext());
@@ -244,19 +250,20 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
     }
 
     private void getMealData(String meal) {
+        progressDialog.show();
 
-        if(meal.equalsIgnoreCase("breakfast")){
             mSubscriptions.add(NetworkUtil.getRetrofit(db.getUserToken()).getFoodMeal(selectedDate,meal,db.getUserToken())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
                     .subscribe(this::handleResponseGetMeal,this::handleErrorGetMeal));
-        }
+
+
 
     }
 
     private void handleResponseGetMeal(ResponseForGetMeal response) {
 
-        Toast.makeText(getContext(),"",Toast.LENGTH_LONG).show();
+        //Toast.makeText(getContext(),"",Toast.LENGTH_LONG).show();
         //Log.d("error77",response.getMessage());
 
         progressDialog.hide();
@@ -383,7 +390,7 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
                         int quantity = wheelPickerQty.getCurrentItemPosition()+ 1;
                         String unit = ingredientTyp.get(wheelPickerTyp.getCurrentItemPosition());
 
-                        breakfastIngredients.set(pos,quantity + " " +unit+" "+ listItems.get(position).getName());
+                        breakfastIngredients.set(pos,""+quantity + " " +unit+" "+ listItems.get(position).getName());
                         final ArrayAdapter<String> breakfastAdapter = new ArrayAdapter<>(ctx, R.layout.listview_text, breakfastIngredients);
 
 
@@ -392,10 +399,11 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
 
 
 
-                            updateUI("breakfast");
 
 
                         uploadMealLogToServer("breakfast");
+                        updateUI("breakfast");
+
 
                         breakfastListView.setAdapter(breakfastAdapter);
                         dialog.dismiss();
@@ -419,13 +427,14 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
 */
                         mealLogBreakfast.removeMealAt(pos);
 
-                        updateUI("breakfast");
 
 
                         final ArrayAdapter<String> breakfastAdapter = new ArrayAdapter<>(ctx, R.layout.listview_text, breakfastIngredients);
                         breakfastListView.setAdapter(breakfastAdapter);
                         breakfastListView.getLayoutParams().height = 110 * breakfastIngredients.size();
                         uploadMealLogToServer("breakfast");
+                        updateUI("breakfast");
+
                         dialog.dismiss();
                     }
                 });
@@ -647,14 +656,24 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
             }
         }
     }
-    private void updateUI(String meal){
+    private void updateUI(String meal)  {
+       /* ProgressDialog progressDialog = new ProgressDialog(getContext());
+        progressDialog.setMessage("working..");
+        progressDialog.setCancelable(false);
+        progressDialog.show();*/
+        try{
+            wait(1000);
+
+        }catch (Exception e){
+
+        }
         if(meal.equalsIgnoreCase("breakfast")){
             breakfastCalorie.setText(String.valueOf(mealLogBreakfast.getMealCalorie()));
             breakfastProtien.setText(String.valueOf(mealLogBreakfast.getMealProtien()));
             breakfastFats.setText(String.valueOf(mealLogBreakfast.getMealFat()));
             breakfastCarbs.setText(String.valueOf(mealLogBreakfast.getMealCarbs()));
         }
-
+        progressDialog.hide();
     }
 
     private void uploadMealLogToServer(String meal){
