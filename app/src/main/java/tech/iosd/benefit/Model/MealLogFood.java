@@ -7,7 +7,7 @@ package tech.iosd.benefit.Model;
 public class MealLogFood {
 
 
-    private String id;
+    private String _id;
     private String name;
     private float calories;
     private float proteins;
@@ -24,19 +24,28 @@ public class MealLogFood {
         public int piece;
         public int bowl;
         public int katori;
-        public int sever;
+        public int serve;
+        public int gram;
 
         public Size() {
-
+            this.piece = 0;
+            this.bowl = 0;
+            this.katori = 0;
+            this.serve = 0;
+            this.gram = 0;
         }
     }
 
+    public Size getSize() {
+        return size;
+    }
+
     public String getId() {
-        return id;
+        return _id;
     }
 
     public void setId(String id) {
-        this.id = id;
+        this._id = id;
     }
 
     public float getCalories() {
@@ -88,7 +97,30 @@ public class MealLogFood {
     }
 
     public String getUnit() {
-        return unit;
+        if(size.gram != 0){
+            return "gram";
+        }else if(size.bowl!= 0){
+            return "bowl";
+        }else if(size.katori!= 0){
+            return "katori";
+        }else if(size.piece!= 0){
+            return "piece";
+        }else{
+            return "serve";
+        }
+    }
+    public int getDefaultSize(){
+        if(size.gram != 0){
+            return size.gram;
+        }else if(size.bowl != 0){
+            return size.bowl;
+        }else if(size.katori!= 0){
+            return size.katori;
+        }else if(size.piece!= 0){
+            return size.piece;
+        }else{
+            return size.serve;
+        }
     }
 
     public void setUnit(String unit) {

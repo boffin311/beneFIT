@@ -168,13 +168,13 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="24sp"
-                    android:text="120"
-                    android:textAllCaps="true"
                     android:fontFamily="@font/oswald"
+                    android:text="0"
+                    android:textAlignment="center"
+                    android:textAllCaps="true"
                     android:textColor="#000000"
-                    android:textStyle="bold"
-                    android:textAlignment="center"/>
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -211,13 +211,13 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="24sp"
-                    android:text="500"
-                    android:textAllCaps="true"
                     android:fontFamily="@font/oswald"
+                    android:text="0"
+                    android:textAlignment="center"
+                    android:textAllCaps="true"
                     android:textColor="#000000"
-                    android:textStyle="bold"
-                    android:textAlignment="center"/>
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -254,13 +254,13 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="24sp"
-                    android:text="3110"
-                    android:textAllCaps="true"
                     android:fontFamily="@font/oswald"
+                    android:text="2730"
+                    android:textAlignment="center"
+                    android:textAllCaps="true"
                     android:textColor="#000000"
-                    android:textStyle="bold"
-                    android:textAlignment="center"/>
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

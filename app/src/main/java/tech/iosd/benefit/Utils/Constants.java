@@ -22,6 +22,11 @@ public class Constants {
     public static final String DATABASE_NAME = "userDB";
     public static final String TABLE_NAME = "profileLoginedUser";
 
+    public static final float BOWL_GRAM = 40;
+    public static final float KATORI_GRAM = 40;
+
+
+
 
 
 
