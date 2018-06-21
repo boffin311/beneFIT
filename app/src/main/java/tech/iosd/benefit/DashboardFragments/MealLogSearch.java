@@ -154,7 +154,7 @@ public class MealLogSearch extends Fragment implements tech.iosd.benefit.Adapter
         Intent intent = new Intent(getContext(), MealLogSearch.class);
         intent.putExtra("meal",(new Gson()).toJson(listItems.get(position)) );
 
-        intent.putExtra("mealType" , bundle.getString("meal"));
+        intent.putExtra("mealType" , bundle.getString("mealType"));
         getTargetFragment().onActivityResult(getTargetRequestCode(), RESULT_OK, intent);
         getFragmentManager().popBackStack();
     }

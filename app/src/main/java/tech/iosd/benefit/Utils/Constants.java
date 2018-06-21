@@ -26,6 +26,12 @@ public class Constants {
     public static final float KATORI_GRAM = 40;
 
     public static final int ADD_DATA_REQUEST_OK = 300;
+    public static final String BREAKFAST = "breakfast";
+    public static final String MID_MORNING = "midmornig";
+    public static final String LUNCH = "lunch";
+    public static final String DINNER = "dinner";
+    public static final String SNACKS = "snacks";
+
 
 
 
