@@ -532,7 +532,7 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
                         int quantity = wheelPickerQty.getCurrentItemPosition()+ 1;
                         String unit = ingredientTyp.get(wheelPickerTyp.getCurrentItemPosition());
 
-                        breakfastIngredients.set(pos,""+quantity + " " +unit+" "+ mealLogBreakfast.getMeal().get(position).getItem().getName());
+                        breakfastIngredients.set(pos,""+quantity + " " +unit+" "+ mealLogBreakfast.getMeal().get(pos).getItem().getName());
                         final ArrayAdapter<String> breakfastAdapter = new ArrayAdapter<>(ctx, R.layout.listview_text, breakfastIngredients);
 
                         mealLogBreakfast.updateMealAt(mealLogBreakfast.getMeal().get(pos),quantity,unit,pos);
@@ -601,7 +601,7 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
                         int quantity = wheelPickerQty.getCurrentItemPosition()+ 1;
                         String unit = ingredientTyp.get(wheelPickerTyp.getCurrentItemPosition());
 
-                        midMorningIngredients.set(pos,""+quantity + " " +unit+" "+ mealLogMidmorning.getMeal().get(position).getItem().getName());
+                        midMorningIngredients.set(pos,""+quantity + " " +unit+" "+ mealLogMidmorning.getMeal().get(pos).getItem().getName());
                         final ArrayAdapter<String> midMorningAdapter = new ArrayAdapter<>(ctx, R.layout.listview_text, midMorningIngredients);
 
                         mealLogMidmorning.updateMealAt(mealLogMidmorning.getMeal().get(pos),quantity,unit,pos);
@@ -666,7 +666,7 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
                         int quantity = wheelPickerQty.getCurrentItemPosition()+ 1;
                         String unit = ingredientTyp.get(wheelPickerTyp.getCurrentItemPosition());
 
-                        lunchIngredients.set(pos,""+quantity + " " +unit+" "+ mealLogLunch.getMeal().get(position).getItem().getName());
+                        lunchIngredients.set(pos,""+quantity + " " +unit+" "+ mealLogLunch.getMeal().get(pos).getItem().getName());
                         mealLogLunch.updateMealAt(mealLogLunch.getMeal().get(pos),quantity,unit,pos);
 
                         uploadMealLogToServer(Constants.LUNCH);
@@ -705,7 +705,7 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
                         int quantity = wheelPickerQty.getCurrentItemPosition()+ 1;
                         String unit = ingredientTyp.get(wheelPickerTyp.getCurrentItemPosition());
 
-                        snacksIngredients.set(pos,""+quantity + " " +unit+" "+ mealLogSnacks.getMeal().get(position).getItem().getName());
+                        snacksIngredients.set(pos,""+quantity + " " +unit+" "+ mealLogSnacks.getMeal().get(pos).getItem().getName());
                         mealLogSnacks.updateMealAt(mealLogSnacks.getMeal().get(pos),quantity,unit,pos);
 
                         uploadMealLogToServer(Constants.SNACKS);
@@ -747,7 +747,7 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
                         int quantity = wheelPickerQty.getCurrentItemPosition()+ 1;
                         String unit = ingredientTyp.get(wheelPickerTyp.getCurrentItemPosition());
 
-                        dinnerIngredients.set(pos,""+quantity + " " +unit+" "+ mealLogdinner.getMeal().get(position).getItem().getName());
+                        dinnerIngredients.set(pos,""+quantity + " " +unit+" "+ mealLogdinner.getMeal().get(pos).getItem().getName());
                         mealLogdinner.updateMealAt(mealLogdinner.getMeal().get(pos),quantity,unit,pos);
 
                         uploadMealLogToServer(Constants.DINNER);
