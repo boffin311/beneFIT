@@ -86,6 +86,10 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
     TextView dialogCarbs, dialogProtien, dialogCalorie, dialogFats;
     TextView breakfastCarbs, breakfastProtien,breakfastCalorie, breakfastFats;
     TextView midmorningCarbs, midmorningProtien,midmorningCalorie, midmorningFats;
+    TextView lunchCarbs, lunchProtien,lunchCalorie, lunchFats;
+    TextView snacksCarbs, snacksProtien,snacksCalorie, snacksFats;
+    TextView dinnerCarbs, dinnerProtien,dinnerCalorie, dinnerFats;
+
 
 
     private ProgressDialog progressDialog;
@@ -102,6 +106,9 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
     int position = -1;
     MealLogForOneMeal mealLogBreakfast;
     MealLogForOneMeal mealLogMidmorning;
+    MealLogForOneMeal mealLogLunch;
+    MealLogForOneMeal mealLogSnacks;
+    MealLogForOneMeal mealLogdinner;
     private String selectedDate;
 
 
@@ -119,6 +126,9 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
         mSubscriptionsSearch = new CompositeSubscription();
         mealLogBreakfast = new MealLogForOneMeal(getContext());
         mealLogMidmorning = new MealLogForOneMeal(getContext());
+        mealLogLunch = new MealLogForOneMeal(getContext());
+        mealLogSnacks = new MealLogForOneMeal(getContext());
+        mealLogdinner = new MealLogForOneMeal(getContext());
 
         db = new DatabaseHandler(getContext());
         progressDialog =  new ProgressDialog(ctx);
@@ -142,8 +152,20 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
         midmorningCarbs = rootView.findViewById(R.id.meal_log_midmorning_carb);
         midmorningFats = rootView.findViewById(R.id.meal_log_midmorning_fat);
 
-        midmorningCalorie.setText(String.valueOf(mealLogMidmorning.getMealCalorie()));
+        lunchCalorie = rootView.findViewById(R.id.meal_log_lunch_calorie);
+        lunchProtien = rootView.findViewById(R.id.meal_log_lunch_protien);
+        lunchCarbs = rootView.findViewById(R.id.meal_log_lunch_carb);
+        lunchFats = rootView.findViewById(R.id.meal_log_lunch_fat);
 
+        snacksCalorie = rootView.findViewById(R.id.meal_log_snacks_calorie);
+        snacksProtien = rootView.findViewById(R.id.meal_log_snacks_protien);
+        snacksCarbs = rootView.findViewById(R.id.meal_log_snacks_carb);
+        snacksFats = rootView.findViewById(R.id.meal_log_snacks_fat);
+
+        dinnerCalorie = rootView.findViewById(R.id.meal_log_dinner_calorie);
+        dinnerProtien = rootView.findViewById(R.id.meal_log_dinner_protien);
+        dinnerCarbs = rootView.findViewById(R.id.meal_log_dinner_carb);
+        dinnerFats = rootView.findViewById(R.id.meal_log_dinner_fat);
 
 
 
@@ -165,13 +187,8 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
         breakfastListView.getLayoutParams().height = 110 * breakfastIngredients.size();
         rootView.findViewById(R.id.my_nutrition_breakfast_add).setOnClickListener(this);
 
-
         midMorningListView = rootView.findViewById(R.id.my_nutrition_mid_morning);
         midMorningIngredients = new ArrayList<>();
-/*
-        midMorningIngredients.add("2 Egg Whites");
-        midMorningIngredients.add("4 Rotis");
-        midMorningIngredients.add("1 Glass of mix fruit juice");*/
         final ArrayAdapter<String> midMorningAdapter = new ArrayAdapter<>(ctx, R.layout.listview_text, midMorningIngredients);
         midMorningListView.setAdapter(midMorningAdapter);
         midMorningListView.setOnItemClickListener(this);
@@ -180,9 +197,6 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
 
         lunchListView = rootView.findViewById(R.id.my_nutrition_lunch);
         lunchIngredients = new ArrayList<>();
-        lunchIngredients.add("2 Egg Whites");
-        lunchIngredients.add("4 Rotis");
-        lunchIngredients.add("1 Glass of mix fruit juice");
         final ArrayAdapter<String> lunchAdapter = new ArrayAdapter<>(ctx, R.layout.listview_text, lunchIngredients);
         lunchListView.setAdapter(lunchAdapter);
         lunchListView.setOnItemClickListener(this);
@@ -191,9 +205,6 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
 
         snackListView = rootView.findViewById(R.id.my_nutrition_snacks);
         snacksIngredients = new ArrayList<>();
-        snacksIngredients.add("2 Egg Whites");
-        snacksIngredients.add("4 Rotis");
-        snacksIngredients.add("1 Glass of mix fruit juice");
         final ArrayAdapter<String> snacksAdapter = new ArrayAdapter<>(ctx, R.layout.listview_text, snacksIngredients);
         snackListView.setAdapter(snacksAdapter);
         snackListView.setOnItemClickListener(this);
@@ -202,9 +213,6 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
 
         dinnerListView = rootView.findViewById(R.id.my_nutrition_dinner);
         dinnerIngredients = new ArrayList<>();
-        dinnerIngredients.add("2 Egg Whites");
-        dinnerIngredients.add("4 Rotis");
-        dinnerIngredients.add("1 Glass of mix fruit juice");
         final ArrayAdapter<String> dinnerAdapter = new ArrayAdapter<>(ctx, R.layout.listview_text, dinnerIngredients);
         dinnerListView.setAdapter(dinnerAdapter);
         dinnerListView.setOnItemClickListener(this);
@@ -245,31 +253,59 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
                 Toast.makeText(getContext(),selectedDate,Toast.LENGTH_SHORT).show();
                 lbl_year.setText(String.valueOf(selDate.get(Calendar.YEAR)));
                 lbl_month.setText(months[selDate.get(Calendar.MONTH)]);
+
                 breakfastIngredients.clear();
+                midMorningIngredients.clear();
+                lunchIngredients.clear();
+                snacksIngredients.clear();
+                dinnerIngredients.clear();
+
                 mealLogBreakfast.onDateChange();
+                mealLogLunch.onDateChange();
+                mealLogMidmorning.onDateChange();
+                mealLogSnacks.onDateChange();
+                mealLogdinner.onDateChange();
+
                 final ArrayAdapter<String> breakfastAdapter = new ArrayAdapter<>(ctx, R.layout.listview_text, breakfastIngredients);
                 breakfastListView.setAdapter(breakfastAdapter);
                 breakfastListView.getLayoutParams().height = 110 * breakfastIngredients.size();
+                final ArrayAdapter<String> midMorningAdapter = new ArrayAdapter<>(ctx, R.layout.listview_text, midMorningIngredients);
+                midMorningListView.setAdapter(midMorningAdapter);
+                midMorningListView.getLayoutParams().height = 110 * midMorningIngredients.size();
+                final ArrayAdapter<String> lunchAdapter = new ArrayAdapter<>(ctx, R.layout.listview_text, lunchIngredients);
+                lunchListView.setAdapter(lunchAdapter);
+                lunchListView.getLayoutParams().height = 110 * lunchIngredients.size();
+                final ArrayAdapter<String> snacksAdapter = new ArrayAdapter<>(ctx, R.layout.listview_text, snacksIngredients);
+                snackListView.setAdapter(snacksAdapter);
+                snackListView.getLayoutParams().height = 110 * snacksIngredients.size();
+                final ArrayAdapter<String> dinnerAdapter = new ArrayAdapter<>(ctx, R.layout.listview_text, dinnerIngredients);
+                dinnerListView.setAdapter(dinnerAdapter);
+                dinnerListView.getLayoutParams().height = 110 * dinnerIngredients.size();
+
                 getMealData(Constants.BREAKFAST);
                 updateUI(Constants.BREAKFAST);
+                getMealData(Constants.MID_MORNING);
+                updateUI(Constants.MID_MORNING);
+                getMealData(Constants.LUNCH);
+                updateUI(Constants.LUNCH);
+                getMealData(Constants.SNACKS);
+                updateUI(Constants.SNACKS);
+                getMealData(Constants.DINNER);
+                updateUI(Constants.DINNER);
             }
         });
 
 
         getMealData(Constants.BREAKFAST);
         updateUI(Constants.BREAKFAST);
-
         getMealData(Constants.MID_MORNING);
         updateUI(Constants.MID_MORNING);
-
-        /*getMealData(Constants.LUNCH);
+        getMealData(Constants.LUNCH);
         updateUI(Constants.LUNCH);
-
         getMealData(Constants.SNACKS);
         updateUI(Constants.SNACKS);
-
         getMealData(Constants.DINNER);
-        updateUI(Constants.DINNER);*/
+        updateUI(Constants.DINNER);
 
 
         return rootView;
@@ -311,14 +347,63 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
                 }
             }else if(response.getData().getType().equalsIgnoreCase(Constants.MID_MORNING)){
                 for (int i = 0; i< response.getData().getFood().size(); i++) {
-                    midMorningIngredients.add("1" + " " +response.getData().getFood().get(i).getUnit()+" "+ response.getData().getFood().get(i).getItem().getName());
-                    Toast.makeText(getContext(),"midmor " + "1" + " " +response.getData().getFood().get(i).getUnit()+" "+ response.getData().getFood().get(i).getItem().getName()+" size: "+ midMorningIngredients.size(),Toast.LENGTH_SHORT).show();
-                    mealLogMidmorning.addMeal(new ResponseForGetMeal.Food( 1,response.getData().getFood().get(i).getItem()),+1,response.getData().getFood().get(i).getUnit());
+                    midMorningIngredients.add(response.getData().getFood().get(i).getQuantity() + " " +response.getData().getFood().get(i).getUnit()+" "+ response.getData().getFood().get(i).getItem().getName());
+                    Toast.makeText(getContext(),"1" + " " +response.getData().getFood().get(i).getUnit()+" "+ response.getData().getFood().get(i).getItem().getName()+" size: "+ midMorningIngredients.size(),Toast.LENGTH_SHORT).show();
+                    mealLogMidmorning.addMeal(new ResponseForGetMeal.Food( response.getData().getFood().get(i).getQuantity(),response.getData().getFood().get(i).getItem()),response.getData().getFood().get(i).getQuantity(),response.getData().getFood().get(i).getUnit());
                     final ArrayAdapter<String> midmoringAdapter = new ArrayAdapter<>(ctx, R.layout.listview_text, midMorningIngredients);
                     midMorningListView.setAdapter(midmoringAdapter);
                     midMorningListView.getLayoutParams().height = 110 * midMorningIngredients.size();
                     updateUI(Constants.MID_MORNING);
                     uploadMealLogToServer(Constants.MID_MORNING);
+
+                }
+
+            }else if(response.getData().getType().equalsIgnoreCase(Constants.LUNCH)){
+                for (int i = 0; i< response.getData().getFood().size(); i++) {
+                    lunchIngredients.add(response.getData().getFood().get(i).getQuantity()  + " " +response.getData().getFood().get(i).getUnit()+" "+ response.getData().getFood().get(i).getItem().getName());
+                    Toast.makeText(getContext(), response.getData().getFood().get(i).getQuantity() + " " +response.getData().getFood().get(i).getUnit()+" "+ response.getData().getFood().get(i).getItem().getName()+" size: "+ midMorningIngredients.size(),Toast.LENGTH_SHORT).show();
+                    mealLogLunch.addMeal(new ResponseForGetMeal.Food( response.getData().getFood().get(i).getQuantity(),response.getData().getFood().get(i).getItem()),response.getData().getFood().get(i).getQuantity(),response.getData().getFood().get(i).getUnit());
+                    final ArrayAdapter<String> midmoringAdapter = new ArrayAdapter<>(ctx, R.layout.listview_text, lunchIngredients);
+                    lunchListView.setAdapter(midmoringAdapter);
+                    lunchListView.getLayoutParams().height = 110 * lunchIngredients.size();
+                    updateUI(Constants.LUNCH);
+                    uploadMealLogToServer(Constants.LUNCH);
+
+                }
+
+            }else if(response.getData().getType().equalsIgnoreCase(Constants.LUNCH)){
+                for (int i = 0; i< response.getData().getFood().size(); i++) {
+                    lunchIngredients.add(response.getData().getFood().get(i).getQuantity()  + " " +response.getData().getFood().get(i).getUnit()+" "+ response.getData().getFood().get(i).getItem().getName());
+                    mealLogLunch.addMeal(new ResponseForGetMeal.Food( response.getData().getFood().get(i).getQuantity(),response.getData().getFood().get(i).getItem()),response.getData().getFood().get(i).getQuantity(),response.getData().getFood().get(i).getUnit());
+                    final ArrayAdapter<String> midmoringAdapter = new ArrayAdapter<>(ctx, R.layout.listview_text, lunchIngredients);
+                    lunchListView.setAdapter(midmoringAdapter);
+                    lunchListView.getLayoutParams().height = 110 * lunchIngredients.size();
+                    updateUI(Constants.LUNCH);
+                    uploadMealLogToServer(Constants.LUNCH);
+
+                }
+
+            }else if(response.getData().getType().equalsIgnoreCase(Constants.SNACKS)){
+                for (int i = 0; i< response.getData().getFood().size(); i++) {
+                    snacksIngredients.add(response.getData().getFood().get(i).getQuantity()  + " " +response.getData().getFood().get(i).getUnit()+" "+ response.getData().getFood().get(i).getItem().getName());
+                    mealLogSnacks.addMeal(new ResponseForGetMeal.Food( response.getData().getFood().get(i).getQuantity(),response.getData().getFood().get(i).getItem()),response.getData().getFood().get(i).getQuantity(),response.getData().getFood().get(i).getUnit());
+                    final ArrayAdapter<String> midmoringAdapter = new ArrayAdapter<>(ctx, R.layout.listview_text, lunchIngredients);
+                    snackListView.setAdapter(midmoringAdapter);
+                    snackListView.getLayoutParams().height = 110 * snacksIngredients.size();
+                    updateUI(Constants.SNACKS);
+                    uploadMealLogToServer(Constants.SNACKS);
+
+                }
+
+            }else if(response.getData().getType().equalsIgnoreCase(Constants.DINNER)){
+                for (int i = 0; i< response.getData().getFood().size(); i++) {
+                    dinnerIngredients.add(response.getData().getFood().get(i).getQuantity()  + " " +response.getData().getFood().get(i).getUnit()+" "+ response.getData().getFood().get(i).getItem().getName());
+                    mealLogdinner.addMeal(new ResponseForGetMeal.Food( response.getData().getFood().get(i).getQuantity(),response.getData().getFood().get(i).getItem()),response.getData().getFood().get(i).getQuantity(),response.getData().getFood().get(i).getUnit());
+                    final ArrayAdapter<String> midmoringAdapter = new ArrayAdapter<>(ctx, R.layout.listview_text, lunchIngredients);
+                    dinnerListView.setAdapter(midmoringAdapter);
+                    dinnerListView.getLayoutParams().height = 110 * dinnerIngredients.size();
+                    updateUI(Constants.DINNER);
+                    uploadMealLogToServer(Constants.DINNER);
 
                 }
 
@@ -443,8 +528,6 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
                     {
 
                         breakfastIngredients.remove(pos);
-
-
                         mealLogBreakfast.removeMealAt(pos);
 
                         final ArrayAdapter<String> breakfastAdapter = new ArrayAdapter<>(ctx, R.layout.listview_text, breakfastIngredients);
@@ -501,7 +584,6 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
 
                         uploadMealLogToServer(Constants.MID_MORNING);
                         updateUI(Constants.MID_MORNING);
-                       // midMorningIngredients.set(pos, wheelPickerQty.getData().get(wheelPickerQty.getCurrentItemPosition()) + " " + wheelPickerTyp.getData().get(wheelPickerTyp.getCurrentItemPosition()));
                         midMorningListView.setAdapter(midMorningAdapter);
                         dialog.dismiss();
                     }
@@ -512,9 +594,13 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
                     public void onClick(View view)
                     {
                         midMorningIngredients.remove(pos);
+                        mealLogMidmorning.removeMealAt(pos);
+
                         final ArrayAdapter<String> midMorningAdapter = new ArrayAdapter<>(ctx, R.layout.listview_text, midMorningIngredients);
                         midMorningListView.setAdapter(midMorningAdapter);
                         midMorningListView.getLayoutParams().height = 110 * midMorningIngredients.size();
+                        uploadMealLogToServer(Constants.MID_MORNING);
+                        updateUI(Constants.MID_MORNING);
                         dialog.dismiss();
                     }
                 });
@@ -523,13 +609,45 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
             case R.id.my_nutrition_lunch:
             {
                 dialogTitle.setText(lunchIngredients.get(pos));
+                String unit = mealLogLunch.getMeal().get(pos).getUnit();
+                int quantity = mealLogLunch.getMeal().get(pos).getQuantity();
+                if(unit.equalsIgnoreCase("gram")){
+
+                    wheelPickerTyp.setSelectedItemPosition(0);
+
+                }else if(unit.equalsIgnoreCase("piece")){
+
+                    wheelPickerTyp.setSelectedItemPosition(1);
+
+                }else if(unit.equalsIgnoreCase("bowl")){
+
+                    wheelPickerTyp.setSelectedItemPosition(2);
+
+                }else if(unit.equalsIgnoreCase("katori")){
+
+                    wheelPickerTyp.setSelectedItemPosition(3);
+
+                }else {
+
+                    wheelPickerTyp.setSelectedItemPosition(4);
+
+                }
+                wheelPickerQty.setSelectedItemPosition(quantity-1);
+
                 dialogModify.setOnClickListener(new View.OnClickListener()
                 {
                     @Override
                     public void onClick(View view)
                     {
-                        //lunchIngredients.set(pos, wheelPickerQty.getData().get(wheelPickerQty.getCurrentItemPosition()) + " " +
-                        // .getData().get(wheelPickerTyp.getCurrentItemPosition()));
+                        int quantity = wheelPickerQty.getCurrentItemPosition()+ 1;
+                        String unit = ingredientTyp.get(wheelPickerTyp.getCurrentItemPosition());
+
+                        lunchIngredients.set(pos,""+quantity + " " +unit+" "+ mealLogLunch.getMeal().get(position).getItem().getName());
+                        mealLogLunch.updateMealAt(mealLogLunch.getMeal().get(pos),quantity,unit,pos);
+
+                        uploadMealLogToServer(Constants.LUNCH);
+                        updateUI(Constants.LUNCH);
+
                         final ArrayAdapter<String> lunchAdapter = new ArrayAdapter<>(ctx, R.layout.listview_text, lunchIngredients);
                         lunchListView.setAdapter(lunchAdapter);
                         dialog.dismiss();
@@ -541,9 +659,12 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
                     public void onClick(View view)
                     {
                         lunchIngredients.remove(pos);
+                        mealLogLunch.removeMealAt(pos);
                         final ArrayAdapter<String> lunchAdapter = new ArrayAdapter<>(ctx, R.layout.listview_text, lunchIngredients);
                         lunchListView.setAdapter(lunchAdapter);
                         lunchListView.getLayoutParams().height = 110 * lunchIngredients.size();
+                        uploadMealLogToServer(Constants.LUNCH);
+                        updateUI(Constants.LUNCH);
                         dialog.dismiss();
                     }
                 });
@@ -557,7 +678,16 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
                     @Override
                     public void onClick(View view)
                     {
-                        //snacksIngredients.set(pos, wheelPickerQty.getData().get(wheelPickerQty.getCurrentItemPosition()) + " " + wheelPickerTyp.getData().get(wheelPickerTyp.getCurrentItemPosition()));
+                        int quantity = wheelPickerQty.getCurrentItemPosition()+ 1;
+                        String unit = ingredientTyp.get(wheelPickerTyp.getCurrentItemPosition());
+
+                        snacksIngredients.set(pos,""+quantity + " " +unit+" "+ mealLogSnacks.getMeal().get(position).getItem().getName());
+                        mealLogSnacks.updateMealAt(mealLogSnacks.getMeal().get(pos),quantity,unit,pos);
+
+                        uploadMealLogToServer(Constants.SNACKS);
+                        updateUI(Constants.SNACKS);
+
+
                         final ArrayAdapter<String> snacksAdapter = new ArrayAdapter<>(ctx, R.layout.listview_text, snacksIngredients);
                         snackListView.setAdapter(snacksAdapter);
                         dialog.dismiss();
@@ -569,9 +699,14 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
                     public void onClick(View view)
                     {
                         snacksIngredients.remove(pos);
+                        mealLogSnacks.removeMealAt(pos);
+
                         final ArrayAdapter<String> snacksAdapter = new ArrayAdapter<>(ctx, R.layout.listview_text, snacksIngredients);
                         snackListView.setAdapter(snacksAdapter);
                         snackListView.getLayoutParams().height = 110 * snacksIngredients.size();
+
+                        uploadMealLogToServer(Constants.SNACKS);
+                        updateUI(Constants.SNACKS);
                         dialog.dismiss();
                     }
                 });
@@ -585,7 +720,15 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
                     @Override
                     public void onClick(View view)
                     {
-                        //dinnerIngredients.set(pos, wheelPickerQty.getData().get(wheelPickerQty.getCurrentItemPosition()) + " " + wheelPickerTyp.getData().get(wheelPickerTyp.getCurrentItemPosition()));
+                        int quantity = wheelPickerQty.getCurrentItemPosition()+ 1;
+                        String unit = ingredientTyp.get(wheelPickerTyp.getCurrentItemPosition());
+
+                        dinnerIngredients.set(pos,""+quantity + " " +unit+" "+ mealLogdinner.getMeal().get(position).getItem().getName());
+                        mealLogdinner.updateMealAt(mealLogdinner.getMeal().get(pos),quantity,unit,pos);
+
+                        uploadMealLogToServer(Constants.DINNER);
+                        updateUI(Constants.DINNER);
+
                         final ArrayAdapter<String> dinnerAdapter = new ArrayAdapter<>(ctx, R.layout.listview_text, dinnerIngredients);
                         dinnerListView.setAdapter(dinnerAdapter);
                         dialog.dismiss();
@@ -597,9 +740,12 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
                     public void onClick(View view)
                     {
                         dinnerIngredients.remove(pos);
+                        mealLogdinner.removeMealAt(pos);
                         final ArrayAdapter<String> dinnerAdapter = new ArrayAdapter<>(ctx, R.layout.listview_text, dinnerIngredients);
                         dinnerListView.setAdapter(dinnerAdapter);
                         dinnerListView.getLayoutParams().height = 110 * dinnerIngredients.size();
+                        uploadMealLogToServer(Constants.DINNER);
+                        updateUI(Constants.DINNER);
                         dialog.dismiss();
                     }
                 });
@@ -688,6 +834,16 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
             midmorningProtien.setText(String.valueOf(mealLogMidmorning.getMealProtien()));
             midmorningFats.setText(String.valueOf(mealLogMidmorning.getMealFat()));
             midmorningCarbs.setText(String.valueOf(mealLogMidmorning.getMealCarbs()));
+        }else  if(meal.equalsIgnoreCase(Constants.LUNCH)){
+            lunchCalorie.setText(String.valueOf(mealLogLunch.getMealCalorie()));
+            lunchProtien.setText(String.valueOf(mealLogLunch.getMealProtien()));
+            lunchFats.setText(String.valueOf(mealLogLunch.getMealFat()));
+            lunchCarbs.setText(String.valueOf(mealLogLunch.getMealCarbs()));
+        }else  if(meal.equalsIgnoreCase(Constants.SNACKS)){
+            snacksCalorie.setText(String.valueOf(mealLogSnacks.getMealCalorie()));
+            snacksProtien.setText(String.valueOf(mealLogSnacks.getMealProtien()));
+            snacksFats.setText(String.valueOf(mealLogSnacks.getMealFat()));
+            snacksCarbs.setText(String.valueOf(mealLogSnacks.getMealCarbs()));
         }
 
 
@@ -723,7 +879,46 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
 
             }
 
-            Log.d("error77","breakfast found");
+            Log.d("error77","midmorning found");
+        }else if(meal.equalsIgnoreCase(Constants.LUNCH)){
+            for(int i = 0; i< mealLogLunch.getMeal().size(); i++){
+                String id = mealLogLunch.getMeal().get(i).getItem().getId();
+                int quantity = mealLogLunch.getMeal().get(i).getQuantity();
+                food1.add(new BodyForMealLog.Food(id,quantity,mealLogLunch.getMeal().get(i).getUnit()));
+                Log.d("error77"," "+mealLogLunch.getMeal().get(i).getItem().getSize().serve+" "+mealLogLunch.getMeal().get(i).getItem().getSize().gram);
+                Log.d("error77",String.valueOf(mealLogLunch.getMeal().size()));
+//                Log.d("error77",id);
+
+
+            }
+
+            Log.d("error77","lunch found");
+        }else if(meal.equalsIgnoreCase(Constants.SNACKS)){
+            for(int i = 0; i< mealLogSnacks.getMeal().size(); i++){
+                String id = mealLogSnacks.getMeal().get(i).getItem().getId();
+                int quantity = mealLogSnacks.getMeal().get(i).getQuantity();
+                food1.add(new BodyForMealLog.Food(id,quantity,mealLogSnacks.getMeal().get(i).getUnit()));
+                Log.d("error77"," "+mealLogSnacks.getMeal().get(i).getItem().getSize().serve+" "+mealLogSnacks.getMeal().get(i).getItem().getSize().gram);
+                Log.d("error77",String.valueOf(mealLogSnacks.getMeal().size()));
+//                Log.d("error77",id);
+
+
+            }
+
+            Log.d("error77","lunch found");
+        }else if(meal.equalsIgnoreCase(Constants.DINNER)){
+            for(int i = 0; i< mealLogdinner.getMeal().size(); i++){
+                String id = mealLogdinner.getMeal().get(i).getItem().getId();
+                int quantity = mealLogdinner.getMeal().get(i).getQuantity();
+                food1.add(new BodyForMealLog.Food(id,quantity,mealLogdinner.getMeal().get(i).getUnit()));
+                Log.d("error77"," "+mealLogdinner.getMeal().get(i).getItem().getSize().serve+" "+mealLogdinner.getMeal().get(i).getItem().getSize().gram);
+                Log.d("error77",String.valueOf(mealLogdinner.getMeal().size()));
+//                Log.d("error77",id);
+
+
+            }
+
+            Log.d("error77","lunch found");
         }
 
         BodyForMealLog bodyForMealLog = new BodyForMealLog(selectedDate,meal, food1);
@@ -741,6 +936,15 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
 
             }else if(responseForSuccess.getMealType().equalsIgnoreCase(Constants.MID_MORNING)){
                 updateUI(Constants.MID_MORNING);
+
+            }else if(responseForSuccess.getMealType().equalsIgnoreCase(Constants.LUNCH)){
+                updateUI(Constants.LUNCH);
+
+            }else if(responseForSuccess.getMealType().equalsIgnoreCase(Constants.SNACKS)){
+                updateUI(Constants.SNACKS);
+
+            }else if(responseForSuccess.getMealType().equalsIgnoreCase(Constants.DINNER)){
+                updateUI(Constants.DINNER);
 
             }
         }
@@ -801,6 +1005,7 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
                 if(mealType.equalsIgnoreCase(Constants.BREAKFAST)){
                     breakfastIngredients.add("1" + " " +newFood.getUnit()+" "+ newFood.getName());
                     mealLogBreakfast.addMeal(new ResponseForGetMeal.Food( 1,newFood),+1,newFood.getUnit());
+
                     final ArrayAdapter<String> breakfastAdapter = new ArrayAdapter<>(ctx, R.layout.listview_text, breakfastIngredients);
                     breakfastListView.setAdapter(breakfastAdapter);
                     breakfastListView.getLayoutParams().height = 110 * breakfastIngredients.size();
@@ -808,20 +1013,44 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
                     uploadMealLogToServer(Constants.BREAKFAST);
                 }else if(mealType.equalsIgnoreCase(Constants.MID_MORNING)){
                     midMorningIngredients.add("1" + " " +newFood.getUnit()+" "+ newFood.getName());
-                    Toast.makeText(getContext(),"midmor " + "1" + " " +newFood.getUnit()+" "+ newFood.getName()+" size: "+ midMorningIngredients.size(),Toast.LENGTH_SHORT).show();
                     mealLogMidmorning.addMeal(new ResponseForGetMeal.Food( 1,newFood),+1,newFood.getUnit());
-                    final ArrayAdapter<String> midmoringAdapter = new ArrayAdapter<>(ctx, R.layout.listview_text, midMorningIngredients);
-                    midMorningListView.setAdapter(midmoringAdapter);
-                    midMorningListView.getLayoutParams().height = 110 * midMorningIngredients.size();
-                    updateUI(Constants.MID_MORNING);
-                    uploadMealLogToServer(Constants.MID_MORNING);
-
-
 
                     final ArrayAdapter<String> midMorningAdapter = new ArrayAdapter<>(ctx, R.layout.listview_text, midMorningIngredients);
                     midMorningListView.setAdapter(midMorningAdapter);
-                    midMorningListView.setOnItemClickListener(this);
                     midMorningListView.getLayoutParams().height = 110 * midMorningIngredients.size();
+
+                    updateUI(Constants.MID_MORNING);
+                    uploadMealLogToServer(Constants.MID_MORNING);
+                }else if(mealType.equalsIgnoreCase(Constants.LUNCH)){
+                    lunchIngredients.add("1" + " " +newFood.getUnit()+" "+ newFood.getName());
+                    mealLogLunch.addMeal(new ResponseForGetMeal.Food( 1,newFood),+1,newFood.getUnit());
+
+                    final ArrayAdapter<String> midMorningAdapter = new ArrayAdapter<>(ctx, R.layout.listview_text, lunchIngredients);
+                    lunchListView.setAdapter(midMorningAdapter);
+                    lunchListView.getLayoutParams().height = 110 * lunchIngredients.size();
+
+                    updateUI(Constants.LUNCH);
+                    uploadMealLogToServer(Constants.LUNCH);
+                }else if(mealType.equalsIgnoreCase(Constants.SNACKS)){
+                    snacksIngredients.add("1" + " " +newFood.getUnit()+" "+ newFood.getName());
+                    mealLogSnacks.addMeal(new ResponseForGetMeal.Food( 1,newFood),+1,newFood.getUnit());
+
+                    final ArrayAdapter<String> midMorningAdapter = new ArrayAdapter<>(ctx, R.layout.listview_text, snacksIngredients);
+                    snackListView.setAdapter(midMorningAdapter);
+                    snackListView.getLayoutParams().height = 110 * snacksIngredients.size();
+
+                    updateUI(Constants.SNACKS);
+                    uploadMealLogToServer(Constants.SNACKS);
+                }else if(mealType.equalsIgnoreCase(Constants.DINNER)){
+                    dinnerIngredients.add("1" + " " +newFood.getUnit()+" "+ newFood.getName());
+                    mealLogdinner.addMeal(new ResponseForGetMeal.Food( 1,newFood),+1,newFood.getUnit());
+
+                    final ArrayAdapter<String> midMorningAdapter = new ArrayAdapter<>(ctx, R.layout.listview_text, dinnerIngredients);
+                    dinnerListView.setAdapter(midMorningAdapter);
+                    dinnerListView.getLayoutParams().height = 110 * dinnerIngredients.size();
+
+                    updateUI(Constants.DINNER);
+                    uploadMealLogToServer(Constants.DINNER);
                 }
 
 
