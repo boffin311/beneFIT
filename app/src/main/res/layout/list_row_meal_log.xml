@@ -11,7 +11,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:fontFamily="@font/oswald"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/proxima_nova"
         android:text="name"
         android:textAllCaps="true"
         android:textColor="#565656"
@@ -26,7 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginTop="8dp"
-        android:fontFamily="@font/oswald"
+        android:fontFamily="@font/proxima_nova"
         android:text="details"
         android:textAllCaps="true"
         android:textColor="@color/colorGrey"
@@ -40,7 +41,7 @@
         android:id="@+id/view"
         android:layout_width="match_parent"
 
-        android:layout_height="2dp"
+        android:layout_height="1dp"
         android:background="@color/FABIndicatorSelected"
         app:layout_constraintBottom_toBottomOf="parent"
         tools:layout_editor_absoluteX="16dp"></View>
