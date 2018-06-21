@@ -778,6 +778,8 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
         }
     }
 
+
+
     @Override
     public void onClick(View view)
     {
