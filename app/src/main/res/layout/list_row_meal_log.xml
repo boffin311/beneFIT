@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/list_row_meal_log_name_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -9,15 +10,52 @@
         android:id="@+id/list_row_meal_log_name_textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
         android:layout_marginStart="16dp"
-        android:fontFamily="@font/oswald"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/proxima_nova"
         android:text="name"
         android:textAllCaps="true"
         android:textColor="#565656"
-        android:textSize="16sp"
+        android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/list_row_meal_log_details_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/proxima_nova"
+        android:text="details"
+        android:textAllCaps="true"
+        android:textColor="@color/colorGrey"
+        android:textSize="10sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/list_row_meal_log_name_textview"
+        app:layout_constraintTop_toBottomOf="@+id/list_row_meal_log_name_textview" />
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+
+        android:layout_height="1dp"
+        android:background="@color/FABIndicatorSelected"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:layout_editor_absoluteX="16dp"></View>
+
+    <ImageView
+        android:id="@+id/list_row_meal_log_add_meal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginTop="8dp"
+        android:tint="#565656"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_arrow_forw_24dp" />
 </android.support.constraint.ConstraintLayout>

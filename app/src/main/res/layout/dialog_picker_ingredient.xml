@@ -34,9 +34,12 @@
             app:wheel_atmospheric="true"
             app:wheel_curved="true"
             app:wheel_cyclic="true"
-            app:wheel_item_text_color="#A7A7DB"
+            app:wheel_item_text_color="#c1c1f5"
             app:wheel_item_text_size="24sp"
-            app:wheel_selected_item_text_color="#536D8A" />
+            app:wheel_selected_item_text_color="#233e5c"
+            app:wheel_visible_item_count="3"
+
+            />
 
         <com.aigestudio.wheelpicker.WheelPicker
             android:id="@+id/dialog_picker_ingredient_type"
@@ -46,9 +49,12 @@
             app:wheel_atmospheric="true"
             app:wheel_curved="true"
             app:wheel_cyclic="false"
-            app:wheel_item_text_color="#A7A7DB"
+            app:wheel_item_text_color="#c1c1f5"
             app:wheel_item_text_size="24sp"
-            app:wheel_selected_item_text_color="#536D8A" />
+            app:wheel_selected_item_text_color="#233e5c"
+            app:wheel_visible_item_count="3"
+
+            />
     </LinearLayout>
 
     <LinearLayout

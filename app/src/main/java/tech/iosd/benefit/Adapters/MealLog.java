@@ -56,6 +56,7 @@ public class MealLog extends RecyclerView.Adapter<MealLog.ViewHolder> {
 
 
         holder.name.setText(listItems.get(position).getName());
+        holder.details.setText("1 "+listItems.get(position).getUnit());
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -73,15 +74,14 @@ public class MealLog extends RecyclerView.Adapter<MealLog.ViewHolder> {
 
     public class ViewHolder extends RecyclerView.ViewHolder{
 
-        public TextView name;
+        public TextView name, details;
         public View view;
 
         public ViewHolder(View itemView) {
             super(itemView);
             name = (TextView) itemView.findViewById(R.id.list_row_meal_log_name_textview);
-            view = itemView.findViewById(R.id.list_row_meal_log_name_view);
-
-
+            view = itemView.findViewById(R.id.list_row_meal_log_add_meal);
+            details = (TextView) itemView.findViewById(R.id.list_row_meal_log_details_textview);
 
         }
     }
