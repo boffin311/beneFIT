@@ -146,4 +146,9 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
 
         return true;
     }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+    }
 }

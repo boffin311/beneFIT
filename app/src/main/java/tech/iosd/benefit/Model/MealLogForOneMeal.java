@@ -35,6 +35,53 @@ public class MealLogForOneMeal {
         mealProtien = 0;
         meal.clear();
     }
+    private void updateLogDetails(){
+        mealCalorie = 0;
+        mealCarbs = 0;
+        mealFat = 0;
+        mealProtien = 0;
+        for(int i =0; i<meal.size(); i++){
+            String unit = meal.get(i).getUnit();
+            int quantity = meal.get(i).getQuantity();
+            ResponseForGetMeal.Food food = meal.get(i);
+            if(unit.equalsIgnoreCase("gram")){
+
+                mealCalorie = mealCalorie + (quantity * food.getItem().getCalories())/food.getItem().getDefaultSize();
+                mealCarbs = mealCarbs + (quantity * food.getItem().getCarbs())/food.getItem().getDefaultSize();
+                mealProtien = mealProtien + (quantity * food.getItem().getProteins())/food.getItem().getDefaultSize();
+                mealFat = mealFat + (quantity * food.getItem().getFats())/food.getItem().getDefaultSize();
+
+            }else if(unit.equalsIgnoreCase("piece")){
+
+                mealCalorie = mealCalorie + (quantity * food.getItem().getCalories()* food.getItem().getSize().piece)/food.getItem().getDefaultSize();
+                mealCarbs = mealCarbs + (quantity * food.getItem().getCarbs()* food.getItem().getSize().piece)/food.getItem().getDefaultSize();
+                mealProtien = mealProtien + (quantity * food.getItem().getProteins()* food.getItem().getSize().piece)/food.getItem().getDefaultSize();
+                mealFat = mealFat + (quantity * food.getItem().getFats()* food.getItem().getSize().piece)/food.getItem().getDefaultSize();
+
+            }else if(unit.equalsIgnoreCase("bowl")){
+
+                mealCalorie = mealCalorie + (quantity * food.getItem().getCalories()* Constants.BOWL_GRAM)/food.getItem().getDefaultSize();
+                mealCarbs = mealCarbs + (quantity * food.getItem().getCarbs()* Constants.BOWL_GRAM)/food.getItem().getDefaultSize();
+                mealProtien = mealProtien + (quantity * food.getItem().getProteins()* Constants.BOWL_GRAM)/food.getItem().getDefaultSize();
+                mealFat = mealFat + (quantity * food.getItem().getFats()* Constants.BOWL_GRAM)/food.getItem().getDefaultSize();
+
+            }else if(unit.equalsIgnoreCase("katori")){
+
+                mealCalorie = mealCalorie + (quantity * food.getItem().getCalories()* Constants.KATORI_GRAM)/food.getItem().getDefaultSize();
+                mealCarbs = mealCarbs + (quantity * food.getItem().getCarbs()* Constants.KATORI_GRAM)/food.getItem().getDefaultSize();
+                mealProtien = mealProtien + (quantity * food.getItem().getProteins()* Constants.KATORI_GRAM)/food.getItem().getDefaultSize();
+                mealFat = mealFat + (quantity * food.getItem().getFats()* Constants.KATORI_GRAM)/food.getItem().getDefaultSize();
+
+            }else {
+
+                mealCalorie = mealCalorie + (quantity * food.getItem().getCalories()* food.getItem().getSize().serve)/food.getItem().getDefaultSize();
+                mealCarbs = mealCarbs + (quantity * food.getItem().getCarbs()* food.getItem().getSize().serve)/food.getItem().getDefaultSize();
+                mealProtien = mealProtien + (quantity * food.getItem().getProteins()* food.getItem().getSize().serve)/food.getItem().getDefaultSize();
+                mealFat = mealFat + (quantity * food.getItem().getFats()* food.getItem().getSize().serve)/food.getItem().getDefaultSize();
+
+            }
+        }
+    }
 
     public boolean removeMealAt(int position){
         if (/*position<0 || position > meal.size()*/false ){
@@ -42,151 +89,28 @@ public class MealLogForOneMeal {
 
             return false;
         }else {
-
-            ResponseForGetMeal.Food food = meal.get(position);
-            String unit = food.getUnit();
-            int quantity = food.getQuantity();
-            if(unit.equalsIgnoreCase("gram")){
-
-                mealCalorie = mealCalorie - (quantity * food.getItem().getCalories())/food.getItem().getDefaultSize();
-                mealCarbs = mealCarbs - (quantity * food.getItem().getCarbs())/food.getItem().getDefaultSize();
-                mealProtien = mealProtien - (quantity * food.getItem().getProteins())/food.getItem().getDefaultSize();
-                mealFat = mealFat - (quantity * food.getItem().getFats())/food.getItem().getDefaultSize();
-
-            }else if(unit.equalsIgnoreCase("piece")){
-
-                mealCalorie = mealCalorie - (quantity * food.getItem().getCalories()* food.getItem().getSize().piece)/food.getItem().getDefaultSize();
-                mealCarbs = mealCarbs - (quantity * food.getItem().getCarbs()* food.getItem().getSize().piece)/food.getItem().getDefaultSize();
-                mealProtien = mealProtien - (quantity * food.getItem().getProteins()* food.getItem().getSize().piece)/food.getItem().getDefaultSize();
-                mealFat = mealFat - (quantity * food.getItem().getFats()* food.getItem().getSize().piece)/food.getItem().getDefaultSize();
-
-            }else if(unit.equalsIgnoreCase("bowl")){
-
-                mealCalorie = mealCalorie - (quantity * food.getItem().getCalories()* Constants.BOWL_GRAM)/food.getItem().getDefaultSize();
-                mealCarbs = mealCarbs - (quantity * food.getItem().getCarbs()* Constants.BOWL_GRAM)/food.getItem().getDefaultSize();
-                mealProtien = mealProtien - (quantity * food.getItem().getProteins()* Constants.BOWL_GRAM)/food.getItem().getDefaultSize();
-                mealFat = mealFat - (quantity * food.getItem().getFats()* Constants.BOWL_GRAM)/food.getItem().getDefaultSize();
-
-            }else if(unit.equalsIgnoreCase("katori")){
-
-                mealCalorie = mealCalorie - (quantity * food.getItem().getCalories()* Constants.KATORI_GRAM)/food.getItem().getDefaultSize();
-                mealCarbs = mealCarbs - (quantity * food.getItem().getCarbs()* Constants.KATORI_GRAM)/food.getItem().getDefaultSize();
-                mealProtien = mealProtien - (quantity * food.getItem().getProteins()* Constants.KATORI_GRAM)/food.getItem().getDefaultSize();
-                mealFat = mealFat - (quantity * food.getItem().getFats()* Constants.KATORI_GRAM)/food.getItem().getDefaultSize();
-
-            }else {
-
-                mealCalorie = mealCalorie - (quantity * food.getItem().getCalories()* food.getItem().getSize().serve)/food.getItem().getDefaultSize();
-                mealCarbs = mealCarbs - (quantity * food.getItem().getCarbs()* food.getItem().getSize().serve)/food.getItem().getDefaultSize();
-                mealProtien = mealProtien - (quantity * food.getItem().getProteins()* food.getItem().getSize().serve)/food.getItem().getDefaultSize();
-                mealFat = mealFat - (quantity * food.getItem().getFats()* food.getItem().getSize().serve)/food.getItem().getDefaultSize();
-
-            }
-            Toast.makeText(context,"removing cal: " + food.getItem().getCalories(),Toast.LENGTH_SHORT).show();
-
             meal.remove(position);
+            updateLogDetails();
             return true;
         }
     }
 
     public boolean updateMealAt(ResponseForGetMeal.Food food,int newquantity,String newUnit,int position){
 
-        String unit = food.getUnit();
-        int quantity = food.getQuantity();
-        if(unit.equalsIgnoreCase("gram")){
 
-            mealCalorie = mealCalorie - (quantity * food.getItem().getCalories())/food.getItem().getDefaultSize();
-            mealCarbs = mealCarbs - (quantity * food.getItem().getCarbs())/food.getItem().getDefaultSize();
-            mealProtien = mealProtien - (quantity * food.getItem().getProteins())/food.getItem().getDefaultSize();
-            mealFat = mealFat - (quantity * food.getItem().getFats())/food.getItem().getDefaultSize();
-
-            calculateLogFor(newquantity,newUnit, food);
-
-
-        }else if(unit.equalsIgnoreCase("piece")){
-
-            mealCalorie = mealCalorie - (quantity * food.getItem().getCalories()* food.getItem().getSize().piece)/food.getItem().getDefaultSize();
-            mealCarbs = mealCarbs - (quantity * food.getItem().getCarbs()* food.getItem().getSize().piece)/food.getItem().getDefaultSize();
-            mealProtien = mealProtien - (quantity * food.getItem().getProteins()* food.getItem().getSize().piece)/food.getItem().getDefaultSize();
-            mealFat = mealFat - (quantity * food.getItem().getFats()* food.getItem().getSize().piece)/food.getItem().getDefaultSize();
-
-            calculateLogFor(newquantity,newUnit, food);
-
-        }else if(unit.equalsIgnoreCase("bowl")){
-
-            mealCalorie = mealCalorie - (quantity * food.getItem().getCalories()* Constants.BOWL_GRAM)/food.getItem().getDefaultSize();
-            mealCarbs = mealCarbs - (quantity * food.getItem().getCarbs()* Constants.BOWL_GRAM)/food.getItem().getDefaultSize();
-            mealProtien = mealProtien - (quantity * food.getItem().getProteins()* Constants.BOWL_GRAM)/food.getItem().getDefaultSize();
-            mealFat = mealFat - (quantity * food.getItem().getFats()* Constants.BOWL_GRAM)/food.getItem().getDefaultSize();
-
-            calculateLogFor(newquantity,newUnit, food);
-
-        }else if(unit.equalsIgnoreCase("katori")){
-
-            mealCalorie = mealCalorie - (quantity * food.getItem().getCalories()* Constants.KATORI_GRAM)/food.getItem().getDefaultSize();
-            mealCarbs = mealCarbs - (quantity * food.getItem().getCarbs()* Constants.KATORI_GRAM)/food.getItem().getDefaultSize();
-            mealProtien = mealProtien - (quantity * food.getItem().getProteins()* Constants.KATORI_GRAM)/food.getItem().getDefaultSize();
-            mealFat = mealFat - (quantity * food.getItem().getFats()* Constants.KATORI_GRAM)/food.getItem().getDefaultSize();
-
-            calculateLogFor(newquantity,newUnit, food);
-
-        }else {
-
-            mealCalorie = mealCalorie - (quantity * food.getItem().getCalories()* food.getItem().getSize().serve)/food.getItem().getDefaultSize();
-            mealCarbs = mealCarbs - (quantity * food.getItem().getCarbs()* food.getItem().getSize().serve)/food.getItem().getDefaultSize();
-            mealProtien = mealProtien - (quantity * food.getItem().getProteins()* food.getItem().getSize().serve)/food.getItem().getDefaultSize();
-            mealFat = mealFat - (quantity * food.getItem().getFats()* food.getItem().getSize().serve)/food.getItem().getDefaultSize();
-            calculateLogFor(newquantity,newUnit, food);
-
-        }
         food.setUnit(newUnit);
         food.setQuantity(newquantity);
-        meal.get(position).setItem(food.getItem());
+        //meal.get(position).setItem(food.getItem());
         meal.get(position).setQuantity(newquantity);
         meal.get(position).setUnit(newUnit);
+        updateLogDetails();
 
         return true;
 
 
     }
-    private void calculateLogFor(int quantity, String unit,ResponseForGetMeal.Food food ){
-        if(unit.equalsIgnoreCase("gram")){
 
-            mealCalorie = mealCalorie + (quantity * food.getItem().getCalories())/food.getItem().getDefaultSize();
-            mealCarbs = mealCarbs + (quantity * food.getItem().getCarbs())/food.getItem().getDefaultSize();
-            mealProtien = mealProtien + (quantity * food.getItem().getProteins())/food.getItem().getDefaultSize();
-            mealFat = mealFat + (quantity * food.getItem().getFats())/food.getItem().getDefaultSize();
 
-        }else if(unit.equalsIgnoreCase("piece")){
-
-            mealCalorie = mealCalorie + (quantity * food.getItem().getCalories()* food.getItem().getSize().piece)/food.getItem().getDefaultSize();
-            mealCarbs = mealCarbs + (quantity * food.getItem().getCarbs()* food.getItem().getSize().piece)/food.getItem().getDefaultSize();
-            mealProtien = mealProtien + (quantity * food.getItem().getProteins()* food.getItem().getSize().piece)/food.getItem().getDefaultSize();
-            mealFat = mealFat + (quantity * food.getItem().getFats()* food.getItem().getSize().piece)/food.getItem().getDefaultSize();
-
-        }else if(unit.equalsIgnoreCase("bowl")){
-
-            mealCalorie = mealCalorie + (quantity * food.getItem().getCalories()* Constants.BOWL_GRAM)/food.getItem().getDefaultSize();
-            mealCarbs = mealCarbs + (quantity * food.getItem().getCarbs()* Constants.BOWL_GRAM)/food.getItem().getDefaultSize();
-            mealProtien = mealProtien + (quantity * food.getItem().getProteins()* Constants.BOWL_GRAM)/food.getItem().getDefaultSize();
-            mealFat = mealFat + (quantity * food.getItem().getFats()* Constants.BOWL_GRAM)/food.getItem().getDefaultSize();
-
-        }else if(unit.equalsIgnoreCase("katori")){
-
-            mealCalorie = mealCalorie + (quantity * food.getItem().getCalories()* Constants.KATORI_GRAM)/food.getItem().getDefaultSize();
-            mealCarbs = mealCarbs + (quantity * food.getItem().getCarbs()* Constants.KATORI_GRAM)/food.getItem().getDefaultSize();
-            mealProtien = mealProtien + (quantity * food.getItem().getProteins()* Constants.KATORI_GRAM)/food.getItem().getDefaultSize();
-            mealFat = mealFat + (quantity * food.getItem().getFats()* Constants.KATORI_GRAM)/food.getItem().getDefaultSize();
-
-        }else {
-
-            mealCalorie = mealCalorie + (quantity * food.getItem().getCalories()* food.getItem().getSize().serve)/food.getItem().getDefaultSize();
-            mealCarbs = mealCarbs + (quantity * food.getItem().getCarbs()* food.getItem().getSize().serve)/food.getItem().getDefaultSize();
-            mealProtien = mealProtien + (quantity * food.getItem().getProteins()* food.getItem().getSize().serve)/food.getItem().getDefaultSize();
-            mealFat = mealFat + (quantity * food.getItem().getFats()* food.getItem().getSize().serve)/food.getItem().getDefaultSize();
-
-        }
-    }
 
     public boolean addMeal(ResponseForGetMeal.Food food,int quantity,String unit){
         food.setUnit(unit);
