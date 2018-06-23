@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -27,6 +28,7 @@ import com.auth0.android.jwt.Claim;
 import com.auth0.android.jwt.JWT;
 import com.squareup.picasso.Picasso;
 import com.stfalcon.chatkit.commons.ImageLoader;
+import com.stfalcon.chatkit.messages.MessageInput;
 import com.stfalcon.chatkit.messages.MessagesList;
 import com.stfalcon.chatkit.messages.MessagesListAdapter;
 
@@ -77,7 +79,7 @@ public class Chat extends Fragment
         progressDialog = new ProgressDialog(getContext());
         progressDialog.setMessage("Connecting..");
         progressDialog.setCancelable(false);
-        progressDialog.show();
+//        progressDialog.show();
 
         db = new DatabaseHandler(getContext());
 
@@ -401,10 +403,20 @@ public class Chat extends Fragment
         //adapter.addToStart(new Message("1", "I'm your coach and i am here to help you out", coach, Calendar.getInstance().getTime()), true);
         //
 
-        RecyclerView messagesList = rootView.findViewById(R.id.messagesList);
-        messagesList.setLayoutManager(new LinearLayoutManager(getActivity()));
-        messagesList.setAdapter(mAdapter);
+        mMessagesView = rootView.findViewById(R.id.messagesList);
+        mMessagesView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mMessagesView.setAdapter(mAdapter);
         //messagesList.setAdapter(adapter);
+        MessageInput messageInput = rootView.findViewById(R.id.mmessageInput);
+        mInputMessageView = messageInput.getInputEditText();
+
+        messageInput.getButton().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                attemptSend();
+
+            }
+        });
         return rootView;
     }
 }
