@@ -9,6 +9,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.ScaleDrawable;
 import android.location.LocationManager;
 import android.os.IBinder;
 import android.support.v4.app.Fragment;
@@ -32,7 +34,10 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
@@ -41,6 +46,7 @@ import com.google.maps.android.SphericalUtil;
 
 import java.util.ArrayList;
 
+import tech.iosd.benefit.Model.MapsMarker;
 import tech.iosd.benefit.R;
 import tech.iosd.benefit.Services.GPSTracker;
 import tech.iosd.benefit.Utils.Constants;
@@ -77,6 +83,9 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
     double lastDistance =0;
     private boolean fistPuase = true;
     private ProgressDialog progressDialog;
+    private ArrayList<MapsMarker> mapsMarkers;
+    private double currentLatitude, currentLongitude;
+
 
     private ServiceConnection sc = new ServiceConnection() {
         @Override
@@ -98,11 +107,11 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
 
                     CameraUpdate center=
                             CameraUpdateFactory.newLatLng(myLocation);
-                    CameraUpdate zoom=CameraUpdateFactory.zoomTo(30);
+                    CameraUpdate zoom=CameraUpdateFactory.zoomTo(20);
 
                     googleMap.moveCamera(center);
                     googleMap.animateCamera(zoom);
-                    googleMap.setMyLocationEnabled(true);
+                    //googleMap.setMyLocationEnabled(true);
                     progressDialog.hide();
                     //gpsTracker.showSettingsAlert();
 
@@ -198,6 +207,7 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
         distance = rootView.findViewById(R.id.dashboard_track_my_activity_distance_textview);
 
         bindService();
+        mapsMarkers = new ArrayList<>();
 
         fm = getFragmentManager();
 
@@ -244,11 +254,11 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
 
                     CameraUpdate center=
                             CameraUpdateFactory.newLatLng(myLocation);
-                    CameraUpdate zoom=CameraUpdateFactory.zoomTo(30);
+                    CameraUpdate zoom=CameraUpdateFactory.zoomTo(20);
 
                     googleMap.moveCamera(center);
                     googleMap.animateCamera(zoom);
-                    googleMap.setMyLocationEnabled(true);
+                    //googleMap.setMyLocationEnabled(true);
                 }
 
                 // For showing a move to my location button
@@ -272,6 +282,8 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
 
             }
         });
+
+
 
 
         return rootView;
@@ -328,6 +340,7 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
                 pauseLayout.setVisibility(View.VISIBLE);
                 stopLayout.setVisibility(View.GONE);
                 myService.setPaused(false);
+                mapsMarkers.add(new MapsMarker(myService.getLatitude(),myService.getLongitude(),true));
                 startRunning();
                 break;
             }
@@ -337,6 +350,7 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
                 pauseLayout.setVisibility(View.GONE);
                 stopLayout.setVisibility(View.VISIBLE);
                 discardBtn.setVisibility(View.VISIBLE);
+                mapsMarkers.add(new MapsMarker(myService.getLatitude(),myService.getLongitude(),false));
 
                 myService.setPaused(true);
                 break;
@@ -350,6 +364,7 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
                 stopLayout.setVisibility(View.GONE);
                 discardBtn.setVisibility(View.GONE);
                 myService.setPaused(false);
+                mapsMarkers.add(new MapsMarker(myService.getLatitude(),myService.getLongitude(),true));
 
                 break;
 
@@ -379,6 +394,7 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
                         stopLayout.setVisibility(View.GONE);
                         discardBtn.setVisibility(View.GONE);
                         myService.stoptacking();
+                        points.clear();
                         distance.setText(String.valueOf(0));
 
                     }
@@ -401,6 +417,18 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
 
 
     private void startRunning() {
+
+        if(myService.isGoogleAPIConnected){
+            currentLatitude=myService.getLatitude();
+            currentLongitude=myService.getLongitude();
+            LatLng myLocation = new LatLng(currentLatitude, currentLongitude);
+
+            CameraUpdate center=
+                    CameraUpdateFactory.newLatLng(myLocation);
+            CameraUpdate zoom=CameraUpdateFactory.zoomTo(18);
+            googleMap.moveCamera(center);
+            googleMap.animateCamera(zoom);
+        }
         IntentFilter intentFilter = new IntentFilter(Constants.GPS_UPDATE);
 
         BroadcastReceiver mReceiver = new BroadcastReceiver() {
@@ -415,10 +443,37 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
                         BroadcastService.class);
                 stopService(stopIntent);
                 */
+            Bundle bundle =  intent.getExtras();
+            String key =  bundle.getString("key");
+            //Toast.makeText(getContext(),"broadccastint "+key,Toast.LENGTH_SHORT).show();
 
                 if (intent.getAction().equals(Constants.GPS_UPDATE)) {
                     //intent.getExtras();
-                    redrawLine();
+                    if(key.equalsIgnoreCase(Constants.GPS_IS_UPDATED)){
+                        currentLatitude=myService.getLatitude();
+                        currentLongitude=myService.getLongitude();
+                        redrawLine();
+                    }else if(key.equalsIgnoreCase(Constants.GPS_CONNECTED)){
+                        currentLatitude=myService.getLatitude();
+                        currentLongitude=myService.getLongitude();
+                        LatLng myLocation = new LatLng(currentLatitude, currentLongitude);
+
+                        CameraUpdate center=
+                                CameraUpdateFactory.newLatLng(myLocation);
+                        CameraUpdate zoom=CameraUpdateFactory.zoomTo(18);
+                        googleMap.moveCamera(center);
+                        googleMap.animateCamera(zoom);
+                    }else if(key.equalsIgnoreCase(Constants.GPS_ONLY_LOCATION_CHANGE)){
+                        currentLatitude=myService.getLatitude();
+                        currentLongitude=myService.getLongitude();
+                        LatLng myLocation = new LatLng(currentLatitude, currentLongitude);
+
+                        CameraUpdate center=
+                                CameraUpdateFactory.newLatLng(myLocation);
+                        CameraUpdate zoom=CameraUpdateFactory.zoomTo(18);
+                        googleMap.moveCamera(center);
+                        googleMap.animateCamera(zoom);
+                    }
                     //Toast.makeText(getContext(),"activity",Toast.LENGTH_LONG).show();
 
                 }
@@ -426,17 +481,22 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
         };
         getActivity().getApplicationContext().registerReceiver(mReceiver, intentFilter);
 
+
         String stringLongitude = String.valueOf(myService.getLongitude());
             myService.setPaused(false);
 
             Toast.makeText(getActivity().getApplicationContext(),"Lat:"+stringLongitude+"\nLong"+stringLongitude,Toast.LENGTH_LONG).show();
 
             LatLng sydney = new LatLng(myService.getLatitude(), myService.getLongitude());
-            googleMap.addMarker(new MarkerOptions().position(sydney).title("Starting Point").snippet("You started your running journey from this point."));
+        Drawable drawable = getResources().getDrawable(R.drawable.marker_green);
+        drawable.setBounds(0, 0, (int)(drawable.getIntrinsicWidth()*0.5),
+                (int)(drawable.getIntrinsicHeight()*0.5));
+        ScaleDrawable sd = new ScaleDrawable(drawable, 0, 0.5f, 0.5f);
+            googleMap.addMarker(new MarkerOptions().position(sydney).title("Starting Point").snippet("You started your running journey from this point.").icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_green)));
 
-            CameraPosition cameraPosition = new CameraPosition.Builder().target(sydney).zoom(30).build();
+            CameraPosition cameraPosition = new CameraPosition.Builder().target(sydney).zoom(18).build();
             googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-        CameraUpdate zoom=CameraUpdateFactory.zoomTo(30);
+        CameraUpdate zoom=CameraUpdateFactory.zoomTo(18);
         googleMap.animateCamera(zoom);
 
        /* points.clear();
@@ -447,6 +507,19 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
 
 
 
+    }
+
+    private void updateMarkers(){
+        for (int i =0;i <mapsMarkers.size();i++){
+            Toast.makeText(getContext(), String.valueOf(i),Toast.LENGTH_SHORT).show();
+            LatLng latLng = new LatLng(mapsMarkers.get(i).getLatitude(),mapsMarkers.get(i).getLongitude());
+            CircleOptions circleOptions = new CircleOptions().center(latLng).radius(3).fillColor(R.color.marker_red_fill).strokeColor(R.color.marker_red_stroke).strokeWidth(8);
+            googleMap.addCircle(circleOptions);
+
+            /*googleMap.addMarker(new MarkerOptions()
+                    .position(latLng)
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_green)));*/
+        }
     }
 
     private void redrawLine(){
@@ -462,6 +535,12 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
         if(!myService.isPaused()){
 
             googleMap.clear();
+            updateMarkers();
+            LatLng latLng = new LatLng(myService.getLatitude(),myService.getLongitude());
+            CircleOptions circleOptions = new CircleOptions().center(latLng).radius(3).fillColor(R.color.marker_red_fill).strokeColor(R.color.marker_red_stroke).strokeWidth(8);
+            googleMap.addCircle(circleOptions);
+
+
 
             CameraUpdate center=
                     CameraUpdateFactory.newLatLng(new LatLng(myService.getLatitude(),myService.getLongitude()));

@@ -17,6 +17,13 @@ public class Constants {
     public static final String HIP_SIZE = "hip";
     public static final int RC_SIGN_IN = 400;
     public static final String GPS_UPDATE = "tech.ios.benefit.android.action.broadcast";
+    public static final String GPS_CONNECTED = "gpsconnected";
+    public static final String GPS_IS_UPDATED = "gpsisupdated";
+    public static final String GPS_ONLY_LOCATION_CHANGE = "gpsisupdated";
+
+
+
+
 
     public static final int DATABASE_VERSION= 1;
     public static final String DATABASE_NAME = "userDB";

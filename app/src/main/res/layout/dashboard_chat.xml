@@ -73,11 +73,10 @@
     </android.support.v7.widget.CardView>
 
     <com.stfalcon.chatkit.messages.MessageInput
-        android:id="@+id/mmessagesInput"
+        android:id="@+id/messagesInput"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         app:inputHint="Type a message"
-        app:showAttachmentButton="true">
-    </com.stfalcon.chatkit.messages.MessageInput>
+        app:showAttachmentButton="true"></com.stfalcon.chatkit.messages.MessageInput>
 </RelativeLayout>

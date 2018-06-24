@@ -36,4 +36,7 @@
     <color name="username10">#a700ff</color>
     <color name="username11">#d300e7</color>
 
+    <color name="marker_red_fill">#ff5252</color>
+    <color name="marker_red_stroke">#bf430101</color>
+
 </resources>

@@ -26,7 +26,8 @@ public class OnBoardingActivity extends AppCompatActivity
     private static final int PERMISSION_REQUEST_CODE = 1;
     String p1 = android.Manifest.permission.CAMERA, p2 = android.Manifest.permission.ACCESS_FINE_LOCATION,
             p3 = android.Manifest.permission.ACCESS_COARSE_LOCATION, p4 = android.Manifest.permission.READ_EXTERNAL_STORAGE,
-            p5 = android.Manifest.permission.WRITE_EXTERNAL_STORAGE ;
+            p5 = android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)

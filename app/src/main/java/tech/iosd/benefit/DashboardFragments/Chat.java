@@ -407,7 +407,7 @@ public class Chat extends Fragment
         mMessagesView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mMessagesView.setAdapter(mAdapter);
         //messagesList.setAdapter(adapter);
-        MessageInput messageInput = rootView.findViewById(R.id.mmessageInput);
+        MessageInput messageInput = rootView.findViewById(R.id.messageInput);
         mInputMessageView = messageInput.getInputEditText();
 
         messageInput.getButton().setOnClickListener(new View.OnClickListener() {
