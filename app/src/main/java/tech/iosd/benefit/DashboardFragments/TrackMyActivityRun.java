@@ -527,6 +527,7 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
         points = myService.getPoints();
 
         double distance_number ;
+
         distance_number = SphericalUtil.computeLength(points);
 
         //lastDistance = distance_number - distace_paused;
@@ -563,7 +564,7 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
             fistPuase =true;
             polyline = googleMap.addPolyline(options); //add Polyline
 
-            distance.setText(String.valueOf(distance_number-distace_paused));
+            distance.setText(String.format("%.1f",(distance_number-distace_paused)/1000));
 
         }else {
             if (fistPuase){
