@@ -3,18 +3,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-<!--
+
     <com.stfalcon.chatkit.messages.MessagesList
         android:id="@+id/messagesList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="60dp"/>-->
+        android:layout_marginBottom="60dp"/>
+    <!--
     <android.support.v7.widget.RecyclerView
         android:id="@+id/messagesList"
 
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="60dp"/>
+        android:layout_marginBottom="60dp"/>-->
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
@@ -73,10 +74,10 @@
     </android.support.v7.widget.CardView>
 
     <com.stfalcon.chatkit.messages.MessageInput
-        android:id="@+id/messagesInput"
+        android:id="@+id/messages_input"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         app:inputHint="Type a message"
-        app:showAttachmentButton="true"></com.stfalcon.chatkit.messages.MessageInput>
+        app:showAttachmentButton="false" />
 </RelativeLayout>

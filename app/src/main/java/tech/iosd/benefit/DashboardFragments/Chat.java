@@ -44,11 +44,11 @@ import io.socket.emitter.Emitter;
 import tech.iosd.benefit.Adapters.MessageAdapter;
 import tech.iosd.benefit.Author;
 import tech.iosd.benefit.Chat.ChatApplication;
-import tech.iosd.benefit.Chat.Message;
+import tech.iosd.benefit.Message;
 import tech.iosd.benefit.Model.DatabaseHandler;
 import tech.iosd.benefit.R;
 
-public class Chat extends Fragment
+public class Chat extends Fragment implements MessageInput.InputListener
 {
     Context ctx;
     FragmentManager fm;
@@ -63,9 +63,9 @@ public class Chat extends Fragment
 
     private static final int TYPING_TIMER_LENGTH = 600;
 
-    private RecyclerView mMessagesView;
+    private MessagesList mMessagesView;
     private EditText mInputMessageView;
-    private List<Message> mMessages = new ArrayList<Message>();
+    //private List<Message> mMessages = new ArrayList<Message>();
     private RecyclerView.Adapter mAdapter;
     private boolean mTyping = false;
     private Handler mTypingHandler = new Handler();
@@ -73,6 +73,8 @@ public class Chat extends Fragment
     private Socket mSocket;
 
     private Boolean isConnected = true;
+    private MessagesListAdapter<Message> adapter;
+    private MessageInput messageInput;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,7 +108,7 @@ public class Chat extends Fragment
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        mAdapter = new MessageAdapter(context, mMessages);
+        //mAdapter = new MessageAdapter(context, mMessages);
         if (context instanceof Activity){
             //this.listener = (MainActivity) context;
         }
@@ -142,10 +144,10 @@ public class Chat extends Fragment
     };
 
     private void addLog(String message) {
-        mMessages.add(new Message.Builder(Message.TYPE_LOG)
+        /*mMessages.add(new Message.Builder(Message.TYPE_LOG)
                 .message(message).build());
         mAdapter.notifyItemInserted(mMessages.size() - 1);
-        scrollToBottom();
+        scrollToBottom();*/
     }
 
     private void addParticipantsLog(int numUsers) {
@@ -154,42 +156,43 @@ public class Chat extends Fragment
     }
 
     private void addMessage(String username, String message) {
-        mMessages.add(new Message.Builder(Message.TYPE_MESSAGE)
+        /*mMessages.add(new Message.Builder(Message.TYPE_MESSAGE)
                 .username(username).message(message).build());
-        mAdapter.notifyItemInserted(mMessages.size() - 1);
+        mAdapter.notifyItemInserted(mMessages.size() - 1);*/
+
         scrollToBottom();
     }
 
     private void addTyping(String username) {
-        mMessages.add(new Message.Builder(Message.TYPE_ACTION)
+        /*mMessages.add(new Message.Builder(Message.TYPE_ACTION)
                 .username(username).build());
         mAdapter.notifyItemInserted(mMessages.size() - 1);
-        scrollToBottom();
+        scrollToBottom();*/
     }
 
     private void removeTyping(String username) {
-        for (int i = mMessages.size() - 1; i >= 0; i--) {
+        /*for (int i = mMessages.size() - 1; i >= 0; i--) {
             Message message = mMessages.get(i);
             if (message.getType() == Message.TYPE_ACTION && message.getUsername().equals(username)) {
                 mMessages.remove(i);
                 mAdapter.notifyItemRemoved(i);
             }
-        }
+        }*/
     }
 
-    private void attemptSend() {
+    private void attemptSend(String msg) {
         if (null == mUsername) return;
         if (!mSocket.connected()) return;
 
         mTyping = false;
 
-        String message = mInputMessageView.getText().toString().trim();
-        if (TextUtils.isEmpty(message)) {
+        String message = msg.trim();
+        /*if (TextUtils.isEmpty(message)) {
             mInputMessageView.requestFocus();
             return;
-        }
+        }*/
 
-        mInputMessageView.setText("");
+        //mInputMessageView.setText("");
         addMessage(mUsername, message);
 
         mSocket.emit("new message", message);
@@ -393,30 +396,39 @@ public class Chat extends Fragment
         };
 
 
-        //MessagesListAdapter<Message> adapter = new MessagesListAdapter<>("0", imageLoader);
+        adapter = new MessagesListAdapter<>("0", imageLoader);
 
         //Demo Code
         Author coach = new Author("50", "Ankit Priyarup", "https://graph.facebook.com/100002080115387/picture?type=square");
         Author me = new Author("51", "Me");
 
-        //adapter.addToStart(new Message("0", "Hello", coach, Calendar.getInstance().getTime()), true);
-        //adapter.addToStart(new Message("1", "I'm your coach and i am here to help you out", coach, Calendar.getInstance().getTime()), true);
+        adapter.addToStart(new Message("0", "Hello", coach, Calendar.getInstance().getTime()), true);
+        adapter.addToStart(new Message("1", "I'm your coach and i am here to help you out", me, Calendar.getInstance().getTime()), true);
         //
+
 
         mMessagesView = rootView.findViewById(R.id.messagesList);
         mMessagesView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mMessagesView.setAdapter(mAdapter);
-        //messagesList.setAdapter(adapter);
-        MessageInput messageInput = rootView.findViewById(R.id.messageInput);
+        //mMessagesView.setAdapter(mAdapter);
+        mMessagesView.setAdapter(adapter);
+        messageInput = rootView.findViewById(R.id.messages_input);
         mInputMessageView = messageInput.getInputEditText();
 
         messageInput.getButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                attemptSend();
 
             }
         });
         return rootView;
+    }
+
+    @Override
+    public boolean onSubmit(CharSequence input) {
+
+        String msg  = input.toString();
+        attemptSend(msg);
+
+        return true;
     }
 }

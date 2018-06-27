@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import tech.iosd.benefit.Chat.Message;
 import tech.iosd.benefit.R;
 
 /**
@@ -18,9 +17,9 @@ import tech.iosd.benefit.R;
 
 
 
-public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
+public class MessageAdapter  {
 
-    private List<Message> mMessages;
+    /*private List<Message> mMessages;
     private int[] mUsernameColors;
 
     public MessageAdapter(Context context, List<Message> messages) {
@@ -95,5 +94,5 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
             int index = Math.abs(hash % mUsernameColors.length);
             return mUsernameColors[index];
         }
-    }
+    }*/
 }
