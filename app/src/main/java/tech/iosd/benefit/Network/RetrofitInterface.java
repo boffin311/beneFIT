@@ -22,6 +22,7 @@ import tech.iosd.benefit.Model.ResponseForMeasurementsUpdate;
 import tech.iosd.benefit.Model.ResponseForMesurementsHistory;
 import tech.iosd.benefit.Model.ResponseForSuccess;
 import tech.iosd.benefit.Model.ResponseForUpdate;
+import tech.iosd.benefit.Model.ResponseForWorkoutForDate;
 import tech.iosd.benefit.Model.User;
 import tech.iosd.benefit.Model.UserDetails;
 import tech.iosd.benefit.Model.UserForLogin;
@@ -53,6 +54,9 @@ public interface RetrofitInterface {
 
     @GET("mealLog/food/search/{name}")
     Observable<ResponseForFoodSearch> getFoodList(@Path("name") String name, @Header("Authorization") String token);
+
+    @GET("workout/user/get")
+    Observable<ResponseForWorkoutForDate> getWorkoutforDate(@Query("date") String date, @Header("Authorization") String token);
 
     @GET("mealLog/details")
     Observable<ResponseForGetMeal> getFoodMeal(@Query("date") String date, @Query("type") String type, @Header("Authorization") String token);

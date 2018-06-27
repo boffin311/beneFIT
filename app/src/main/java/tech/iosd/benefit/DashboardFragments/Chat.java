@@ -412,8 +412,7 @@ public class Chat extends Fragment implements MessageInput.InputListener
         //mMessagesView.setAdapter(mAdapter);
         mMessagesView.setAdapter(adapter);
         messageInput = rootView.findViewById(R.id.messages_input);
-        mInputMessageView = messageInput.getInputEditText();
-
+        //mInputMessageView = messageInput.getInputEditText();
         messageInput.getButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
