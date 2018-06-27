@@ -492,7 +492,7 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
         drawable.setBounds(0, 0, (int)(drawable.getIntrinsicWidth()*0.5),
                 (int)(drawable.getIntrinsicHeight()*0.5));
         ScaleDrawable sd = new ScaleDrawable(drawable, 0, 0.5f, 0.5f);
-            googleMap.addMarker(new MarkerOptions().position(sydney).title("Starting Point").snippet("You started your running journey from this point.").icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_green)));
+            //googleMap.addMarker(new MarkerOptions().position(sydney).title("Starting Point").snippet("You started your running journey from this point.").icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_green)));
 
             CameraPosition cameraPosition = new CameraPosition.Builder().target(sydney).zoom(18).build();
             googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
