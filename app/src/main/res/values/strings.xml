@@ -63,8 +63,9 @@
     <string name="bmi_obesity">OBESITY</string>
     <string name="bmi_obesity_details">Advise - Increase physical activity and improve diet.  D. Range 30.0 and above Advise - Shed some weight down, limit your calorie intake, Exercise regular and improve your metabolism.</string>
 
+    <string name="description">Media Controls</string>
+
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-
 </resources>
