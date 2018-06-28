@@ -177,11 +177,12 @@
                     android:layout_height="1dp"/>
 
                 <TextView
+                    android:id="@+id/videoplayerTest"
                     android:padding="5dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:drawableEnd="@drawable/ic_add_attachment"
-                    android:text="Rist" />
+                    android:text="VideoPlayer test " />
 
 
             </LinearLayout>
