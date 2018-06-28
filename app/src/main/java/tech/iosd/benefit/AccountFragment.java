@@ -45,6 +45,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
+import tech.iosd.benefit.VideoPlayer.VideoPlayerActivity;
+
 public class AccountFragment extends Fragment implements
     GoogleApiClient.ConnectionCallbacks,
     GoogleApiClient.OnConnectionFailedListener{
@@ -53,9 +55,6 @@ public class AccountFragment extends Fragment implements
     FragmentManager fm;
 
     TextView googleFit;
-    public AccountFragment() {
-        // Required empty public constructor
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -65,11 +64,24 @@ public class AccountFragment extends Fragment implements
         fm = getFragmentManager();
         googleFit = rootView.findViewById(R.id.googleFit);
 
+        TextView videoplayerTest = rootView.findViewById(R.id.videoplayerTest);
+        videoplayerTest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getContext(), VideoPlayerActivity.class));
+            }
+        });
 
+
+        //permissions required from user...
         FitnessOptions fitnessOptions = FitnessOptions.builder()
                 .addDataType(DataType.TYPE_STEP_COUNT_DELTA, FitnessOptions.ACCESS_READ)
                 .addDataType(DataType.AGGREGATE_STEP_COUNT_DELTA, FitnessOptions.ACCESS_READ)
                 .addDataType(DataType.TYPE_DISTANCE_DELTA,FitnessOptions.ACCESS_READ)
+                .addDataType(DataType.TYPE_HEIGHT,FitnessOptions.ACCESS_READ)
+                .addDataType(DataType.TYPE_HEIGHT,FitnessOptions.ACCESS_WRITE)
+                .addDataType(DataType.TYPE_WEIGHT,FitnessOptions.ACCESS_READ)
+                .addDataType(DataType.TYPE_WEIGHT,FitnessOptions.ACCESS_WRITE)
                 .build();
 
         if (GoogleSignIn.hasPermissions(GoogleSignIn.getLastSignedInAccount(getActivity()), fitnessOptions)) {
