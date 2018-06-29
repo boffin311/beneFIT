@@ -16,6 +16,8 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            multiDexEnabled true
+
         }
     }
     compileOptions {
@@ -97,10 +99,8 @@ dependencies {
     }
 
     compile 'com.auth0.android:jwtdecode:1.1.1'
-
-
-
-
+    compile 'com.android.support:multidex:1.0.0'
+    compile 'com.mani:ThinDownloadManager:1.4.0'
 
     testCompile 'junit:junit:4.12'
 }

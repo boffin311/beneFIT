@@ -17,6 +17,7 @@ import tech.iosd.benefit.Model.BodyForMealLog;
 import tech.iosd.benefit.Model.Measurements;
 import tech.iosd.benefit.Model.Response;
 import tech.iosd.benefit.Model.ResponseForFoodSearch;
+import tech.iosd.benefit.Model.ResponseForGetExcerciseVideoUrl;
 import tech.iosd.benefit.Model.ResponseForGetMeal;
 import tech.iosd.benefit.Model.ResponseForMeasurementsUpdate;
 import tech.iosd.benefit.Model.ResponseForMesurementsHistory;
@@ -64,6 +65,8 @@ public interface RetrofitInterface {
     @POST("mealLog/details")
     Observable<ResponseForSuccess> sendFoodMeal(@Body BodyForMealLog bodyForMealLog, @Header("Authorization") String token);
 
+    @GET("workout/exercise/{url}/url")
+    Observable<ResponseForGetExcerciseVideoUrl> getExerciseVideoUrl(@Path("url") String url, @Header("Authorization") String token);
     /*@GET("users/{email}")
     Observable<User> getProfile(@Path("email") String email);*/
 

@@ -282,10 +282,23 @@
             </LinearLayout>
         </android.support.v7.widget.CardView>
 
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/dashboard_my_workouts_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="none" />
+        <Button
+            android:id="@+id/dashboard_my_workouts_start_workout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/proxima_nova"
+            android:textStyle="bold"
+            android:text="START WORKOUT"
+            android:background="@drawable/button_style_grey"
+            android:textColor="@color/colorClear"
+            android:paddingStart="50dp"
+            android:paddingEnd="50dp"/>
     </LinearLayout>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/dashboard_my_workouts_recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+
 </ScrollView>
