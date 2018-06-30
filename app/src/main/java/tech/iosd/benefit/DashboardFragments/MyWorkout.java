@@ -160,25 +160,33 @@ public class MyWorkout extends Fragment
     }
 
     private int getNumberOfDifferntId(){
+        ArrayList <String> stringForCheck =  new ArrayList<>();
         int value =0;
         for (int i = 0; i<exercises.size();i++){
             String id = exercises.get(i).getExercise().get_id();
             value++;
-            for(int j =0;j<exercises.size();j++){
-                if (j == i){
+            for(int j =0;j<stringForCheck.size();j++){
+                if(stringForCheck.size() == 0){
+                    stringForCheck.add(id);
+                }else if(stringForCheck.get(j).equals(id)){
+                    break;
+                }else if(j== stringForCheck.size()-1){
+                    stringForCheck.add(id);
+                }
+               /* if (j == i){
                     continue;
                 }
                 if (id.equals(exercises.get(j).getExercise().get_id())){
                     value--;
                     break;
-                }
+                }*/
                 /*if(j == exercises.size()-1){
                     value++;
                 }*/
             }
         }
 
-        return value;
+        return stringForCheck.size();
     }
     private void downloadFiles() {
         if (currentPosition>=exercises.size()){
@@ -211,7 +219,6 @@ public class MyWorkout extends Fragment
     }
 
     private void handleResponseGetMeal(ResponseForWorkoutForDate responseForWorkoutForDate) {
-        noOfDiffId = getNumberOfDifferntId();
         progressDialog.hide();
         if (!responseForWorkoutForDate.isSuccess()){
             return;
@@ -223,6 +230,8 @@ public class MyWorkout extends Fragment
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
         recyclerView.getLayoutParams().height = 210*exercises.size();
+        noOfDiffId = getNumberOfDifferntId();
+
     }
 
     private void handleErrorGetMeal(Throwable error) {
