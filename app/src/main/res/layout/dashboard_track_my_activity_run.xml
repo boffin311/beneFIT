@@ -328,7 +328,7 @@
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="-5dp"
                     android:fontFamily="@font/oswald"
-                    android:text="Distance (M)"
+                    android:text="KM"
                     android:textAllCaps="true"
                     android:textColor="@color/colorGreyOnBoard"
                     android:textSize="16sp" />

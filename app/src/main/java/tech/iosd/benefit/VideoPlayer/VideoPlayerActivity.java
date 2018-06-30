@@ -3,6 +3,7 @@ package tech.iosd.benefit.VideoPlayer;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -59,7 +60,7 @@ public class VideoPlayerActivity extends Activity implements SurfaceHolder.Callb
     int tottalReps = 4;
     private TextToSpeech tts;
     int flag = 0;
-
+    String videoLoaction = new String();
     CheckBox soundOn;
     Boolean isSoundOn = true;
     @Override
@@ -122,6 +123,14 @@ public class VideoPlayerActivity extends Activity implements SurfaceHolder.Callb
 //        } catch (IOException e) {
 //            e.printStackTrace();
 //        }
+
+        Bundle bundle = getIntent().getExtras();
+        if (bundle== null){
+            finish();
+        }
+        else {
+            videoLoaction = bundle.getString("url");
+        }
     }
 
     @Override
