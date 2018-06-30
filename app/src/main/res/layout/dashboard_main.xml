@@ -38,8 +38,8 @@
                     android:fontFamily="@font/oswald"
                     android:text="Workouts"
                     android:textAllCaps="true"
-                    android:textColor="@color/white"
-                    android:textSize="22sp"
+                    android:textColor="@color/colorFadedWhite"
+                    android:textSize="20sp"
                     android:layout_marginBottom="12dp"
                     android:textStyle="bold"/>
 
@@ -76,8 +76,8 @@
                     android:fontFamily="@font/oswald"
                     android:text="Nutrition"
                     android:textAllCaps="true"
-                    android:textColor="@color/white"
-                    android:textSize="22sp"
+                    android:textColor="@color/colorFadedWhite"
+                    android:textSize="20sp"
                     android:layout_marginBottom="12dp"
                     android:textStyle="bold"/>
 
@@ -122,8 +122,8 @@
                     android:fontFamily="@font/oswald"
                     android:text="Track AND LOG"
                     android:textAllCaps="true"
-                    android:textColor="@color/white"
-                    android:textSize="22sp"
+                    android:textColor="@color/colorFadedWhite"
+                    android:textSize="20sp"
                     android:layout_marginBottom="12dp"
                     android:textStyle="bold"/>
 
@@ -160,8 +160,8 @@
                     android:fontFamily="@font/oswald"
                     android:text="MEASUREMENT"
                     android:textAllCaps="true"
-                    android:textColor="@color/white"
-                    android:textSize="22sp"
+                    android:textColor="@color/colorFadedWhite"
+                    android:textSize="20sp"
                     android:layout_marginBottom="12dp"
                     android:textStyle="bold"/>
 
@@ -204,8 +204,8 @@
                     android:fontFamily="@font/oswald"
                     android:text="Challenges"
                     android:textAllCaps="true"
-                    android:textColor="@color/white"
-                    android:textSize="22sp"
+                    android:textColor="@color/colorFadedWhite"
+                    android:textSize="20sp"
                     android:textAlignment="center"
                     android:layout_marginBottom="12dp"
                     android:textStyle="bold"/>

@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         android:background="#ededed">
 
@@ -14,8 +14,7 @@
             android:id="@+id/dashboard_workout_my_workouts"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            app:cardElevation="2dp"
+            app:cardElevation="1dp"
             app:cardBackgroundColor="#f7f7f7">
 
             <RelativeLayout
@@ -23,8 +22,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="25dp"
                 android:layout_marginEnd="25dp"
-                android:layout_marginTop="14dp"
-                android:layout_marginBottom="14dp">
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp">
 
                 <ImageView
                     android:id="@+id/workout_icon"
@@ -69,7 +68,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            app:cardElevation="2dp"
+            app:cardElevation="1dp"
             app:cardBackgroundColor="#f7f7f7">
 
             <RelativeLayout
@@ -77,19 +76,19 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="25dp"
                 android:layout_marginEnd="25dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp">
+                android:layout_marginTop="18dp"
+                android:layout_marginBottom="18dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     android:text="Free workouts"
                     android:textAllCaps="true"
                     android:layout_centerVertical="true"
                     android:fontFamily="@font/oswald"
                     android:textStyle="bold"
-                    android:textColor="#000000"
+                    android:textColor="@color/colorPrimaryDark"
                     android:layout_marginStart="10dp"/>
             </RelativeLayout>
         </android.support.v7.widget.CardView>
