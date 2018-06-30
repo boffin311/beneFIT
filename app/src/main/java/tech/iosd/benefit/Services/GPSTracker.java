@@ -2,18 +2,26 @@ package tech.iosd.benefit.Services;
 
 import java.util.ArrayList;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.app.Service;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.location.Location;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.util.FloatMath;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -26,6 +34,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.location.LocationListener;
 import com.google.maps.android.SphericalUtil;
 
+import tech.iosd.benefit.Model.MapsMarker;
 import tech.iosd.benefit.Utils.Constants;
 
 /**
@@ -34,7 +43,8 @@ import tech.iosd.benefit.Utils.Constants;
 public class GPSTracker extends Service implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
-        LocationListener {
+        LocationListener,
+        SensorEventListener {
     private Context mContext;
 
     private double latitude, longitude;
@@ -44,26 +54,35 @@ public class GPSTracker extends Service implements
 
     private boolean isPaused = false;
     ProgressDialog progressDialog;
+    public boolean isGoogleAPIConnected = false;
 
 
-
-    private static final long INTERVAL = 1000 * 10;
-    private static final long FASTEST_INTERVAL = 1000 * 5;
+    private static final long INTERVAL = 1500;
+    private static final long FASTEST_INTERVAL = 1000;
     LocationRequest mLocationRequest;
     GoogleApiClient mGoogleApiClient;
     Location mCurrentLocation, lStart, lEnd;
     static double distance = 0;
     private double lastDistance = 0;
-    private double lastLongitude =0;
-    private double lastLatitude =0;
+    private double lastLongitude = 0;
+    private double lastLatitude = 0;
     double speed;
+
+    private SensorManager sensorMan;
+    private Sensor accelerometer;
+
+    private float[] mGravity;
+    private float mAccel;
+    private float mAccelCurrent;
+    private float mAccelLast;
+    boolean isMovement = false;
+
 
     private final IBinder mBinder = new LocalBinder();
 
 
-
     public void stopLocationUpdates() {
-        Toast.makeText(this,"stopeed",Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "stopeed", Toast.LENGTH_LONG).show();
 
         LocationServices.FusedLocationApi.removeLocationUpdates(
                 mGoogleApiClient, this);
@@ -72,10 +91,23 @@ public class GPSTracker extends Service implements
     }
 
     @Override
-    public void onCreate(){
+    public void onCreate() {
         super.onCreate();
-        points =  new ArrayList<>();
-        pointsForLastDistance =  new ArrayList<>();
+        points = new ArrayList<>();
+        pointsForLastDistance = new ArrayList<>();
+
+        sensorMan = (SensorManager) getSystemService(SENSOR_SERVICE);
+        if (sensorMan == null) {
+            //Toast.makeText(this,"null sensor man",Toast.LENGTH_LONG).show();
+
+        }
+        accelerometer = sensorMan.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        mAccel = 0.00f;
+        mAccelCurrent = SensorManager.GRAVITY_EARTH;
+        mAccelLast = SensorManager.GRAVITY_EARTH;
+
+        sensorMan.registerListener(this, accelerometer,
+                SensorManager.SENSOR_DELAY_UI);
 
     }
 
@@ -121,9 +153,35 @@ public class GPSTracker extends Service implements
     @Override
     public void onConnected(Bundle bundle) {
 
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+        if (location != null) {
+
+            latitude = location.getLatitude();
+            longitude = location.getLongitude();
+            isGoogleAPIConnected = true;
+
+            Intent broadcastIntent = new Intent();
+            broadcastIntent.putExtra("key", Constants.GPS_CONNECTED);
+            broadcastIntent.setAction(Constants.GPS_UPDATE);
+            sendBroadcast(broadcastIntent);
+
+        } else {
+            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+        }
+/*
         try {
-            LocationServices.FusedLocationApi.requestLocationUpdates(
-                    mGoogleApiClient, mLocationRequest, this);
+
             Toast.makeText(this,"onconnecyed",Toast.LENGTH_LONG).show();
             if (mGoogleApiClient.isConnected()) {
                 Toast.makeText(this,"GoogleApiClient  connected",Toast.LENGTH_LONG).show();
@@ -135,8 +193,40 @@ public class GPSTracker extends Service implements
 
 
         } catch (SecurityException e) {
+        }*/
+
+    }
+
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+            mGravity = event.values.clone();
+            // Shake detection
+            float x = mGravity[0];
+            float y = mGravity[1];
+            float z = mGravity[2];
+            mAccelLast = mAccelCurrent;
+            mAccelCurrent = (float) Math.sqrt(x * x + y * y + z * z);
+            // Toast.makeText(this,"senser acc: "+ mAccel,Toast.LENGTH_SHORT).show();
+
+            float delta = mAccelCurrent - mAccelLast;
+            mAccel = mAccel * 0.9f + delta;
+            // Make this higher or lower according to how much
+            // motion you want to detect
+            Log.d("sensor", String.valueOf(Math.abs(mAccel)));
+
+            if (Math.abs(mAccel) > 1) {
+                // do something
+                // Toast.makeText(mContext,"senser acc: "+ Math.abs(mAccel),Toast.LENGTH_SHORT).show();
+            }
         }
 
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+        // required method
     }
 
     @Override
@@ -146,22 +236,34 @@ public class GPSTracker extends Service implements
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-        Toast.makeText(this,connectionResult.getErrorMessage(),Toast.LENGTH_LONG).show();
+        Toast.makeText(this, connectionResult.getErrorMessage(), Toast.LENGTH_LONG).show();
         Log.d("error77", connectionResult.getErrorMessage());
     }
+
     @Override
     public void onLocationChanged(Location location) {
-        mCurrentLocation = location;
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        ;
 
         latitude = mCurrentLocation.getLatitude();
         longitude = mCurrentLocation.getLongitude();
-        Toast.makeText(this, "Location accuracy: "+String.valueOf(location.getAccuracy()), Toast.LENGTH_SHORT).show();
+      //  Toast.makeText(this, "Location accuracy: "+String.valueOf(mCurrentLocation.getAccuracy()), Toast.LENGTH_SHORT).show();
 
 
         if(isPaused){
-            progressDialog.hide();
+            //progressDialog.hide();
         }
-        if(location.getAccuracy()<20){
+        if(mCurrentLocation.getAccuracy()<20){
             progressDialog.hide();
             pointsForLastDistance.clear();
             pointsForLastDistance.add(new LatLng(latitude,longitude));
@@ -169,7 +271,7 @@ public class GPSTracker extends Service implements
 
             double dist = SphericalUtil.computeLength(pointsForLastDistance);
             if(Math.abs(dist - lastDistance) <1){
-                Toast.makeText(this, "user not moving "+ dist +"-"+ lastDistance+"="+(dist - lastDistance), Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "speed too slow have run..", Toast.LENGTH_SHORT).show();
                 lastDistance = dist;
                 lastLatitude =  latitude;
                 lastLongitude =  longitude;
@@ -182,22 +284,29 @@ public class GPSTracker extends Service implements
 
 
             if(isPaused()){
-                points.add(new LatLng(mCurrentLocation.getLatitude(),mCurrentLocation.getLongitude()));
+                //points.add(new LatLng(mCurrentLocation.getLatitude(),mCurrentLocation.getLongitude()));
 
                 Intent broadcastIntent = new Intent();
+               // broadcastIntent.setType(Constants.GPS_ONLY_LOCATION_CHANGE);
+                broadcastIntent.putExtra("key",Constants.GPS_ONLY_LOCATION_CHANGE);
                 broadcastIntent.setAction(Constants.GPS_UPDATE);
+
                 sendBroadcast(broadcastIntent);
                 speed = 0;
             }else {
                 points.add(new LatLng(mCurrentLocation.getLatitude(),mCurrentLocation.getLongitude()));
 
                 Intent broadcastIntent = new Intent();
+                broadcastIntent.putExtra("key",Constants.GPS_IS_UPDATED);
+
                 broadcastIntent.setAction(Constants.GPS_UPDATE);
                 sendBroadcast(broadcastIntent);
                 speed = location.getSpeed() * 18 / 5;
             }
         }else {
-             progressDialog.show();
+             //progressDialog.show();
+            Toast.makeText(this, "low accuracy", Toast.LENGTH_SHORT).show();
+
         }
 
 
@@ -240,6 +349,7 @@ public class GPSTracker extends Service implements
     }
     public void stoptacking(){
         points.clear();
+        distance =0;
         isPaused = true;
     }
 
@@ -258,7 +368,7 @@ public class GPSTracker extends Service implements
         mLocationRequest.setFastestInterval(FASTEST_INTERVAL);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         if(mLocationRequest != null){
-            Toast.makeText(this,"connected gps",Toast.LENGTH_LONG).show();
+          //  Toast.makeText(this,"connected gps",Toast.LENGTH_LONG).show();
            // latitude = mCurrentLocation.getLatitude();
         //    longitude = mCurrentLocation.getLongitude();
         }
@@ -277,7 +387,7 @@ public class GPSTracker extends Service implements
         mGoogleApiClient.connect();
 
         if (!mGoogleApiClient.isConnected()) {
-            Toast.makeText(this,"GoogleApiClient not yet connected",Toast.LENGTH_LONG).show();
+           // Toast.makeText(this,"GoogleApiClient not yet connected",Toast.LENGTH_LONG).show();
 
             mGoogleApiClient.connect(); // connect it here..
 

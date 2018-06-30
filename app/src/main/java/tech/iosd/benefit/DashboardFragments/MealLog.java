@@ -315,9 +315,6 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
                 updateUI(Constants.LUNCH);
                 updateUI(Constants.SNACKS);
 
-
-
-
             }
         });
 
