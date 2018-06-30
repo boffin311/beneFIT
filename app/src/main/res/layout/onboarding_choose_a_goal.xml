@@ -8,14 +8,14 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="0dp"
+        android:layout_marginBottom="20dp"
         android:layout_marginTop="30dp"
         android:fontFamily="@font/oswald"
         android:text="@string/choose_goals_title"
         android:textAlignment="center"
         android:textAllCaps="true"
         android:textColor="@color/colorPrimary"
-        android:textSize="30sp"
+        android:textSize="25sp"
         android:textStyle="bold" />
 
     <TextView
@@ -29,11 +29,47 @@
         android:text="@string/choose_goals_desc"
         android:textColor="@color/colorPrimary"/>
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/get_started_pager_indicator1"
+            android:layout_width="8dp"
+            android:layout_height="8dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginStart="2dp"
+            android:src="@drawable/circle"
+            android:contentDescription="@null"/>
+
+        <ImageView
+            android:id="@+id/get_started_pager_indicator2"
+            android:layout_width="8dp"
+            android:layout_height="8dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginStart="2dp"
+            android:src="@drawable/circle"
+            android:contentDescription="@null"/>
+
+        <ImageView
+            android:id="@+id/get_started_pager_indicator3"
+            android:layout_width="8dp"
+            android:layout_height="8dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginStart="2dp"
+            android:src="@drawable/circle"
+            android:contentDescription="@null"/>
+    </LinearLayout>
+
+
     <android.support.v4.view.ViewPager
         android:id="@+id/get_started_goals_pager"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:layout_weight="4"
         android:background="@color/white" />
 
@@ -42,40 +78,6 @@
         android:layout_height="0dp"
         android:layout_weight="2">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_centerHorizontal="true"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:id="@+id/get_started_pager_indicator1"
-                android:layout_width="8dp"
-                android:layout_height="8dp"
-                android:layout_marginEnd="2dp"
-                android:layout_marginStart="2dp"
-                android:src="@drawable/circle"
-                android:contentDescription="@null"/>
-
-            <ImageView
-                android:id="@+id/get_started_pager_indicator2"
-                android:layout_width="8dp"
-                android:layout_height="8dp"
-                android:layout_marginEnd="2dp"
-                android:layout_marginStart="2dp"
-                android:src="@drawable/circle"
-                android:contentDescription="@null"/>
-
-            <ImageView
-                android:id="@+id/get_started_pager_indicator3"
-                android:layout_width="8dp"
-                android:layout_height="8dp"
-                android:layout_marginEnd="2dp"
-                android:layout_marginStart="2dp"
-                android:src="@drawable/circle"
-                android:contentDescription="@null"/>
-        </LinearLayout>
 
         <Button
             android:id="@+id/get_started_continue"
