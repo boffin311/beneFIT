@@ -19,8 +19,8 @@
             android:textAllCaps="true"
             android:fontFamily="@font/oswald"
             android:textStyle="bold"
-            android:textSize="30sp"
-            android:layout_marginTop="20dp"
+            android:textSize="25sp"
+            android:layout_marginTop="30dp"
             android:textColor="@color/colorPrimary"
             android:textAlignment="center"/>
 
@@ -33,7 +33,6 @@
             android:layout_marginEnd="50dp"
             android:fontFamily="@font/proxima_nova"
             android:textColor="@color/colorPrimary"
-            android:textStyle="bold"
             android:text="@string/setup_profile_desc"
             android:textSize="16sp"/>
 
@@ -46,6 +45,7 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="15dp"
                 android:orientation="vertical">
 
                 <android.support.design.widget.FloatingActionButton
@@ -79,6 +79,7 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
                 android:orientation="vertical">
 
                 <android.support.design.widget.FloatingActionButton
@@ -111,6 +112,7 @@
             android:layout_marginStart="50dp"
             android:layout_marginEnd="50dp"
             android:layout_marginBottom="5dp"
+            android:layout_marginTop="48dp"
             android:text="@string/setup_profile_lbl_age"/>
 
         <EditText
@@ -123,7 +125,7 @@
             android:paddingBottom="7dp"
             android:layout_marginStart="50dp"
             android:layout_marginEnd="50dp"
-            android:layout_marginBottom="20dp"
+            android:layout_marginBottom="30dp"
             android:maxLines="1"
             android:hint=""
             android:inputType="number"
@@ -147,7 +149,7 @@
             android:orientation="horizontal"
             android:layout_marginStart="50dp"
             android:layout_marginEnd="50dp"
-            android:layout_marginBottom="20dp">
+            android:layout_marginBottom="30dp">
 
             <TextView
                 android:id="@+id/get_started_profile_setup_height"
@@ -205,7 +207,7 @@
             android:orientation="horizontal"
             android:layout_marginStart="50dp"
             android:layout_marginEnd="50dp"
-            android:layout_marginBottom="20dp">
+            android:layout_marginBottom="30dp">
 
             <TextView
                 android:id="@+id/get_started_profile_setup_weight"
@@ -261,7 +263,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="50dp"
             android:layout_marginEnd="50dp"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="15dp"
             android:orientation="vertical">
 
             <RadioButton
@@ -298,7 +300,7 @@
             android:layout_marginStart="50dp"
             android:layout_marginEnd="50dp"
             android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp">
+            android:layout_marginBottom="50dp">
 
             <Button
                 android:id="@+id/get_started_profile_setup_next"
