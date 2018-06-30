@@ -2,7 +2,9 @@ package tech.iosd.benefit.DashboardFragments;
 
 import android.app.Presentation;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.net.Uri;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.content.Context;
@@ -45,6 +47,7 @@ import tech.iosd.benefit.Adapters.DashboardWorkoutAdapter;
 import tech.iosd.benefit.Model.*;
 import tech.iosd.benefit.Network.NetworkUtil;
 import tech.iosd.benefit.R;
+import tech.iosd.benefit.VideoPlayer.VideoPlayerActivity;
 
 public class MyWorkout extends Fragment
 {
@@ -75,6 +78,7 @@ public class MyWorkout extends Fragment
 
     private int noOfDiffId =0;
     private int noOfCurrentVideUser=0;
+    boolean allVideoDownloaded = false;
 
 
     @Nullable
@@ -188,9 +192,25 @@ public class MyWorkout extends Fragment
 
         return stringForCheck.size();
     }
+    private void showSnackBarMessage(String message) {
+
+        if (getView() != null) {
+
+            Snackbar.make(getView(),message, Snackbar.LENGTH_LONG).show();
+
+        }
+    }
     private void downloadFiles() {
         if (currentPosition>=exercises.size()){
             downloadDialog.hide();
+            if(allVideoDownloaded){
+                Intent intent = new Intent(getActivity().getApplicationContext(), VideoPlayerActivity.class);
+                String dataInString = (new Gson()).toJson(exercises);
+                intent.putExtra("dataFromServer",dataInString);
+                getContext().startActivity(intent);
+            }else {
+                showSnackBarMessage("All files not downloaded.\nPlease try again.");
+            }
             return;
         }
         File file = new File(getActivity().getFilesDir().toString()+"/videos/"+exercises.get(currentPosition).getExercise().get_id()+".mp4");
@@ -312,6 +332,7 @@ public class MyWorkout extends Fragment
                     public void onDownloadComplete(int id) {
                         currentPosition++;
                         Toast.makeText(getActivity().getApplicationContext(),"completed download"+(currentPosition+1),Toast.LENGTH_SHORT).show();
+                        allVideoDownloaded = allVideoDownloaded && true;
                         downloadFiles();
 
                     }
@@ -321,6 +342,8 @@ public class MyWorkout extends Fragment
                         Toast.makeText(getActivity().getApplicationContext(),"failed error in logs TAG error77 ",Toast.LENGTH_SHORT).show();
                         Log.d("error77",errorMessage+"\n"+"of number"+((int)currentPosition+1)+"\nof id: "+exercises.get(currentPosition).getExercise().get_id());
                         currentPosition++;
+                        allVideoDownloaded = allVideoDownloaded && true;
+
                         downloadFiles();
 
                     }
