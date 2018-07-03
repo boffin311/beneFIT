@@ -2,7 +2,9 @@ package tech.iosd.benefit.DashboardFragments;
 
 import android.app.Presentation;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.net.Uri;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.content.Context;
@@ -45,6 +47,7 @@ import tech.iosd.benefit.Adapters.DashboardWorkoutAdapter;
 import tech.iosd.benefit.Model.*;
 import tech.iosd.benefit.Network.NetworkUtil;
 import tech.iosd.benefit.R;
+import tech.iosd.benefit.VideoPlayer.VideoPlayerActivity;
 
 public class MyWorkout extends Fragment
 {
@@ -71,6 +74,11 @@ public class MyWorkout extends Fragment
     private View mView;
     private ProgressBar progressBar;
     private TextView progressTV;
+    private TextView numberOfCurrentVideo;
+
+    private int noOfDiffId =0;
+    private int noOfCurrentVideUser=0;
+    boolean allVideoDownloaded = false;
 
 
     @Nullable
@@ -100,6 +108,8 @@ public class MyWorkout extends Fragment
         mView = getActivity().getLayoutInflater().inflate(R.layout.dialog_download, null);
         progressBar = mView.findViewById(R.id.main_progressbar);
         progressTV =  mView.findViewById(R.id.percentage_tv);
+        numberOfCurrentVideo = mView.findViewById(R.id.currentfileDownload);
+        mBuilder.setView(mView);
         downloadDialog = mBuilder.create();
 
         startWorkout = rootView.findViewById(R.id.dashboard_my_workouts_start_workout);
@@ -107,6 +117,7 @@ public class MyWorkout extends Fragment
             @Override
             public void onClick(View view) {
                 downloadDialog.show();
+                downloadDialog.setCancelable(false);
                 downloadFiles();
             }
         });
@@ -152,18 +163,64 @@ public class MyWorkout extends Fragment
         return rootView;
     }
 
+    private int getNumberOfDifferntId(){
+        ArrayList <String> stringForCheck =  new ArrayList<>();
+        int value =0;
+        for (int i = 0; i<exercises.size();i++){
+            String id = exercises.get(i).getExercise().get_id();
+            value++;
+            for(int j =0;j<stringForCheck.size();j++){
+                if(stringForCheck.size() == 0){
+                    stringForCheck.add(id);
+                }else if(stringForCheck.get(j).equals(id)){
+                    break;
+                }else if(j== stringForCheck.size()-1){
+                    stringForCheck.add(id);
+                }
+               /* if (j == i){
+                    continue;
+                }
+                if (id.equals(exercises.get(j).getExercise().get_id())){
+                    value--;
+                    break;
+                }*/
+                /*if(j == exercises.size()-1){
+                    value++;
+                }*/
+            }
+        }
+
+        return stringForCheck.size();
+    }
+    private void showSnackBarMessage(String message) {
+
+        if (getView() != null) {
+
+            Snackbar.make(getView(),message, Snackbar.LENGTH_LONG).show();
+
+        }
+    }
     private void downloadFiles() {
         if (currentPosition>=exercises.size()){
             downloadDialog.hide();
+            if(allVideoDownloaded){
+                Intent intent = new Intent(getActivity().getApplicationContext(), VideoPlayerActivity.class);
+                String dataInString = (new Gson()).toJson(exercises);
+                intent.putExtra("dataFromServer",dataInString);
+                getContext().startActivity(intent);
+            }else {
+                showSnackBarMessage("All files not downloaded.\nPlease try again.");
+            }
             return;
         }
-        File file = new File(getActivity().getCacheDir().toString()+exercises.get(currentPosition).getExercise().get_id()+".mp4");
+        File file = new File(getActivity().getFilesDir().toString()+"/videos/"+exercises.get(currentPosition).getExercise().get_id()+".mp4");
         if(file.exists()){
             Toast.makeText(getContext(),"file arleady presenet"+(currentPosition+1),Toast.LENGTH_SHORT).show();
             currentPosition++;
-            if(currentPosition<exercises.size()){
+            downloadFiles();
+           /* if(currentPosition<exercises.size()){
                 getExcercise(exercises.get(currentPosition).getExercise().get_id());
-            }
+            }*/
         }
         else{
             getExcercise(exercises.get(currentPosition).getExercise().get_id());
@@ -193,6 +250,8 @@ public class MyWorkout extends Fragment
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
         recyclerView.getLayoutParams().height = 210*exercises.size();
+        noOfDiffId = getNumberOfDifferntId();
+
     }
 
     private void handleErrorGetMeal(Throwable error) {
@@ -261,8 +320,9 @@ public class MyWorkout extends Fragment
         }
     }
     public void getVideo(String url) {
+        noOfCurrentVideUser++;
         Uri downloadUri = Uri.parse(url);
-        Uri destinationUri = Uri.parse(getActivity().getFilesDir().toString()+"/"+exercises.get(currentPosition).getExercise().get_id()+".mp4");
+        Uri destinationUri = Uri.parse(getActivity().getFilesDir().toString()+"/videos/"+exercises.get(currentPosition).getExercise().get_id()+".mp4");
         DownloadRequest downloadRequest = new DownloadRequest(downloadUri)
                 .setRetryPolicy(new DefaultRetryPolicy())
                 .setDestinationURI(destinationUri).setPriority(DownloadRequest.Priority.HIGH)
@@ -272,6 +332,7 @@ public class MyWorkout extends Fragment
                     public void onDownloadComplete(int id) {
                         currentPosition++;
                         Toast.makeText(getActivity().getApplicationContext(),"completed download"+(currentPosition+1),Toast.LENGTH_SHORT).show();
+                        allVideoDownloaded = allVideoDownloaded && true;
                         downloadFiles();
 
                     }
@@ -279,8 +340,10 @@ public class MyWorkout extends Fragment
                     @Override
                     public void onDownloadFailed(int id, int errorCode, String errorMessage) {
                         Toast.makeText(getActivity().getApplicationContext(),"failed error in logs TAG error77 ",Toast.LENGTH_SHORT).show();
-                        Log.d("error77",errorMessage);
+                        Log.d("error77",errorMessage+"\n"+"of number"+((int)currentPosition+1)+"\nof id: "+exercises.get(currentPosition).getExercise().get_id());
                         currentPosition++;
+                        allVideoDownloaded = allVideoDownloaded && true;
+
                         downloadFiles();
 
                     }
@@ -291,6 +354,7 @@ public class MyWorkout extends Fragment
                         //Toast.makeText(getActivity().getApplicationContext(),"total"+ totalBytes+"dnld "+downlaodedBytes+"progress "+p,Toast.LENGTH_SHORT).show();
                         progressBar.setProgress((int)p);
                         progressTV.setText(String.format("%.2f", (float)p));
+                        numberOfCurrentVideo.setText(String.valueOf(noOfCurrentVideUser)+"/"+noOfDiffId);
                     }
                 });
         int downloadId = downloadManager.add(downloadRequest);
