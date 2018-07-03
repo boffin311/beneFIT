@@ -33,16 +33,15 @@ public class VideoControllerView extends FrameLayout {
     private MediaPlayerControl mPlayer;
     private Context mContext;
     private ViewGroup mAnchor;
-    private View mRoot, mRoot2;
+    private View mRoot;
     private ProgressBar mProgress;
     private TextView mEndTime, mCurrentTime,onScreenName;
     private boolean mShowing;
     private boolean mDragging;
-    private static final int sDefaultTimeout = 2000;
+    private static final int sDefaultTimeout = 3000;
     private static final int FADE_OUT = 1;
     private static final int SHOW_PROGRESS = 2;
     private boolean mFromXml;
-    private boolean mListenersSet;
     StringBuilder mFormatBuilder;
     Formatter mFormatter;
     private ImageButton mPauseButton;
@@ -82,9 +81,8 @@ public class VideoControllerView extends FrameLayout {
     }
 
 
-    public void setAnchorView(ViewGroup view, int IntroReal, int noOfSets,String namek) {
+    public void setAnchorView(ViewGroup view, int noOfSets,String namek) {
         mAnchor = view;
-        introReal = IntroReal;
         NoOfSets = noOfSets;
         vidName = namek;
 

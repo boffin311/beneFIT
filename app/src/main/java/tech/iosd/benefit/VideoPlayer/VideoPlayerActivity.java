@@ -3,7 +3,6 @@ package tech.iosd.benefit.VideoPlayer;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -21,9 +20,8 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
-import android.widget.NumberPicker;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
@@ -33,6 +31,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Locale;
 
+import tech.iosd.benefit.Model.VideoPlayerItem;
 import tech.iosd.benefit.R;
 
 /**
@@ -41,36 +40,65 @@ import tech.iosd.benefit.R;
 public class VideoPlayerActivity extends Activity implements SurfaceHolder.Callback, MediaPlayer.OnPreparedListener, VideoControllerView.MediaPlayerControl, MediaPlayer.OnCompletionListener, TextToSpeech.OnInitListener {
 
     SurfaceView videoSurface;
-    MediaPlayer player, player2;
+    MediaPlayer player;
     VideoControllerView controller;
-    TextView dura, dura2, NoOfSets, middleCount;
-    Boolean count;
-    int screenTime, screenTime2;
+    TextView dura, dura2, setsCounter, middleCount, restCounter, repsCounter;
+    int screenTime;
     CountDownTimer countDownTimer;
     public static final String TAG = "chla";
     ProgressDialog progressDialog;
-    Button skipIntroBtn;
-    int noOfSets = 2;
-    String videoName;
-    int IntroReal;
-    int videoNo;
-    int currentSet = 0;
-    int tottalReps = 4;
+    Button skipIntroBtn, skipRestBtn;
     private TextToSpeech tts;
-    int flag = 0;
-    String videoLoaction = new String();
     CheckBox soundOn;
     Boolean isSoundOn = true;
+
+
+    View introView, restView, allTimeViews, tutorialView, repView;//for hiding layouts at different points
+    private VideoPlayerItem videoItem;//has all details of items
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_player);
+
+        //adding dummy data to videoplayeritem fot testing.........
+        videoItem = new VideoPlayerItem();
+        videoItem.setType(VideoPlayerItem.TYPE_FOLLOW);
+        videoItem.setSets(4);
+        videoItem.setVideoName("StackPushUp Repetitive");
+        videoItem.setRestTimeSec(10);
+        videoItem.setTotalReps(5);
+        videoItem.setIntroVideo("android.resource://");
+        videoItem.setSingleRepVideo("android.resource://");
+        videoItem.setCurrentRep(0);
+        videoItem.setCurrentSet(0);
+
+
+        //setting references to control layouts
+        introView = (View) findViewById(R.id.introViews);
+        repView = (View) findViewById(R.id.repViews);
+        tutorialView = (View) findViewById(R.id.tutorialView);
+        restView = (View) findViewById(R.id.restView);
+        allTimeViews = (View) findViewById(R.id.allTimeViews);
+
+        restCounter = (TextView) findViewById(R.id.restCounter);
+        repsCounter = (TextView) findViewById(R.id.repsTextView);
+        skipRestBtn = (Button) findViewById(R.id.skipRest);
+        skipRestBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(countDownTimer!=null)
+                    countDownTimer.cancel();//stopping rest counter
+                videoItem.setResting(false);
+                startNext();
+            }
+        });
+
         dura = findViewById(R.id.duration);
         dura2 = findViewById(R.id.duration2);
         skipIntroBtn = findViewById(R.id.btn_skip_intro);
         skipIntroBtn.setOnClickListener(skipIntroListner);
-        NoOfSets = findViewById(R.id.no_of_sets);
+        setsCounter = findViewById(R.id.no_of_sets);
         middleCount = findViewById(R.id.countInBetweenScreen);
         tts = new TextToSpeech(this, this);
         soundOn = findViewById(R.id.muteCheckBox);
@@ -93,9 +121,9 @@ public class VideoPlayerActivity extends Activity implements SurfaceHolder.Callb
             }
         });
 
-        // player = new MediaPlayer();
         controller = new VideoControllerView(this);
-        startNext();
+
+        //player is initialised after surface is created (onSurfaceCreated method)
 
     }
 
@@ -115,57 +143,67 @@ public class VideoPlayerActivity extends Activity implements SurfaceHolder.Callb
                 | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
     }
 
-    private void showFeedBack() {//end of workout
+    private void showRestScreen() {
         //cleaning up
-        if (player != null)
+        if (player != null) {
             player.stop();
-
+        }
+        NumberFormat f = new DecimalFormat("00");
+        //hide other layouts
         controller.hide();
-        controller.setEnabled(false);
-
-        tts.stop();
-        tts.shutdown();
-
-        //removing all views and placing feedback view in its place
-        LinearLayout linearLayout = findViewById(R.id.video_container);
-        linearLayout.removeAllViews();
-        View view = getLayoutInflater().inflate(R.layout.feed_back, linearLayout, false);
-        linearLayout.addView(view);
-
-        Button restart = (Button)view.findViewById(R.id.restart);
-        restart.setOnClickListener(new View.OnClickListener() {
+        controller.setEnabled(false); //controller disabled so that it doesn't show on touch
+        hideAllViews();
+        //show rest screen
+        restView.setVisibility(View.VISIBLE);
+        videoItem.setResting(true);
+        //set timer to stop resting
+        if(countDownTimer!=null)
+            countDownTimer.cancel();
+        countDownTimer = new CountDownTimer(videoItem.getRestTimeSec()*1000,1000) {
             @Override
-            public void onClick(View v) {
-                recreate();
+            public void onTick(long millisUntilFinished) {
+                int sec = (int)millisUntilFinished/1000;
+                int min = (int)millisUntilFinished/60000;
+                YoYo.with(Techniques.ZoomIn).duration(800).playOn(restCounter);
+                restCounter.setText(f.format(min) + ":" + f.format(sec));
             }
-        });
 
-        NumberPicker numberPicker = (NumberPicker)view.findViewById(R.id.numberPicker);
-        numberPicker.setMinValue(0);
-        numberPicker.setMaxValue(10);
-        numberPicker.setValue(4);
-        numberPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
-            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                //set value here
+            public void onFinish() {//skip button
+                videoItem.setResting(false);
+                startNext();
             }
-        });
+        }.start();
+    }
 
+    private void hideAllViews() {
+        introView.setVisibility(View.GONE);
+        allTimeViews.setVisibility(View.GONE);
+        repView.setVisibility(View.GONE);
+        tutorialView.setVisibility(View.GONE);
+        restView.setVisibility(View.GONE);
+    }
+
+    private void hideAllModeViews() { //doesnt hide allTimeViews
+        introView.setVisibility(View.GONE);
+        repView.setVisibility(View.GONE);
+        tutorialView.setVisibility(View.GONE);
+        restView.setVisibility(View.GONE);
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        controller.show();
-        player.pause();
-        dura.setVisibility(View.INVISIBLE);
-        dura2.setVisibility(View.INVISIBLE);
-        NoOfSets.setVisibility(View.INVISIBLE);
-        if (countDownTimer != null) {
-            countDownTimer.cancel();
+        if (!videoItem.getResting()) {//touch controls only if user is not on rest screen
+            controller.show();
+            player.pause();
+            if (countDownTimer != null) {
+                countDownTimer.cancel();
+            }
+
+            hideAllViews();
         }
         return false;
     }
-
 
     // Implement SurfaceHolder.Callback
     @Override
@@ -174,8 +212,10 @@ public class VideoPlayerActivity extends Activity implements SurfaceHolder.Callb
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
+        Log.w("pkmn", "surface created");
+        player = new MediaPlayer();
         player.setDisplay(holder);
-        player.prepareAsync();
+        startNext();
     }
 
     @Override
@@ -183,90 +223,62 @@ public class VideoPlayerActivity extends Activity implements SurfaceHolder.Callb
     }
     // End SurfaceHolder.Callback
 
-
     // Implement MediaPlayer.OnPreparedListener
     @Override
     public void onPrepared(MediaPlayer mp) {
-        Log.d(TAG, "onPrepared: 1");
+        //show relevant views here
+        hideAllViews();
+        allTimeViews.setVisibility(View.VISIBLE);
+
+        NumberFormat f = new DecimalFormat("00");
+
         controller.setMediaPlayer(this);
-        controller.setAnchorView((FrameLayout) findViewById(R.id.videoSurfaceContainer), IntroReal, noOfSets, videoName);
+        controller.setAnchorView((FrameLayout) findViewById(R.id.videoSurfaceContainer), videoItem.getSets(), videoItem.getVideoName());
         player.start();
         if (progressDialog != null)
             progressDialog.dismiss();
         Log.d(TAG, "onPrepared: " + getDuration());
-        int gy = getDuration();
+        int duration = getDuration();
 
-        if (IntroReal == 1) {
-            if (videoNo == 0 || videoNo == 1) {
-                gy = gy * noOfSets;
-            } else if (videoNo == 2) {
-                gy = gy * tottalReps;
-                noOfSets = tottalReps;
+        if (videoItem.getType() == VideoPlayerItem.TYPE_FOLLOW) {
+            duration = duration * videoItem.getSetsRemaining();
+            tutorialView.setVisibility(View.VISIBLE);
+            setsCounter.setText("Sets: " + videoItem.getCurrentSet() + "/" + videoItem.getSets());
+        } else if (videoItem.getType() == VideoPlayerItem.TYPE_REPETITIVE) {
+            if (videoItem.getIntroComp()) {//if it not intro-video
+                duration = duration * videoItem.getTotalReps();
+                repView.setVisibility(View.VISIBLE);
+                setsCounter.setText("Sets: " + videoItem.getCurrentSet() + "/" + videoItem.getSets());
+            } else {
+                introView.setVisibility(View.VISIBLE);
             }
         }
+
         if (countDownTimer != null) {
             countDownTimer.cancel();
         }
-        countDownTimer = new CountDownTimer(gy, 1000) {//geriye sayma
+        countDownTimer = new CountDownTimer(duration, 1000) {//geriye sayma
 
             public void onTick(long millisUntilFinished) {
-
-                NumberFormat f = new DecimalFormat("00");
                 long hour = (millisUntilFinished / 3600000) % 24;
                 long min = (millisUntilFinished / 60000) % 60;
                 long sec = (millisUntilFinished / 1000) % 60;
-                if (IntroReal == 0) {
-                    dura.setVisibility(View.VISIBLE);
-                    dura2.setVisibility(View.GONE);
-                    NoOfSets.setVisibility(View.INVISIBLE);
-                    dura.setText(videoName + "\n" + "Starts in " + f.format(hour) + ":" + f.format(min) + ":" + f.format(sec));
-                    skipIntroBtn.setVisibility(View.VISIBLE);
-                } else if (IntroReal == 1) {
-                    if (videoNo == 0 || videoNo == 1) {
-                        dura.setVisibility(View.GONE);
-                        skipIntroBtn.setVisibility(View.GONE);
-                        dura2.setVisibility(View.VISIBLE);
-                        NoOfSets.setVisibility(View.VISIBLE);
-                        NoOfSets.setText("Remaining Sets : " + String.valueOf(noOfSets));
+
+                if (videoItem.getType() == VideoPlayerItem.TYPE_FOLLOW) {
+                    dura2.setText("Total Time Remaining : \n" + f.format(hour) + ":" + f.format(min) + ":" + f.format(sec));
+                } else if (videoItem.getType() == VideoPlayerItem.TYPE_REPETITIVE) {
+                    if (videoItem.getIntroComp()) {//if intro is completed
+                        repsCounter.setText("Reps: " + String.valueOf(videoItem.getCurrentRep()) + "/" + String.valueOf(videoItem.getTotalReps()));
                         dura2.setText("Total Time Remaining : \n" + f.format(hour) + ":" + f.format(min) + ":" + f.format(sec));
-                    } else {
-                        dura.setVisibility(View.GONE);
-                        skipIntroBtn.setVisibility(View.GONE);
-                        dura2.setVisibility(View.VISIBLE);
-                        NoOfSets.setVisibility(View.VISIBLE);
-                        dura2.setText(String.valueOf(currentSet) + "/" + String.valueOf(tottalReps));
-                        NoOfSets.setText("Total Time Remaining : \n" + f.format(hour) + ":" + f.format(min) + ":" + f.format(sec));
+                    } else {//for intro video
+                        dura2.setText(videoItem.getVideoName() + "\n" + "Starts in " + f.format(hour) + ":" + f.format(min) + ":" + f.format(sec));
                     }
                 }
             }
 
-            public void onFinish() {
-                dura.setText("00:00:00");
-                dura2.setText("00:00:00");
-                if (IntroReal == 0 && videoNo == 0) {
-                    // if (flag != 1) {
-                    IntroReal = 1;
-                    videoNo = 0;
-                    //  }
-                    // flag = 0;
-                } else if (IntroReal == 1 && videoNo == 0) {
-                    IntroReal = 0;
-                    videoNo = 1;
-                } else if (IntroReal == 0 && videoNo == 1) {
-                    IntroReal = 1;
-                    videoNo = 1;
-                } else if (IntroReal == 1 && videoNo == 1) {
-                    IntroReal = 0;
-                    videoNo = 2;
-                } else if (IntroReal == 0 && videoNo == 2) {
-                    IntroReal = 1;
-                    videoNo = 2;
-                } else if (IntroReal == 1 && videoNo == 2) {
-                    cancel();
-                    return;
-                }
-                startNext();
+            public void onFinish() {//keep empty
             }
+
         }.start();
     }
 // End MediaPlayer.OnPreparedListener
@@ -324,223 +336,112 @@ public class VideoPlayerActivity extends Activity implements SurfaceHolder.Callb
 
     @Override
     public void pause() {
-        dura.setVisibility(View.INVISIBLE);
+        hideAllViews();
         if (countDownTimer != null) {
             countDownTimer.cancel();
         }
-        dura2.setVisibility(View.GONE);
-        NoOfSets.setVisibility(View.INVISIBLE);
         player.pause();
     }
 
     @Override
-    public void start() {
+    public void start() {//resuming player here
+        allTimeViews.setVisibility(View.VISIBLE);
+
+        if (videoItem.getType() == VideoPlayerItem.TYPE_FOLLOW) {
+            if (!videoItem.getIntroComp()) {
+                tutorialView.setVisibility(View.VISIBLE);
+            }
+        } else if (videoItem.getType() == VideoPlayerItem.TYPE_REPETITIVE) {
+            if (videoItem.getIntroComp()) {
+                repView.setVisibility(View.VISIBLE);
+            } else {
+                introView.setVisibility(View.VISIBLE);
+            }
+        }
+
+        NumberFormat f = new DecimalFormat("00");
         player.start();
         if (countDownTimer != null) {
             countDownTimer.cancel();
         }
-        countDownTimer = new CountDownTimer(screenTime, 1000) {                     //geriye sayma
+        countDownTimer = new CountDownTimer(screenTime, 1000) {//resuming from screenTime                     //geriye sayma
 
             public void onTick(long millisUntilFinished) {
-
-                NumberFormat f = new DecimalFormat("00");
                 long hour = (millisUntilFinished / 3600000) % 24;
                 long min = (millisUntilFinished / 60000) % 60;
                 long sec = (millisUntilFinished / 1000) % 60;
-                if (IntroReal == 0) {
-                    dura.setVisibility(View.VISIBLE);
-                    dura2.setVisibility(View.GONE);
-                    NoOfSets.setVisibility(View.INVISIBLE);
-                    dura.setText(videoName + "\n" + "Starts in " + f.format(hour) + ":" + f.format(min) + ":" + f.format(sec));
-                    skipIntroBtn.setVisibility(View.VISIBLE);
-                } else if (IntroReal == 1) {
-                    if (videoNo == 0 || videoNo == 1) {
-                        dura.setVisibility(View.GONE);
-                        skipIntroBtn.setVisibility(View.GONE);
-                        dura2.setVisibility(View.VISIBLE);
-                        NoOfSets.setVisibility(View.VISIBLE);
-                        NoOfSets.setText("Remaining Sets : " + String.valueOf(noOfSets));
+
+                if (videoItem.getType() == VideoPlayerItem.TYPE_FOLLOW) {
+                    dura2.setText("Total Time Remaining : \n" + f.format(hour) + ":" + f.format(min) + ":" + f.format(sec));
+                } else if (videoItem.getType() == VideoPlayerItem.TYPE_REPETITIVE) {
+                    if (videoItem.getIntroComp()) {//if intro is completed
+                        repsCounter.setText(String.valueOf(videoItem.getCurrentRep()) + "/" + String.valueOf(videoItem.getTotalReps()));
                         dura2.setText("Total Time Remaining : \n" + f.format(hour) + ":" + f.format(min) + ":" + f.format(sec));
-                    } else {
-                        dura.setVisibility(View.GONE);
-                        skipIntroBtn.setVisibility(View.GONE);
-                        dura2.setVisibility(View.VISIBLE);
-                        NoOfSets.setVisibility(View.VISIBLE);
-                        dura2.setText(String.valueOf(currentSet) + "/" + String.valueOf(tottalReps));
-                        NoOfSets.setText("Total Time Remaining : \n" + f.format(hour) + ":" + f.format(min) + ":" + f.format(sec));
+                    } else {//for intro video
+                        dura.setText(videoItem.getVideoName() + "\n" + "Starts in " + f.format(hour) + ":" + f.format(min) + ":" + f.format(sec));
                     }
                 }
             }
 
-            public void onFinish() {
-                dura.setText("00:00:00");
-                if (IntroReal == 0 && videoNo == 0) {
-                    IntroReal = 1;
-                    videoNo = 0;
-                } else if (IntroReal == 1 && videoNo == 0) {
-                    IntroReal = 0;
-                    videoNo = 1;
-                } else if (IntroReal == 0 && videoNo == 1) {
-                    IntroReal = 1;
-                    videoNo = 1;
-                } else if (IntroReal == 1 && videoNo == 1) {
-                    IntroReal = 0;
-                    videoNo = 2;
-                } else if (IntroReal == 0 && videoNo == 2) {
-                    IntroReal = 1;
-                    videoNo = 2;
-                } else if (IntroReal == 1 && videoNo == 2) {
-                    cancel();
-                    return;
-                }
-                startNext();
+            public void onFinish() {//keep empty
             }
+
         }.start();
     }
 
     @Override
     public void setOnScreenTime(int time) {
-        if (IntroReal == 1) {
+
+
+        if (videoItem.getType() == VideoPlayerItem.TYPE_FOLLOW) {
             int tempTotalDuration = getDuration();
             int ku = tempTotalDuration - time;
-            screenTime = tempTotalDuration * noOfSets - ku + 1000;
-        } else {
-            screenTime = time + 1000;
+            screenTime = tempTotalDuration * videoItem.getSetsRemaining() - ku + 1000;
+        } else if (videoItem.getType() == VideoPlayerItem.TYPE_REPETITIVE) {
+            int tempTotalDuration = getDuration();
+            int ku = tempTotalDuration - time;
+            screenTime = tempTotalDuration * videoItem.getRepsRemaining() - ku + 1000;
         }
+
     }
 
     @Override
     public void nextVideo() {
         if (player != null) {
-            if (IntroReal == 0 && videoNo == 0) {
-                IntroReal = 1;
-                videoNo = 0;
-            } else if (IntroReal == 1 && videoNo == 0) {
-                IntroReal = 0;
-                videoNo = 1;
-            } else if (IntroReal == 0 && videoNo == 1) {
-                IntroReal = 1;
-                videoNo = 1;
-            } else if (IntroReal == 1 && videoNo == 1) {
-                IntroReal = 0;
-                videoNo = 2;
-            } else if (IntroReal == 0 && videoNo == 2) {
-                IntroReal = 1;
-                videoNo = 2;
-            } else if (IntroReal == 1 && videoNo == 2) {
-                showFeedBack();
-                return;
+            if (videoItem.getType() == VideoPlayerItem.TYPE_FOLLOW) {
+                Toast.makeText(VideoPlayerActivity.this, "Nothing to go forward to", Toast.LENGTH_SHORT).show();
+            } else if (videoItem.getType() == VideoPlayerItem.TYPE_REPETITIVE) {
+                if (videoItem.getIntroComp()) {//if intro is completed
+                    Toast.makeText(VideoPlayerActivity.this, "Nothing to go forward to", Toast.LENGTH_SHORT).show();
+                } else {//if intro is not complete
+                    introView.setVisibility(View.GONE);
+                    videoItem.setIntroComp(true);
+                    startNext();
+                }
             }
-            startNext();
         }
     }
-
 
     @Override
     public void prevVideo() {
         if (player != null) {
-            if (IntroReal == 0 && videoNo == 0) {
-                IntroReal = 0;
-                videoNo = 2;
-            } else if (IntroReal == 1 && videoNo == 0) {
-                IntroReal = 0;
-                videoNo = 2;
-            } else if (IntroReal == 0 && videoNo == 1) {
-                IntroReal = 0;
-                videoNo = 0;
-            } else if (IntroReal == 1 && videoNo == 1) {
-                IntroReal = 0;
-                videoNo = 0;
-            } else if (IntroReal == 0 && videoNo == 2) {
-                IntroReal = 0;
-                videoNo = 1;
-            } else if (IntroReal == 1 && videoNo == 2) {
-                IntroReal = 0;
-                videoNo = 1;
+            if (videoItem.getType() == VideoPlayerItem.TYPE_FOLLOW) {
+                Toast.makeText(VideoPlayerActivity.this, "Nothing to go back to", Toast.LENGTH_SHORT).show();
+            } else if (videoItem.getType() == VideoPlayerItem.TYPE_REPETITIVE) {
+                if (videoItem.getIntroComp()) {//if intro is completed go back to intro video
+                    hideAllViews();
+                    introView.setVisibility(View.VISIBLE);
+                    videoItem.setIntroComp(false);
+                    startNext();
+                } else {
+                    Toast.makeText(VideoPlayerActivity.this, "Nothing to go back to", Toast.LENGTH_SHORT).show();
+                }
             }
-            startNext();
+
         }
     }
 
     public void startNext() {
-        if (player == null) {
-            player = new MediaPlayer();
-            try {
-                videoName = "Stack PushUp intro";
-                IntroReal = 0;
-                videoNo = 0;
-                Uri video = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.stackpushupsingle);
-                player.setDataSource(this, video);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else if (IntroReal == 1 && videoNo == 0) {
-            player.reset();
-            try {
-                videoName = "Stack PushUp";
-                if (countDownTimer != null) {
-                    countDownTimer.cancel();
-                }
-                Uri video = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.stackpushupsingle);
-                player.setDataSource(this, video);
-                player.prepareAsync();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else if (IntroReal == 0 && videoNo == 1) {
-            player.reset();
-            try {
-                videoName = "Superman PushUp intro";
-                if (countDownTimer != null) {
-                    countDownTimer.cancel();
-                }
-                Uri video = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.stackpushupsingle);
-                player.setDataSource(this, video);
-                player.prepareAsync();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else if (IntroReal == 1 && videoNo == 1) {
-            player.reset();
-            try {
-                videoName = "Superman Pushup";
-                if (countDownTimer != null) {
-                    countDownTimer.cancel();
-                }
-                Uri video = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.stackpushupsingle);
-                player.setDataSource(this, video);
-                player.prepareAsync();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else if (IntroReal == 0 && videoNo == 2) {
-            player.reset();
-            try {
-                videoName = "Stack PushUp";
-                if (countDownTimer != null) {
-                    countDownTimer.cancel();
-                }
-                Uri video = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.stackpushupsingle);
-                player.setDataSource(this, video);
-                player.prepareAsync();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else if (IntroReal == 1 && videoNo == 2) {
-            player.reset();
-            try {
-                videoName = "SuperMan PushUp";
-                if (countDownTimer != null) {
-                    countDownTimer.cancel();
-                }
-                Uri video = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.stackpushupsingle);
-                player.setDataSource(this, video);
-                player.prepareAsync();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
         try {
             progressDialog = new ProgressDialog(this);
             progressDialog.setTitle("Please Wait");
@@ -561,85 +462,114 @@ public class VideoPlayerActivity extends Activity implements SurfaceHolder.Callb
         } catch (IllegalArgumentException | SecurityException | IllegalStateException e) {
             e.printStackTrace();
         }
+
+        player.reset();//so that we can re-initialise player
+
+        if (videoItem.getType() == VideoPlayerItem.TYPE_FOLLOW) {
+            if (videoItem.getIntroComp()) {//show rest screen
+                showRestScreen();
+            } else {//show intro
+                try {
+                    if (countDownTimer != null) {
+                        countDownTimer.cancel();
+                    }
+                    Uri video = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.stackpushupsingle);//dummy for now
+                    player.setDataSource(this, video);
+                    player.prepareAsync();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        } else if (videoItem.getType() == VideoPlayerItem.TYPE_REPETITIVE) {
+            if (videoItem.getIntroComp()) {//start single * reps mode here
+                try {
+                    if (countDownTimer != null) {
+                        countDownTimer.cancel();
+                    }
+                    Uri video = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.stackpushupsingle);//dummy for now
+                    player.setDataSource(this, video);
+                    player.prepareAsync();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else {//show intro
+                try {
+                    if (countDownTimer != null) {
+                        countDownTimer.cancel();
+                    }
+                    Uri video = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.stackpushupsingle);//dummy for now
+                    player.setDataSource(this, video);
+                    player.prepareAsync();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
 
     //mediaplayer implement methods
     @Override
     public void onCompletion(MediaPlayer mediaPlayer) {
-        if (IntroReal == 1) {
-            if (videoNo == 0 || videoNo == 1) {
-                if (noOfSets > 0) {
+        if (videoItem.getType() == VideoPlayerItem.TYPE_FOLLOW) {
+            if (videoItem.incrementCurrentSet() < videoItem.getSets()) {
+                //show rest screen
+                showRestScreen();
+            } else {
+                //finish
+                finish();
+                Toast.makeText(VideoPlayerActivity.this, "End of sets", Toast.LENGTH_SHORT).show();
+            }
+        } else if (videoItem.getType() == VideoPlayerItem.TYPE_REPETITIVE) {
+            if (videoItem.getIntroComp()) {//if intro is complete
+                if (videoItem.incrementCurrentRep() < videoItem.getTotalReps()) {
                     player.seekTo(0);
                     player.start();
-                    noOfSets--;
-                } else {
-                    if (videoNo == 0) {
-                        IntroReal = 0;
-                        videoNo = 1;
-                        noOfSets = 2;
-                        startNext();
-                    }
-                    if (videoNo == 1) {
-                        IntroReal = 0;
-                        videoNo = 2;
-                        noOfSets = 2;
-                        currentSet = 0;
-                        startNext();
-                    }
-                }
-            } else if (videoNo == 2) {
-                currentSet = currentSet + 1;
-                flag = 1;
-                if (currentSet <= tottalReps) {
-                    if (currentSet != 4) {
-                        player.seekTo(0);
-                        player.start();
-                        noOfSets--;
-                    } else {
-                        showFeedBack();
-                    }
+
                     middleCount.setVisibility(View.VISIBLE);
-                    middleCount.setText(String.valueOf(currentSet));
+                    middleCount.setText(String.valueOf(videoItem.getCurrentRep()));
                     if (isSoundOn) {
-                        tts.speak(String.valueOf(currentSet), TextToSpeech.QUEUE_FLUSH, null);
+                        tts.speak(String.valueOf(videoItem.getCurrentRep()), TextToSpeech.QUEUE_FLUSH, null);
                     }
-                    YoYo.with(Techniques.ZoomIn).duration(2000).playOn(middleCount);
-                    YoYo.with(Techniques.FadeOut).duration(1000).delay(2000).playOn(middleCount);
+                    //zoom in , fadeout and then remove
+                    YoYo.with(Techniques.ZoomIn).duration(1000).playOn(middleCount);
+                    YoYo.with(Techniques.FadeOut).duration(1000).delay(1000).playOn(middleCount);
 
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
                             middleCount.setVisibility(View.INVISIBLE);
                         }
-                    }, 3000);
+                    }, 2000);
+                } else {
+                    tts.speak(String.valueOf(videoItem.getCurrentRep()), TextToSpeech.QUEUE_FLUSH, null);
+                    if (videoItem.incrementCurrentSet() < videoItem.getSets()) {
+                        showRestScreen();
+                    } else {
+                        finish();
+                        Toast.makeText(VideoPlayerActivity.this, "sets finished", Toast.LENGTH_SHORT).show();
+                    }
                 }
+            } else {//for intro video
+                videoItem.setIntroComp(true);
+                startNext();
             }
-        } else if (IntroReal == 0) {
-            IntroReal = 1;
-            if (videoNo == 0) {
-                videoNo = 1;
-            } else if (videoNo == 1) {
-                videoNo = 2;
-            }
-            startNext();
         }
     }
 
     private View.OnClickListener skipIntroListner = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            dura.setVisibility(View.INVISIBLE);
-            IntroReal = 1;
+            introView.setVisibility(View.GONE);
+            videoItem.setIntroComp(true);
             startNext();
         }
     };
 
-
     //text to speech listener
     @Override
     public void onInit(int i) {
-
         if (i == TextToSpeech.SUCCESS) {
             int result = tts.setLanguage(Locale.US);
             if (result == TextToSpeech.LANG_MISSING_DATA
@@ -661,6 +591,8 @@ public class VideoPlayerActivity extends Activity implements SurfaceHolder.Callb
         super.onDestroy();
     }
 }
+
+
 
 // End VideoMediaController.MediaPlayerControl
 
