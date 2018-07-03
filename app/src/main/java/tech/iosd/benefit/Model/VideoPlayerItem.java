@@ -15,16 +15,68 @@ public class VideoPlayerItem {
 
 
     //common..............
-    private int type,sets;
-    private String videoName;
+    private int type,sets;// type for managing control, sets for number of repetetions
+    private String videoName;//for display
     //rest info
-    private int restTimeSec;
+    private int restTimeSec;//rest time period
 
-    private int totalReps;
+    private int totalReps;//
 
     private String introVideo,singleRepVideo;
-    private String tutorialVideo;
 
+    private int currentSet,currentRep;
+    private Boolean introComp = false, isResting = false;//for seeing state, intro/tutorial OR singleVidLoop
+
+
+    public int incrementCurrentSet(){
+        currentSet++;
+        currentRep=0;
+        return currentSet;
+    }
+    public int incrementCurrentRep(){
+        currentRep++;
+        return currentRep;
+    }
+
+    public int getSetsRemaining(){
+        return (sets - currentSet);
+    }
+
+    public int getRepsRemaining(){
+        return (totalReps - currentRep);
+    }
+
+    public Boolean getIntroComp() {
+        return introComp;
+    }
+
+    public Boolean getResting() {
+        return isResting;
+    }
+
+    public void setResting(Boolean resting) {
+        isResting = resting;
+    }
+
+    public void setIntroComp(Boolean introComp) {
+        this.introComp = introComp;
+    }
+
+    public int getCurrentSet() {
+        return currentSet;
+    }
+
+    public void setCurrentSet(int currentSet) {
+        this.currentSet = currentSet;
+    }
+
+    public int getCurrentRep() {
+        return currentRep;
+    }
+
+    public void setCurrentRep(int currentRep) {
+        this.currentRep = currentRep;
+    }
 
     public String getIntroVideo() {
         return introVideo;
@@ -40,14 +92,6 @@ public class VideoPlayerItem {
 
     public void setSingleRepVideo(String singleRepVideo) {
         this.singleRepVideo = singleRepVideo;
-    }
-
-    public String getTutorialVideo() {
-        return tutorialVideo;
-    }
-
-    public void setTutorialVideo(String tutorialVideo) {
-        this.tutorialVideo = tutorialVideo;
     }
 
     public int getType() {

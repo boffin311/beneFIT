@@ -12,74 +12,161 @@
     <FrameLayout
         android:id="@+id/videoSurfaceContainer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
+        android:layout_height="match_parent">
 
         <SurfaceView
             android:id="@+id/videoSurface"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:id="@+id/duration"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end|bottom"
-            android:textColor="#fff"
-            android:background="#28000000"
-            android:textSize="20dp"
-            android:textStyle="bold" />
-        <TextView
-            android:id="@+id/no_of_sets"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end|bottom"
-            android:textColor="#fff"
-            android:background="#28000000"
-            android:textSize="20sp"
-            android:textStyle="italic" />
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
 
-        <TextView
-            android:id="@+id/duration2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:gravity="center"
-            android:textColor="#fff"
-            android:background="#28000000"
-            android:textSize="20dp"
-            android:textStyle="normal" />
+        <FrameLayout
+            android:id="@+id/tutorialView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone">
 
-        <Button
-            android:id="@+id/btn_skip_intro"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:background="#28000000"
-            android:text="Skip >>>"
-            android:textStyle="italic"
-            android:textColor="#fff" />
-        <TextView
-            android:id="@+id/countInBetweenScreen"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal|center_vertical"
-            android:textColor="#fff"
-            android:background="#28000000"
-            android:gravity="center"
-            android:textSize="130sp"
-            android:textAppearance="?android:textAppearanceLarge"/>
+            <TextView
+                android:id="@+id/tutorialTimeLeft"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|top"
+                android:background="#28000000"
+                android:textColor="#fff"
+                android:textSize="20sp"
+                android:textStyle="normal" />
 
-        <CheckBox
-            android:id="@+id/muteCheckBox"
-            android:layout_gravity="start|bottom"
-            android:layout_width="wrap_content"
-            android:background="#28000000"
-            android:checked="true"
-            android:button="@drawable/mute_selector"
-            android:layout_height="wrap_content" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/restView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#212121"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/restTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|top"
+                android:background="#28000000"
+                android:text="REST"
+                android:textAppearance="?android:textAppearanceLarge"
+                android:textColor="#fff"
+                android:textSize="100sp" />
+
+            <TextView
+                android:id="@+id/restCounter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|bottom"
+                android:background="#28000000"
+                android:text="10"
+                android:textAppearance="?android:textAppearanceLarge"
+                android:textColor="#fff"
+                android:textSize="100sp" />
+
+            <Button
+                android:id="@+id/skipRest"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:text="skip" />
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/repViews"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/countInBetweenScreen"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:background="#28000000"
+                android:textAppearance="?android:textAppearanceLarge"
+                android:textColor="#fff"
+                android:textSize="130sp" />
+
+            <TextView
+                android:id="@+id/repsTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|top"
+                android:background="#28000000"
+                android:textColor="#fff"
+                android:textSize="20sp"
+                android:textStyle="normal" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/introViews"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/duration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|bottom"
+                android:background="#28000000"
+                android:textColor="#fff"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/btn_skip_intro"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:background="#28000000"
+                android:text="Skip >>>"
+                android:textColor="#fff"
+                android:textStyle="italic" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/allTimeViews"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <CheckBox
+                android:id="@+id/muteCheckBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|bottom"
+                android:background="#28000000"
+                android:button="@drawable/mute_selector"
+                android:checked="true" />
+
+            <TextView
+                android:id="@+id/no_of_sets"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|center_vertical"
+                android:background="#28000000"
+                android:textColor="#fff"
+                android:textSize="20sp"
+                android:textStyle="italic" />
+
+            <TextView
+                android:id="@+id/duration2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|bottom"
+                android:gravity="center"
+                android:textColor="#fff"
+                android:background="#28000000"
+                android:textSize="20sp"
+                android:textStyle="normal" />
+
+        </FrameLayout>
+
+
     </FrameLayout>
-
-
 </LinearLayout>
