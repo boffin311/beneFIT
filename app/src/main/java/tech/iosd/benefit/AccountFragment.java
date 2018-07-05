@@ -38,6 +38,7 @@ import com.google.android.gms.fitness.result.DataReadResponse;
 import com.google.android.gms.fitness.result.DataReadResult;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
 import java.text.DateFormat;
@@ -45,6 +46,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
+import tech.iosd.benefit.Model.VideoPlayerItem;
 import tech.iosd.benefit.VideoPlayer.VideoPlayerActivity;
 
 public class AccountFragment extends Fragment implements
@@ -68,7 +70,25 @@ public class AccountFragment extends Fragment implements
         videoplayerTest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getContext(), VideoPlayerActivity.class));
+                VideoPlayerItem videoItem;
+                //adding dummy data to videoplayeritem fot testing.........
+                videoItem = new VideoPlayerItem();
+                videoItem.setType(VideoPlayerItem.TYPE_REPETITIVE);
+                videoItem.setSets(4);
+                videoItem.setVideoName("StackPushUp Repetitive");
+                videoItem.setRestTimeSec(10);
+                videoItem.setTotalReps(5);
+                videoItem.setIntroVideo("android.resource://");
+                videoItem.setSingleRepVideo("android.resource://");
+                videoItem.setCurrentRep(0);
+                videoItem.setCurrentSet(0);
+
+                Gson gson = new Gson();
+
+
+                Intent intent = new Intent(getContext(), VideoPlayerActivity.class);
+                intent.putExtra("videoItem",gson.toJson(videoItem));
+                startActivity(intent);
             }
         });
 

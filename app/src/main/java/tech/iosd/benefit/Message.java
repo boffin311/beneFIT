@@ -55,4 +55,10 @@ public class Message implements IMessage, MessageContentType.Image, MessageConte
         author = _author;
         createdAt = _createdAt;
     }
+    public Message(String _id, String _text, Date _createdAt)
+    {
+        id = _id;
+        text = _text;
+        createdAt = _createdAt;
+    }
 }

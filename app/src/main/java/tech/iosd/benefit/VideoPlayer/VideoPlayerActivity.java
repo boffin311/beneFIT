@@ -25,6 +25,11 @@ import android.widget.Toast;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+
+import org.json.JSONObject;
+import org.json.JSONStringer;
 
 import java.io.IOException;
 import java.text.DecimalFormat;
@@ -42,7 +47,7 @@ public class VideoPlayerActivity extends Activity implements SurfaceHolder.Callb
     SurfaceView videoSurface;
     MediaPlayer player;
     VideoControllerView controller;
-    TextView dura, dura2, setsCounter, middleCount, restCounter, repsCounter;
+    TextView dura2, setsCounter, middleCount, restCounter, repsCounter;
     int screenTime;
     CountDownTimer countDownTimer;
     public static final String TAG = "chla";
@@ -53,7 +58,7 @@ public class VideoPlayerActivity extends Activity implements SurfaceHolder.Callb
     Boolean isSoundOn = true;
 
 
-    View introView, restView, allTimeViews, tutorialView, repView;//for hiding layouts at different points
+    View restView;//for hiding layouts at different points
     private VideoPlayerItem videoItem;//has all details of items
 
     @Override
@@ -62,24 +67,28 @@ public class VideoPlayerActivity extends Activity implements SurfaceHolder.Callb
         setContentView(R.layout.activity_video_player);
 
         //adding dummy data to videoplayeritem fot testing.........
-        videoItem = new VideoPlayerItem();
-        videoItem.setType(VideoPlayerItem.TYPE_FOLLOW);
-        videoItem.setSets(4);
-        videoItem.setVideoName("StackPushUp Repetitive");
-        videoItem.setRestTimeSec(10);
-        videoItem.setTotalReps(5);
-        videoItem.setIntroVideo("android.resource://");
-        videoItem.setSingleRepVideo("android.resource://");
-        videoItem.setCurrentRep(0);
-        videoItem.setCurrentSet(0);
+//        videoItem = new VideoPlayerItem();
+//        videoItem.setType(VideoPlayerItem.TYPE_FOLLOW);
+//        videoItem.setSets(4);
+//        videoItem.setVideoName("StackPushUp Repetitive");
+//        videoItem.setRestTimeSec(10);
+//        videoItem.setTotalReps(5);
+//        videoItem.setIntroVideo("android.resource://");
+//        videoItem.setSingleRepVideo("android.resource://");
+//        videoItem.setCurrentRep(0);
+//        videoItem.setCurrentSet(0);
+
+        String videoItemString = getIntent().getStringExtra("videoItem");
+        if(videoItemString==null|| videoItemString.equals("")) {
+            finish();
+            return;
+        }
+        Gson gson = new Gson();
+        videoItem = gson.fromJson(videoItemString,VideoPlayerItem.class);
 
 
-        //setting references to control layouts
-        introView = (View) findViewById(R.id.introViews);
-        repView = (View) findViewById(R.id.repViews);
-        tutorialView = (View) findViewById(R.id.tutorialView);
+
         restView = (View) findViewById(R.id.restView);
-        allTimeViews = (View) findViewById(R.id.allTimeViews);
 
         restCounter = (TextView) findViewById(R.id.restCounter);
         repsCounter = (TextView) findViewById(R.id.repsTextView);
@@ -94,7 +103,6 @@ public class VideoPlayerActivity extends Activity implements SurfaceHolder.Callb
             }
         });
 
-        dura = findViewById(R.id.duration);
         dura2 = findViewById(R.id.duration2);
         skipIntroBtn = findViewById(R.id.btn_skip_intro);
         skipIntroBtn.setOnClickListener(skipIntroListner);
@@ -177,18 +185,35 @@ public class VideoPlayerActivity extends Activity implements SurfaceHolder.Callb
     }
 
     private void hideAllViews() {
-        introView.setVisibility(View.GONE);
-        allTimeViews.setVisibility(View.GONE);
-        repView.setVisibility(View.GONE);
-        tutorialView.setVisibility(View.GONE);
+        //introviews
+        skipIntroBtn.setVisibility(View.GONE);
+        //allTimeViews
+        soundOn.setVisibility(View.GONE);
+        dura2.setVisibility(View.GONE);
+        setsCounter.setVisibility(View.GONE);
+        //repsview
+        middleCount.setVisibility(View.GONE);
+        repsCounter.setVisibility(View.GONE);
+        //restview
         restView.setVisibility(View.GONE);
     }
 
-    private void hideAllModeViews() { //doesnt hide allTimeViews
-        introView.setVisibility(View.GONE);
-        repView.setVisibility(View.GONE);
-        tutorialView.setVisibility(View.GONE);
-        restView.setVisibility(View.GONE);
+    private void showAllTimeViews(){
+        soundOn.setVisibility(View.VISIBLE);
+        dura2.setVisibility(View.VISIBLE);
+    }
+    private void showRepsViews(){
+        middleCount.setVisibility(View.VISIBLE);
+        repsCounter.setVisibility(View.VISIBLE);
+        setsCounter.setVisibility(View.VISIBLE);
+    }
+    private void showIntroViews(){
+
+        skipIntroBtn.setVisibility(View.VISIBLE);
+    }
+    private void showTutorialView(){
+
+        setsCounter.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -228,7 +253,7 @@ public class VideoPlayerActivity extends Activity implements SurfaceHolder.Callb
     public void onPrepared(MediaPlayer mp) {
         //show relevant views here
         hideAllViews();
-        allTimeViews.setVisibility(View.VISIBLE);
+        showAllTimeViews();
 
         NumberFormat f = new DecimalFormat("00");
 
@@ -241,16 +266,16 @@ public class VideoPlayerActivity extends Activity implements SurfaceHolder.Callb
         int duration = getDuration();
 
         if (videoItem.getType() == VideoPlayerItem.TYPE_FOLLOW) {
+            showTutorialView();
             duration = duration * videoItem.getSetsRemaining();
-            tutorialView.setVisibility(View.VISIBLE);
             setsCounter.setText("Sets: " + videoItem.getCurrentSet() + "/" + videoItem.getSets());
         } else if (videoItem.getType() == VideoPlayerItem.TYPE_REPETITIVE) {
             if (videoItem.getIntroComp()) {//if it not intro-video
                 duration = duration * videoItem.getTotalReps();
-                repView.setVisibility(View.VISIBLE);
+                showRepsViews();
                 setsCounter.setText("Sets: " + videoItem.getCurrentSet() + "/" + videoItem.getSets());
             } else {
-                introView.setVisibility(View.VISIBLE);
+                showIntroViews();
             }
         }
 
@@ -345,17 +370,17 @@ public class VideoPlayerActivity extends Activity implements SurfaceHolder.Callb
 
     @Override
     public void start() {//resuming player here
-        allTimeViews.setVisibility(View.VISIBLE);
+        showAllTimeViews();
 
         if (videoItem.getType() == VideoPlayerItem.TYPE_FOLLOW) {
             if (!videoItem.getIntroComp()) {
-                tutorialView.setVisibility(View.VISIBLE);
+                showTutorialView();
             }
         } else if (videoItem.getType() == VideoPlayerItem.TYPE_REPETITIVE) {
             if (videoItem.getIntroComp()) {
-                repView.setVisibility(View.VISIBLE);
+                showRepsViews();
             } else {
-                introView.setVisibility(View.VISIBLE);
+                showIntroViews();
             }
         }
 
@@ -378,7 +403,7 @@ public class VideoPlayerActivity extends Activity implements SurfaceHolder.Callb
                         repsCounter.setText(String.valueOf(videoItem.getCurrentRep()) + "/" + String.valueOf(videoItem.getTotalReps()));
                         dura2.setText("Total Time Remaining : \n" + f.format(hour) + ":" + f.format(min) + ":" + f.format(sec));
                     } else {//for intro video
-                        dura.setText(videoItem.getVideoName() + "\n" + "Starts in " + f.format(hour) + ":" + f.format(min) + ":" + f.format(sec));
+                        dura2.setText(videoItem.getVideoName() + "\n" + "Starts in " + f.format(hour) + ":" + f.format(min) + ":" + f.format(sec));
                     }
                 }
             }
@@ -414,7 +439,7 @@ public class VideoPlayerActivity extends Activity implements SurfaceHolder.Callb
                 if (videoItem.getIntroComp()) {//if intro is completed
                     Toast.makeText(VideoPlayerActivity.this, "Nothing to go forward to", Toast.LENGTH_SHORT).show();
                 } else {//if intro is not complete
-                    introView.setVisibility(View.GONE);
+                    hideAllViews();
                     videoItem.setIntroComp(true);
                     startNext();
                 }
@@ -430,7 +455,7 @@ public class VideoPlayerActivity extends Activity implements SurfaceHolder.Callb
             } else if (videoItem.getType() == VideoPlayerItem.TYPE_REPETITIVE) {
                 if (videoItem.getIntroComp()) {//if intro is completed go back to intro video
                     hideAllViews();
-                    introView.setVisibility(View.VISIBLE);
+                    showIntroViews();
                     videoItem.setIntroComp(false);
                     startNext();
                 } else {
@@ -439,6 +464,11 @@ public class VideoPlayerActivity extends Activity implements SurfaceHolder.Callb
             }
 
         }
+    }
+
+    @Override
+    public void Stop() {
+        finish();
     }
 
     public void startNext() {
@@ -561,7 +591,7 @@ public class VideoPlayerActivity extends Activity implements SurfaceHolder.Callb
     private View.OnClickListener skipIntroListner = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            introView.setVisibility(View.GONE);
+            hideAllViews();
             videoItem.setIntroComp(true);
             startNext();
         }
