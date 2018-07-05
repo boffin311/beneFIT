@@ -91,4 +91,16 @@ public class ChatDatabase extends SQLiteOpenHelper {
         db.execSQL("delete from "+TABLE_NAME);
     }
 
+    public Long lastMessageTimeStamp(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = db.rawQuery("select * from "+TABLE_NAME+" where id = (select max(id) from "+TABLE_NAME+")",null);
+        res.moveToLast();
+        Long date = 0L;
+        if(res.getCount()>0)
+            date = res.getLong(res.getColumnIndex(COULMN_TIME));
+        res.close();
+
+        return date;
+    }
+
 }

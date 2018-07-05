@@ -1,6 +1,7 @@
 package tech.iosd.benefit.DashboardFragments;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
@@ -21,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,18 +38,27 @@ import com.stfalcon.chatkit.messages.MessagesListAdapter;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
+import rx.subscriptions.CompositeSubscription;
 import tech.iosd.benefit.Adapters.MessageAdapter;
 import tech.iosd.benefit.Author;
 import tech.iosd.benefit.Chat.ChatApplication;
 import tech.iosd.benefit.Chat.ChatDatabase;
 import tech.iosd.benefit.Message;
 import tech.iosd.benefit.Model.DatabaseHandler;
+import tech.iosd.benefit.Model.ResponseForChatMessage;
+import tech.iosd.benefit.Network.NetworkUtil;
 import tech.iosd.benefit.R;
 
 public class Chat extends Fragment implements MessageInput.InputListener
@@ -55,7 +66,7 @@ public class Chat extends Fragment implements MessageInput.InputListener
     Context ctx;
     FragmentManager fm;
     ProgressDialog progressDialog;
-
+    CompositeSubscription compositeSubscription;
     View rootView;
 
     String TAG = "tag";
@@ -122,22 +133,21 @@ public class Chat extends Fragment implements MessageInput.InputListener
         }
     };
 
-    private void addMessage(String message,int authorInt) {//adds a message on receiving and on sending
+    private void addMessage(String message,int authorInt, Long timestamp) {//adds a message on receiving and on sending
 //        mMessages.add(new Message.Builder(Message.TYPE_MESSAGE)
 //                .username(username).message(message).build());
 //        mAdapter.notifyItemInserted(mMessages.size() - 1);
         if(authorInt==ID_ME) {
-            adapter.addToStart(new Message(String.valueOf(ID_ME), message, me, Calendar.getInstance().getTime()), true);
+            adapter.addToStart(new Message(String.valueOf(ID_ME), message, me, new Date(timestamp)), true);
             messageInput.getInputEditText().setText("");
-
         }else if(authorInt==ID_COACH) {
-            adapter.addToStart(new Message(String.valueOf(ID_COACH), message, coach, Calendar.getInstance().getTime()), true);
+            adapter.addToStart(new Message(String.valueOf(ID_COACH), message, coach, new Date(timestamp)), true);
         }
         else if(authorInt==ID_NUTRITIONIST) {
-            adapter.addToStart(new Message(String.valueOf(ID_NUTRITIONIST), message, nutritionist, Calendar.getInstance().getTime()), true);
+            adapter.addToStart(new Message(String.valueOf(ID_NUTRITIONIST), message, nutritionist, new Date(timestamp)), true);
         }
         //inserting to database
-        chatDatabase.insertMessage(authorInt,message,Calendar.getInstance().getTimeInMillis());
+        chatDatabase.insertMessage(authorInt,message,timestamp);
     }
 
     private void attemptSend(String msg) {
@@ -152,9 +162,11 @@ public class Chat extends Fragment implements MessageInput.InputListener
 
         JSONObject msgObj = new JSONObject();
         try {
-            msgObj.put("username", mUsername);
+            Long timestamp = Calendar.getInstance().getTimeInMillis();
             msgObj.put("message", message);
-            addMessage(message, ID_ME);
+            msgObj.put("author",ID_ME);
+            msgObj.put("timestamp",timestamp);
+            addMessage(message, ID_ME, timestamp);
             mSocket.emit("new message", msgObj);
 
         }catch (JSONException e){
@@ -224,13 +236,15 @@ public class Chat extends Fragment implements MessageInput.InputListener
                     public void run() {
                         JSONObject data = (JSONObject) args[0];
                         String message;
+                        Long timestamp;
                         int authorInt;
                         try {
 
                             message = data.getString("message");
                             authorInt = data.getInt("author");
+                            timestamp = data.getLong("timestamp");
 
-                            addMessage(message,authorInt);
+                            addMessage(message,authorInt,timestamp);
 
                         } catch (JSONException e) {
                             Log.e(TAG, e.getMessage());
@@ -280,7 +294,6 @@ public class Chat extends Fragment implements MessageInput.InputListener
                             numUsers = data.getInt("numUsers");
                         } catch (JSONException e) {
                             Log.e(TAG, e.getMessage());
-                            return;
                         }
                     }
                 });
@@ -319,6 +332,7 @@ public class Chat extends Fragment implements MessageInput.InputListener
             }
         };
 
+
         progressDialog = new ProgressDialog(getContext());
         progressDialog.setMessage("Connecting..");
         progressDialog.setCancelable(false);
@@ -352,6 +366,8 @@ public class Chat extends Fragment implements MessageInput.InputListener
             adapter.addToStart(new Message(String.valueOf(ID_NUTRITIONIST), "and I'm your nutritionist \nFeel free to ask anything :) \nYour fitness is our main concern :D", nutritionist, Calendar.getInstance().getTime()), true);
         }
 
+        getNewMessages();
+
         mMessagesView = rootView.findViewById(R.id.messagesList);
         mMessagesView.setLayoutManager(new LinearLayoutManager(getActivity()));
         //mMessagesView.setAdapter(mAdapter);
@@ -367,13 +383,48 @@ public class Chat extends Fragment implements MessageInput.InputListener
                 }
             }
         });
+
         return rootView;
     }
-
 
     @Override
     public boolean onSubmit(CharSequence input) {
         return true;
     }
 
-}
+    public void getNewMessages(){
+        Long lastMessageTime = chatDatabase.lastMessageTimeStamp();
+        compositeSubscription = new CompositeSubscription();
+        compositeSubscription.add(NetworkUtil.getRetrofit(db.getUserToken()).getChatMessages(lastMessageTime,db.getUserToken())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(this::handleResponseGetMessages,this::handleErrorGetMessages));
+
+    }
+
+    private void handleResponseGetMessages(ResponseForChatMessage responseForChatMessage){
+        Toast.makeText(getContext(),String.valueOf(responseForChatMessage.getMessages().size() +" new messages"),Toast.LENGTH_SHORT).show();
+        ArrayList<ResponseForChatMessage.MessageLocal> messageLocals = responseForChatMessage.getMessages();
+        for(ResponseForChatMessage.MessageLocal messageLocal : messageLocals){
+//            int authorInt = messageLocal.getAuthor();
+//            if(authorInt==ID_COACH) {
+//               message = new Message(String.valueOf(authorInt), messageLocal.getMessage(),coach,new Date(messageLocal.getTimestamp()));
+//            }
+//            else if(authorInt==ID_NUTRITIONIST){
+//                message = new Message(String.valueOf(authorInt), messageLocal.getMessage(),nutritionist,new Date(messageLocal.getTimestamp()));
+//            }
+//            else {//me
+//                message = new Message(String.valueOf(authorInt), messageLocal.getMessage(),me,new Date(messageLocal.getTimestamp()));
+//            }
+//            newMessage(message);
+
+            addMessage(messageLocal.getMessage(),messageLocal.getAuthor(),messageLocal.getTimestamp());
+        }
+    }
+
+    private void handleErrorGetMessages(Throwable error){
+        error.printStackTrace();
+        Toast.makeText(getContext(),"Error in recieving message",Toast.LENGTH_SHORT).show();
+    }
+
+  }

@@ -20,9 +20,6 @@ public class ChatApplication extends Application {
 
     private Socket mSocket;
     private String tokenS;
-    {
-
-    }
 
     public Socket getSocket() {
         DatabaseHandler db = new DatabaseHandler(getApplicationContext());
