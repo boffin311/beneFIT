@@ -16,6 +16,7 @@ import rx.Observable;
 import tech.iosd.benefit.Model.BodyForMealLog;
 import tech.iosd.benefit.Model.Measurements;
 import tech.iosd.benefit.Model.Response;
+import tech.iosd.benefit.Model.ResponseForChatMessage;
 import tech.iosd.benefit.Model.ResponseForFoodSearch;
 import tech.iosd.benefit.Model.ResponseForGetExcerciseVideoUrl;
 import tech.iosd.benefit.Model.ResponseForGetMeal;
@@ -58,6 +59,9 @@ public interface RetrofitInterface {
 
     @GET("workout/user/get")
     Observable<ResponseForWorkoutForDate> getWorkoutforDate(@Query("date") String date, @Header("Authorization") String token);
+
+    @GET("chat/fetch")
+    Observable<ResponseForChatMessage> getChatMessages(@Query("timestamp") Long timestamp, @Header("Authorization") String token);
 
     @GET("mealLog/details")
     Observable<ResponseForGetMeal> getFoodMeal(@Query("date") String date, @Query("type") String type, @Header("Authorization") String token);

@@ -33,16 +33,15 @@ public class VideoControllerView extends FrameLayout {
     private MediaPlayerControl mPlayer;
     private Context mContext;
     private ViewGroup mAnchor;
-    private View mRoot, mRoot2;
+    private View mRoot;
     private ProgressBar mProgress;
     private TextView mEndTime, mCurrentTime,onScreenName;
     private boolean mShowing;
     private boolean mDragging;
-    private static final int sDefaultTimeout = 2000;
+    private static final int sDefaultTimeout = 3000;
     private static final int FADE_OUT = 1;
     private static final int SHOW_PROGRESS = 2;
     private boolean mFromXml;
-    private boolean mListenersSet;
     StringBuilder mFormatBuilder;
     Formatter mFormatter;
     private ImageButton mPauseButton;
@@ -50,8 +49,9 @@ public class VideoControllerView extends FrameLayout {
     private ImageButton nextVideoButton;
     private String vidName;
     private ImageButton prevVideoButton;
+    private ImageButton mStopButton;
     private Handler mHandler = new MessageHandler(this);
-    private int remainingTime, introReal, NoOfSets;
+    private int remainingTime,NoOfSets;
 
 
     public VideoControllerView(Context context, AttributeSet attrs) {
@@ -82,9 +82,8 @@ public class VideoControllerView extends FrameLayout {
     }
 
 
-    public void setAnchorView(ViewGroup view, int IntroReal, int noOfSets,String namek) {
+    public void setAnchorView(ViewGroup view, int noOfSets,String namek) {
         mAnchor = view;
-        introReal = IntroReal;
         NoOfSets = noOfSets;
         vidName = namek;
 
@@ -137,6 +136,11 @@ public class VideoControllerView extends FrameLayout {
 
         mFormatBuilder = new StringBuilder();
         mFormatter = new Formatter(mFormatBuilder, Locale.getDefault());
+
+        mStopButton = (ImageButton)findViewById(R.id.stop);
+        if(mStopButton!=null) {
+            mStopButton.setOnClickListener(mStopListener);
+        }
 
     }
 
@@ -261,11 +265,11 @@ public class VideoControllerView extends FrameLayout {
             int percent = mPlayer.getBufferPercentage();
             mProgress.setSecondaryProgress(percent * 10);
         }
-        if (introReal == 1) {
-            mPlayer.setOnScreenTime(position);
-        } else {
+//        if (introReal == 1) {
+//            mPlayer.setOnScreenTime(position);
+//        } else {
             mPlayer.setOnScreenTime(remaining);
-        }
+//        }
         return position;
     }
 
@@ -425,11 +429,11 @@ public class VideoControllerView extends FrameLayout {
                 remainingTime = (int) duration - (int) newposition + 1000;
             mCurrentTime.setText(stringForTime(remainingTime));
             mEndTime.setText(stringForTime((int) newposition));
-            if (introReal == 1) {
-                mPlayer.setOnScreenTime((int) newposition);
-            } else {
+//            if (introReal == 1) {
+//                mPlayer.setOnScreenTime((int) newposition);
+//            } else {
                 mPlayer.setOnScreenTime(remainingTime);
-            }
+//            }
 
         }
 
@@ -501,18 +505,12 @@ public class VideoControllerView extends FrameLayout {
         }
     };
 
-    private OnClickListener mFfwdListener = new OnClickListener() {
+    private OnClickListener mStopListener = new OnClickListener() {
         public void onClick(View v) {
             if (mPlayer == null) {
                 return;
             }
-
-            int pos = mPlayer.getCurrentPosition();
-            pos += 15000; // milliseconds
-            mPlayer.seekTo(pos);
-            setProgress();
-
-            show(sDefaultTimeout);
+            mPlayer.Stop();
         }
     };
 
@@ -545,6 +543,7 @@ public class VideoControllerView extends FrameLayout {
 
         void nextVideo();
         void prevVideo();
+        void Stop();
     }
 
     private static class MessageHandler extends Handler {

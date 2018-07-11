@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <com.stfalcon.chatkit.messages.MessagesList
-        android:id="@+id/messagesList"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="60dp"/>
     <!--
     <android.support.v7.widget.RecyclerView
         android:id="@+id/messagesList"
@@ -55,7 +51,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="18sp"
-                android:text="Chat with your coach now"
+                android:text="Connecting..."
                 android:layout_centerVertical="true"
                 android:fontFamily="@font/proxima_nova"
                 android:textStyle="bold"
@@ -63,21 +59,28 @@
                 android:layout_marginStart="10dp"/>
 
             <ImageView
+                android:id="@+id/status_circle"
                 android:layout_toEndOf="@id/chat_lbl"
                 android:layout_width="12dp"
                 android:layout_height="12dp"
                 android:layout_centerVertical="true"
                 android:layout_marginStart="20dp"
                 android:src="@drawable/circle"
-                android:tint="#64dc17"/>
+                android:tint="#1759dc"/>
         </RelativeLayout>
     </android.support.v7.widget.CardView>
 
+    <com.stfalcon.chatkit.messages.MessagesList
+        android:id="@+id/messagesList"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
     <com.stfalcon.chatkit.messages.MessageInput
         android:id="@+id/messages_input"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         app:inputHint="Type a message"
         app:showAttachmentButton="false" />
-</RelativeLayout>
+
+</LinearLayout>
