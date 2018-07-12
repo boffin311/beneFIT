@@ -244,12 +244,12 @@ public class MyWorkout extends Fragment
             return;
             //Download completes here
         }
-        Log.d("error77"," " +responseForWorkoutForDate.getData().get(0).getWorkout().getExercises().size());
-        exercises = responseForWorkoutForDate.getData().get(0).getWorkout().getExercises();
+        Log.d("error77"," " +responseForWorkoutForDate.getData().getWorkout().getExercises().size());
+        exercises = responseForWorkoutForDate.getData().getWorkout().getExercises();
         adapter.setExercises(exercises);
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
-        recyclerView.getLayoutParams().height = 210*exercises.size();
+        recyclerView.getLayoutParams().height = 140*exercises.size() ;
         noOfDiffId = getNumberOfDifferntId();
 
     }
