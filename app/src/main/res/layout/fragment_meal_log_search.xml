@@ -45,13 +45,7 @@
             android:textAllCaps="true"
             android:textSize="26sp"
             android:textStyle="bold"
-            android:paddingTop="7dp"
-            android:paddingStart="12dp"
-            android:paddingEnd="12dp"
-            android:paddingBottom="7dp"
-            android:layout_marginStart="50dp"
-            android:layout_marginEnd="50dp"
-            android:layout_marginBottom="30dp"
+
             android:maxLines="1"
             android:background="@drawable/edittxt_style"
             android:textColor="@color/colorPrimary"/>
