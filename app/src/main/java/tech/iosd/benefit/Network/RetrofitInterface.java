@@ -75,8 +75,8 @@ public interface RetrofitInterface {
     @POST("mealLog/details")
     Observable<ResponseForSuccess> sendFoodMeal(@Body BodyForMealLog bodyForMealLog, @Header("Authorization") String token);
 
-    @GET("workout/exercise/{url}/url")
-    Observable<ResponseForGetExcerciseVideoUrl> getExerciseVideoUrl(@Path("url") String url, @Header("Authorization") String token);
+    @GET("workout/exercise/{url}/url/")
+    Observable<ResponseForGetExcerciseVideoUrl> getExerciseVideoUrl(@Path("url") String url, @Header("Authorization") String token,@Query("type") String type);
     /*@GET("users/{email}")
     Observable<User> getProfile(@Path("email") String email);*/
 
