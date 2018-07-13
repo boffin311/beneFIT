@@ -13,9 +13,11 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 import rx.Observable;
 
+import tech.iosd.benefit.Model.BodyForChangePassword;
 import tech.iosd.benefit.Model.BodyForMealLog;
 import tech.iosd.benefit.Model.Measurements;
 import tech.iosd.benefit.Model.Response;
+import tech.iosd.benefit.Model.ResponseForChangePassword;
 import tech.iosd.benefit.Model.ResponseForChatMessage;
 import tech.iosd.benefit.Model.ResponseForFoodSearch;
 import tech.iosd.benefit.Model.ResponseForGetExcerciseVideoUrl;
@@ -77,6 +79,9 @@ public interface RetrofitInterface {
     Observable<ResponseForGetExcerciseVideoUrl> getExerciseVideoUrl(@Path("url") String url, @Header("Authorization") String token);
     /*@GET("users/{email}")
     Observable<User> getProfile(@Path("email") String email);*/
+
+    @POST("profile/update")
+    Observable<Response> changePassword(@Header("authorization") String token, @Body BodyForChangePassword userProfileUpdate);
 
     @PUT("users/{email}")
     Observable<Response> changePassword(@Path("email") String email, @Body User user);
