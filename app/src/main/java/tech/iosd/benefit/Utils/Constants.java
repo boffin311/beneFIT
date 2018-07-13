@@ -46,7 +46,7 @@ public class Constants {
     public static final String SNACKS = "snacks";
 
     public static final String CHAT_SERVER_URL = "http://13.59.14.56:5000/";//global server
-    //public static final String CHAT_SERVER_URL = "http://192.168.0.107:5000";//local server
+//    public static final String CHAT_SERVER_URL = "http://192.168.0.107:5000";//local server
 
 
 
