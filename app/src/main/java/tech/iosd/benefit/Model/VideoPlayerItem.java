@@ -15,7 +15,7 @@ public class VideoPlayerItem {
 
 
     //common..............
-    private int type,sets;// type for managing control, sets for number of repetetions
+    private int type,sets;// type for managing control, sets for number of repetitions
     private String videoName;//for display
     //rest info
     private int restTimeSec;//rest time period
@@ -38,12 +38,14 @@ public class VideoPlayerItem {
             this.type = TYPE_FOLLOW;
         }
 
-        this.videoName = exercise.getExercise().getName();
         this.sets = exercise.getSets();
+        this.videoName = exercise.getExercise().getName();
+        this.restTimeSec = exercise.getRest();
         this.totalReps = exercise.getReps();
 
-        this.introVideo = exercise.get_id()+".mp4";
-        this.singleRepVideo = exercise.get_id()+".mp4";
+
+        this.introVideo = exercise.getExercise().get_id()+".mp4";
+        this.singleRepVideo = exercise.getExercise().get_id()+"_a.mp4";
 
 
         //defaults
