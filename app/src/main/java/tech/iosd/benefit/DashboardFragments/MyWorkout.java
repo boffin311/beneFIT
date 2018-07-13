@@ -200,32 +200,7 @@ public class MyWorkout extends Fragment
 
         }
     }
-    private void downloadFiles() {
-        if (currentPosition>=exercises.size()){
-            downloadDialog.hide();
-            if(allVideoDownloaded){
-                Intent intent = new Intent(getActivity().getApplicationContext(), VideoPlayerActivity.class);
-                String dataInString = (new Gson()).toJson(exercises);
-                intent.putExtra("dataFromServer",dataInString);
-                getContext().startActivity(intent);
-            }else {
-                showSnackBarMessage("All files not downloaded.\nPlease try again.");
-            }
-            return;
-        }
-        File file = new File(getActivity().getFilesDir().toString()+"/videos/"+exercises.get(currentPosition).getExercise().get_id()+".mp4");
-        if(file.exists()){
-            Toast.makeText(getContext(),"file arleady presenet"+(currentPosition+1),Toast.LENGTH_SHORT).show();
-            currentPosition++;
-            downloadFiles();
-           /* if(currentPosition<exercises.size()){
-                getExcercise(exercises.get(currentPosition).getExercise().get_id());
-            }*/
-        }
-        else{
-            getExcercise(exercises.get(currentPosition).getExercise().get_id());
-        }
-    }
+
 
     private void getWorkoutData(String date){
         if(!progressDialog.isShowing()){
@@ -291,7 +266,7 @@ public class MyWorkout extends Fragment
     }
 
     private void handleResponseSendMealLog(ResponseForGetExcerciseVideoUrl reponse) {
-        String url = reponse.getData();
+        ResponseForGetExcerciseVideoUrl.Data url = reponse.getData();
         Toast.makeText(getActivity().getApplicationContext(),"url fetch success",Toast.LENGTH_SHORT).show();
         getVideo(url);
     }
@@ -319,9 +294,38 @@ public class MyWorkout extends Fragment
             //showSnackBarMessage("Network Error !");
         }
     }
-    public void getVideo(String url) {
+    private void downloadFiles() {
+        if (currentPosition>=exercises.size()){
+            downloadDialog.hide();
+            if(allVideoDownloaded){
+                Intent intent = new Intent(getActivity().getApplicationContext(), VideoPlayerActivity.class);
+                String dataInString = (new Gson()).toJson(exercises);
+                intent.putExtra("dataFromServer",dataInString);
+                getContext().startActivity(intent);
+            }else {
+                showSnackBarMessage("All files not downloaded.\nPlease try again.");
+            }
+            return;
+        }
+        File file = new File(getActivity().getFilesDir().toString()+"/videos/"+exercises.get(currentPosition).getExercise().get_id()+".mp4");
+        if(file.exists()){
+            Toast.makeText(getContext(),"file arleady presenet"+(currentPosition+1),Toast.LENGTH_SHORT).show();
+            currentPosition++;
+            downloadFiles();
+           /* if(currentPosition<exercises.size()){
+                getExcercise(exercises.get(currentPosition).getExercise().get_id());
+            }*/
+        }
+        else{
+            getExcercise(exercises.get(currentPosition).getExercise().get_id());
+        }
+    }
+    public void getVideo(ResponseForGetExcerciseVideoUrl.Data data) {
         noOfCurrentVideUser++;
+        boolean firtVideo =true;
+        String url = data.getTutorial();
         Uri downloadUri = Uri.parse(url);
+
         Uri destinationUri = Uri.parse(getActivity().getFilesDir().toString()+"/videos/"+exercises.get(currentPosition).getExercise().get_id()+".mp4");
         DownloadRequest downloadRequest = new DownloadRequest(downloadUri)
                 .setRetryPolicy(new DefaultRetryPolicy())
@@ -330,9 +334,11 @@ public class MyWorkout extends Fragment
                 .setDownloadListener(new DownloadStatusListener() {
                     @Override
                     public void onDownloadComplete(int id) {
+
                         currentPosition++;
                         Toast.makeText(getActivity().getApplicationContext(),"completed download"+(currentPosition+1),Toast.LENGTH_SHORT).show();
                         allVideoDownloaded = allVideoDownloaded && true;
+                        if (!data.getVideoA().equals(""))
                         downloadFiles();
 
                     }

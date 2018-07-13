@@ -46,6 +46,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
+import tech.iosd.benefit.DashboardFragments.Chat;
+import tech.iosd.benefit.DashboardFragments.MyAccountChangePassword;
 import tech.iosd.benefit.Model.DatabaseHandler;
 import tech.iosd.benefit.Model.VideoPlayerItem;
 import tech.iosd.benefit.Utils.JWTUtils;
@@ -58,7 +60,8 @@ public class AccountFragment extends Fragment implements
     Context ctx;
     FragmentManager fm;
 
-    TextView googleFit;
+    TextView googleFit, changePassword;
+
     private DatabaseHandler db;
 
     @Override
@@ -69,6 +72,14 @@ public class AccountFragment extends Fragment implements
         fm = getFragmentManager();
         googleFit = rootView.findViewById(R.id.googleFit);
         db = new DatabaseHandler(getContext());
+        changePassword = rootView.findViewById(R.id.account_change_password);
+        changePassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fm.beginTransaction().replace(R.id.dashboard_content, new MyAccountChangePassword()).addToBackStack(null).commit();
+            }
+        });
+
         try {
             Log.d("JWT_DECODED",db.getUserToken());
 
