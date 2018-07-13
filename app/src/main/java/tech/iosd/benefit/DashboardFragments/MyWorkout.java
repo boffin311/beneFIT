@@ -78,7 +78,7 @@ public class MyWorkout extends Fragment
 
     private int noOfDiffId =0;
     private int noOfCurrentVideUser=0;
-    boolean allVideoDownloaded = false;
+    boolean allVideoDownloaded = true;
 
 
     @Nullable
@@ -342,7 +342,7 @@ public class MyWorkout extends Fragment
                         Toast.makeText(getActivity().getApplicationContext(),"failed error in logs TAG error77 ",Toast.LENGTH_SHORT).show();
                         Log.d("error77",errorMessage+"\n"+"of number"+((int)currentPosition+1)+"\nof id: "+exercises.get(currentPosition).getExercise().get_id());
                         currentPosition++;
-                        allVideoDownloaded = allVideoDownloaded && true;
+                        allVideoDownloaded = allVideoDownloaded && false;
 
                         downloadFiles();
 
