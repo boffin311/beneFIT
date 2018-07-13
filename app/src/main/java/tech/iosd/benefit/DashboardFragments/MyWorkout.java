@@ -82,7 +82,7 @@ public class MyWorkout extends Fragment
 
     private int noOfDiffId =0;
     private int noOfCurrentVideUser=0;
-    boolean allVideoDownloaded = false;
+    boolean allVideoDownloaded = true;
 
 
     @Nullable
@@ -308,10 +308,14 @@ public class MyWorkout extends Fragment
         if (currentPosition>=exercises.size()){
             downloadDialog.hide();
             if(allVideoDownloaded){
-                Intent intent = new Intent(getActivity().getApplicationContext(), VideoPlayerActivity.class);
-                String dataInString = (new Gson()).toJson(exercises);
-                intent.putExtra("dataFromServer",dataInString);
-                getContext().startActivity(intent);
+                Gson gson = new Gson();
+                ArrayList<String> videoPlayerItemList = new ArrayList<>();
+                for(Exercise e:exercises){
+                    videoPlayerItemList.add(gson.toJson(new VideoPlayerItem(e)));
+                }
+                Intent intent = new Intent(getContext(), VideoPlayerActivity.class);
+                intent.putExtra("videoItemList",videoPlayerItemList);
+                startActivity(intent);
             }else {
                 showSnackBarMessage("All files not downloaded.\nPlease try again.");
             }
@@ -435,7 +439,7 @@ public class MyWorkout extends Fragment
                         Toast.makeText(getActivity().getApplicationContext(),"failed error in logs TAG error77 ",Toast.LENGTH_SHORT).show();
                         Log.d("error77",errorMessage+"\n"+"of number"+((int)currentPosition+1)+"\nof id: "+exercises.get(currentPosition).getExercise().get_id());
                         currentPosition++;
-                        allVideoDownloaded = allVideoDownloaded && false;
+                        allVideoDownloaded = false;
 
                         downloadFiles();
 

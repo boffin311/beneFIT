@@ -1,6 +1,7 @@
 package tech.iosd.benefit.VideoPlayer;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.media.AudioManager;
@@ -65,15 +66,16 @@ public class VideoPlayerActivity extends Activity implements SurfaceHolder.Callb
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_player);
 
-
         videoPlayerItemList = getIntent().getStringArrayListExtra("videoItemList");
         currentItem = 0;
 
-
         setVideoItem();
 
+        initViews();
 
-
+        //player is initiated in method surface created
+    }
+    private void initViews(){
         restView = (View) findViewById(R.id.restView);
 
         restCounter = (TextView) findViewById(R.id.restCounter);
@@ -121,6 +123,7 @@ public class VideoPlayerActivity extends Activity implements SurfaceHolder.Callb
 
     }
 
+
     private void startNextInList(){
         if(currentItem < videoPlayerItemList.size() -1 ){
             currentItem++;
@@ -130,7 +133,6 @@ public class VideoPlayerActivity extends Activity implements SurfaceHolder.Callb
             finish();
         }
     }
-
     private void startPreviousInList(){
         if(currentItem >0){
             currentItem--;
@@ -145,6 +147,54 @@ public class VideoPlayerActivity extends Activity implements SurfaceHolder.Callb
         videoItem = gson.fromJson(videoPlayerItemList.get(currentItem),VideoPlayerItem.class);
     }
 
+
+    private void showStopDialog(){
+        pause();
+
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setTitle("Stop Workout?");
+        alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        });
+        alert.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                start();
+            }
+        });
+        alert.setCancelable(false);
+        alert.show();
+    }
+    private void showNextDialog(int next1prev0){
+        pause();
+
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        if(next1prev0==1)
+            alert.setTitle("Skip to Next Exercise?");
+        else
+            alert.setTitle("Go back to previous Exercise?");
+
+        alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if(next1prev0==1)
+                    startNextInList();
+                else
+                    startPreviousInList();
+            }
+        });
+        alert.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                start();
+            }
+        });
+        alert.setCancelable(false);
+        alert.show();
+    }
 
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
@@ -446,11 +496,11 @@ public class VideoPlayerActivity extends Activity implements SurfaceHolder.Callb
         if (player != null) {
             if (videoItem.getType() == VideoPlayerItem.TYPE_FOLLOW) {
 //                Toast.makeText(VideoPlayerActivity.this, "Nothing to go forward to", Toast.LENGTH_SHORT).show();
-                startNextInList();
+                showNextDialog(1);
             } else if (videoItem.getType() == VideoPlayerItem.TYPE_REPETITIVE) {
                 if (videoItem.getIntroComp()) {//if intro is completed
 //                    Toast.makeText(VideoPlayerActivity.this, "Nothing to go forward to", Toast.LENGTH_SHORT).show();
-                    startNextInList();
+                    showNextDialog(1);
                 } else {//if intro is not complete
                     hideAllViews();
                     videoItem.setIntroComp(true);
@@ -465,7 +515,7 @@ public class VideoPlayerActivity extends Activity implements SurfaceHolder.Callb
         if (player != null) {
             if (videoItem.getType() == VideoPlayerItem.TYPE_FOLLOW) {
 //                Toast.makeText(VideoPlayerActivity.this, "Nothing to go back to", Toast.LENGTH_SHORT).show();
-                startPreviousInList();
+                showNextDialog(0);
             } else if (videoItem.getType() == VideoPlayerItem.TYPE_REPETITIVE) {
                 if (videoItem.getIntroComp()) {//if intro is completed go back to intro video
                     hideAllViews();
@@ -474,7 +524,7 @@ public class VideoPlayerActivity extends Activity implements SurfaceHolder.Callb
                     startVideo();
                 } else {
 //                    Toast.makeText(VideoPlayerActivity.this, "Nothing to go back to", Toast.LENGTH_SHORT).show();
-                    startPreviousInList();
+                    showNextDialog(0);
                 }
             }
 
@@ -483,7 +533,7 @@ public class VideoPlayerActivity extends Activity implements SurfaceHolder.Callb
 
     @Override
     public void Stop() {
-        finish();
+        showStopDialog();
     }
 
     public void startVideo() {
@@ -520,7 +570,7 @@ public class VideoPlayerActivity extends Activity implements SurfaceHolder.Callb
                     }
 //                    Uri video = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.stackpushupsingle);//dummy for now
 //                    player.setDataSource(this, video);
-                    String path = VideoPlayerActivity.this.getFilesDir().toString() + videoItem.getIntroVideo();
+                    String path = VideoPlayerActivity.this.getFilesDir().toString()+"/videos/" + videoItem.getIntroVideo();
                     player.setDataSource(path);
 
                     player.prepareAsync();
@@ -537,7 +587,7 @@ public class VideoPlayerActivity extends Activity implements SurfaceHolder.Callb
                     }
 //                    Uri video = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.stackpushupsingle);//dummy for now
 //                    player.setDataSource(this, video);
-                    String path = VideoPlayerActivity.this.getFilesDir().toString() + videoItem.getSingleRepVideo();
+                    String path = VideoPlayerActivity.this.getFilesDir().toString()+"/videos/" + videoItem.getSingleRepVideo();
                     player.setDataSource(path);
 
                     player.prepareAsync();
@@ -551,7 +601,7 @@ public class VideoPlayerActivity extends Activity implements SurfaceHolder.Callb
                     }
 //                    Uri video = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.stackpushupsingle);//dummy for now
 //                    player.setDataSource(this, video);
-                    String path = VideoPlayerActivity.this.getFilesDir().toString() + videoItem.getIntroVideo();
+                    String path = VideoPlayerActivity.this.getFilesDir().toString()+"/videos/" + videoItem.getIntroVideo();
                     player.setDataSource(path);
 
                     player.prepareAsync();
