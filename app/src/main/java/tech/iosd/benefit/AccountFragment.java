@@ -42,8 +42,10 @@ import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import tech.iosd.benefit.Model.DatabaseHandler;
@@ -95,10 +97,13 @@ public class AccountFragment extends Fragment implements
                 videoItem.setCurrentSet(0);
 
                 Gson gson = new Gson();
-
+                ArrayList<String> videoItemList = new ArrayList<>();
+                videoItemList.add(gson.toJson(videoItem));
+                videoItem.setType(VideoPlayerItem.TYPE_FOLLOW);
+                videoItemList.add(gson.toJson(videoItem));
 
                 Intent intent = new Intent(getContext(), VideoPlayerActivity.class);
-                intent.putExtra("videoItem",gson.toJson(videoItem));
+                intent.putExtra("videoItemList",videoItemList);
                 startActivity(intent);
             }
         });
