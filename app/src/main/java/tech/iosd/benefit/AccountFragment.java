@@ -46,7 +46,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
+import tech.iosd.benefit.Model.DatabaseHandler;
 import tech.iosd.benefit.Model.VideoPlayerItem;
+import tech.iosd.benefit.Utils.JWTUtils;
 import tech.iosd.benefit.VideoPlayer.VideoPlayerActivity;
 
 public class AccountFragment extends Fragment implements
@@ -57,6 +59,7 @@ public class AccountFragment extends Fragment implements
     FragmentManager fm;
 
     TextView googleFit;
+    private DatabaseHandler db;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -65,6 +68,14 @@ public class AccountFragment extends Fragment implements
         ctx = rootView.getContext();
         fm = getFragmentManager();
         googleFit = rootView.findViewById(R.id.googleFit);
+        db = new DatabaseHandler(getContext());
+        try {
+            Log.d("JWT_DECODED",db.getUserToken());
+
+            JWTUtils.decoded(db.getUserToken());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         TextView videoplayerTest = rootView.findViewById(R.id.videoplayerTest);
         videoplayerTest.setOnClickListener(new View.OnClickListener() {
