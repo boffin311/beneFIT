@@ -7,9 +7,9 @@ package tech.iosd.benefit.Model;
 public class ResponseForGetExcerciseVideoUrl {
     private  boolean success;
     private String message;
-    private Data data;
+    private String data;
 
-    public ResponseForGetExcerciseVideoUrl(boolean success, String message, Data data) {
+    public ResponseForGetExcerciseVideoUrl(boolean success, String message, String data) {
         this.success = success;
         this.message = message;
         this.data = data;
@@ -31,11 +31,11 @@ public class ResponseForGetExcerciseVideoUrl {
         this.message = message;
     }
 
-    public Data getData() {
+    public String getData() {
         return data;
     }
 
-    public void setData(Data data) {
+    public void setData(String data) {
         this.data = data;
     }
     public class Data{
