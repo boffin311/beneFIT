@@ -36,6 +36,7 @@ import java.io.PipedReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Locale;
 
 import devs.mulham.horizontalcalendar.HorizontalCalendar;
 import devs.mulham.horizontalcalendar.utils.HorizontalCalendarListener;
@@ -139,7 +140,7 @@ public class MyWorkout extends Fragment
                 .datesNumberOnScreen(7)
                 .mode(HorizontalCalendar.Mode.DAYS)
                 .configure()
-                .formatMiddleText("EEE\n").sizeMiddleText(12)
+                .formatMiddleText("EEEEE\n").sizeMiddleText(12)
                 .formatBottomText("dd").sizeBottomText(26)
                 .showTopText(false)
                 .end()
@@ -147,7 +148,7 @@ public class MyWorkout extends Fragment
 
         final TextView lbl_year = rootView.findViewById(R.id.my_workout_calendar_year);
         final TextView lbl_month = rootView.findViewById(R.id.my_workout_calendar_month);
-        dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
 
         selectedDate = dateFormat.format(Calendar.getInstance().getTime());
 
@@ -308,10 +309,10 @@ public class MyWorkout extends Fragment
         if (currentPosition>=exercises.size()){
             downloadDialog.hide();
             if(allVideoDownloaded){
-                Gson gson = new Gson();
+                Gson gson = new GsonBuilder().create();
                 ArrayList<String> videoPlayerItemList = new ArrayList<>();
-                for(Exercise e:exercises){
-                    videoPlayerItemList.add(gson.toJson(new VideoPlayerItem(e)));
+                for(int i =0 ; i<exercises.size();i++){
+                    videoPlayerItemList.add(gson.toJson(new VideoPlayerItem(exercises.get(i))));
                 }
                 Intent intent = new Intent(getContext(), VideoPlayerActivity.class);
                 intent.putExtra("videoItemList",videoPlayerItemList);
@@ -347,6 +348,7 @@ public class MyWorkout extends Fragment
         }
         if(file.exists()){
             Toast.makeText(getContext(),"file arleady presenet "+type+(currentPosition+1),Toast.LENGTH_SHORT).show();
+            Log.d("files",getActivity().getFilesDir().toString()+"/videos/");
             if (type.equals("tutorial")){
                 type = "a";
                 downloadFiles();

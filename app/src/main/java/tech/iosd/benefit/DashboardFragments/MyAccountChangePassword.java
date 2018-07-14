@@ -125,7 +125,7 @@ public class MyAccountChangePassword extends Fragment {
     private void handleResponse(Response response) {
 
         if (response.getSuccess()){
-            Toast.makeText(getActivity().getApplicationContext(),"Password change success!",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity().getApplicationContext(),"Password change success! "+response.mesage,Toast.LENGTH_SHORT).show();
             showSnackBarMessage("Password change success!");
             FragmentManager fm = getFragmentManager();
             fm.popBackStack();

@@ -103,6 +103,9 @@ dependencies {
     implementation 'com.android.support:multidex:1.0.3'
     implementation 'com.mani:ThinDownloadManager:1.4.0'
 
+    implementation 'com.github.paolorotolo:expandableheightlistview:1.0.0'
+
+
     testImplementation 'junit:junit:4.12'
 }
 

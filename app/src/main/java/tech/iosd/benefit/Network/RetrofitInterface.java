@@ -80,7 +80,7 @@ public interface RetrofitInterface {
     /*@GET("users/{email}")
     Observable<User> getProfile(@Path("email") String email);*/
 
-    @POST("profile/update")
+    @POST("auth/changePassword")
     Observable<Response> changePassword(@Header("authorization") String token, @Body BodyForChangePassword userProfileUpdate);
 
     @PUT("users/{email}")
