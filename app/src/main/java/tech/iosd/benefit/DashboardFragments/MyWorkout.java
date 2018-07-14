@@ -308,10 +308,10 @@ public class MyWorkout extends Fragment
         if (currentPosition>=exercises.size()){
             downloadDialog.hide();
             if(allVideoDownloaded){
-                Gson gson = new Gson();
+                Gson gson = new GsonBuilder().create();
                 ArrayList<String> videoPlayerItemList = new ArrayList<>();
-                for(Exercise e:exercises){
-                    videoPlayerItemList.add(gson.toJson(new VideoPlayerItem(e)));
+                for(int i =0 ; i<exercises.size();i++){
+                    videoPlayerItemList.add(gson.toJson(new VideoPlayerItem(exercises.get(i))));
                 }
                 Intent intent = new Intent(getContext(), VideoPlayerActivity.class);
                 intent.putExtra("videoItemList",videoPlayerItemList);
@@ -347,6 +347,7 @@ public class MyWorkout extends Fragment
         }
         if(file.exists()){
             Toast.makeText(getContext(),"file arleady presenet "+type+(currentPosition+1),Toast.LENGTH_SHORT).show();
+            Log.d("files",getActivity().getFilesDir().toString()+"/videos/");
             if (type.equals("tutorial")){
                 type = "a";
                 downloadFiles();

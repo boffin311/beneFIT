@@ -59,7 +59,7 @@ public class VideoPlayerActivity extends Activity implements SurfaceHolder.Callb
     ArrayList<String> videoPlayerItemList;
     int currentItem;
     View restView;//for hiding layouts at different points
-    private VideoPlayerItem videoItem;//has all details of items
+    private VideoPlayerItem videoItem = null;//has all details of items
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
