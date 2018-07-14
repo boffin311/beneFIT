@@ -49,8 +49,9 @@ public class SetupProfile extends Fragment implements View.OnClickListener
     FloatingActionButton btnMale;
     FloatingActionButton btnFemale;
     FloatingActionButton genderSelector;
-    int weightPickerPos = 0;
-    int heightPickerPos = 0;
+    int weightPickerPos = 35;
+    int heightPickerPos = 27;
+    int agePickerPos = 13;
     List<String> heightsCM;
     List<String> heightsFT;
     List<String> weightsKG;
@@ -387,7 +388,7 @@ public class SetupProfile extends Fragment implements View.OnClickListener
                 final AlertDialog dialog = mBuilder.create();
                 dialog.show();
                 wheelPickerHeight.setData(ageList);
-                wheelPickerHeight.setSelectedItemPosition(0);
+                wheelPickerHeight.setSelectedItemPosition(agePickerPos);
                 dialogDone.setOnClickListener(new View.OnClickListener()
                 {
                     @Override
