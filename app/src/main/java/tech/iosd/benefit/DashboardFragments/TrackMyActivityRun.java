@@ -367,6 +367,8 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
                 points =latLngArray.get(currentPolyLine).getLatLngsArrayList();
                 circleOptions = new CircleOptions().center(new LatLng(myService.getLatitude(),myService.getLongitude())).radius(3).fillColor( Color.argb(255,255,82,82)).strokeColor(Color.argb(100,67,1,1)).strokeWidth(4).zIndex(2.0f);
 
+                latLngArray.get(currentPolyLine).getLatLngsArrayList().add(myService.getLatLng());
+
                 googleMap.addCircle(circleOptions);
 
                 startRunning();
@@ -442,6 +444,22 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
                 break;
             }
         }
+    }
+
+    private void calculateAndShowDistace(){
+
+        Double disLocal = 0.0;
+
+        for (int i = 0 ;i <=currentPolyLine; i++) {
+
+
+            disLocal = disLocal + SphericalUtil.computeLength(latLngArray.get(i).getLatLngsArrayList());
+        }
+
+
+        distance.setText(String.format("%.1f",(disLocal)/1000));
+
+
     }
 
 
@@ -617,7 +635,8 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
             googleMap.addCircle(circleOptions);
 
 
-            distance.setText(String.format("%.1f",(distance_number-distace_paused)/1000));
+            //distance.setText(String.format("%.1f",(distance_number-distace_paused)/1000));
+            calculateAndShowDistace();
 
         }else {
             if (fistPuase){

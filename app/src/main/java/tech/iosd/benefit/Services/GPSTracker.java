@@ -43,8 +43,7 @@ import tech.iosd.benefit.Utils.Constants;
 public class GPSTracker extends Service implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
-        LocationListener,
-        SensorEventListener {
+        LocationListener {
     private Context mContext;
 
     private double latitude, longitude;
@@ -114,8 +113,6 @@ public class GPSTracker extends Service implements
         mAccelCurrent = SensorManager.GRAVITY_EARTH;
         mAccelLast = SensorManager.GRAVITY_EARTH;
 
-        sensorMan.registerListener(this, accelerometer,
-                SensorManager.SENSOR_DELAY_UI);
 
     }
 
@@ -207,36 +204,9 @@ public class GPSTracker extends Service implements
     }
 
 
-    @Override
-    public void onSensorChanged(SensorEvent event) {
-        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-            mGravity = event.values.clone();
-            // Shake detection
-            float x = mGravity[0];
-            float y = mGravity[1];
-            float z = mGravity[2];
-            mAccelLast = mAccelCurrent;
-            mAccelCurrent = (float) Math.sqrt(x * x + y * y + z * z);
-            // Toast.makeText(this,"senser acc: "+ mAccel,Toast.LENGTH_SHORT).show();
 
-            float delta = mAccelCurrent - mAccelLast;
-            mAccel = mAccel * 0.9f + delta;
-            // Make this higher or lower according to how much
-            // motion you want to detect
-            Log.d("sensor", String.valueOf(Math.abs(mAccel)));
 
-            if (Math.abs(mAccel) > 1) {
-                // do something
-                // Toast.makeText(mContext,"senser acc: "+ Math.abs(mAccel),Toast.LENGTH_SHORT).show();
-            }
-        }
 
-    }
-
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-        // required method
-    }
 
     @Override
     public void onConnectionSuspended(int i) {
