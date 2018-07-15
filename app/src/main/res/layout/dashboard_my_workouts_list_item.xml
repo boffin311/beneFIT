@@ -52,6 +52,17 @@
                 android:text="2 sets, 6-8 reps"
                 android:textColor="#565656"
                 android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/dashboard_my_workouts_list_item_note"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="110dp"
+                android:layout_marginTop="50dp"
+                android:fontFamily="@font/oswald"
+                android:text="Note ..."
+                android:textColor="#51ff33"
+                android:textSize="16sp" />
         </RelativeLayout>
     </android.support.v7.widget.CardView>
 

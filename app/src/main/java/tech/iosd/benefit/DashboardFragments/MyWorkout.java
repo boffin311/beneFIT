@@ -234,7 +234,6 @@ public class MyWorkout extends Fragment
         adapter.setExercises(exercises);
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
-        recyclerView.getLayoutParams().height = 140*exercises.size() ;
         noOfDiffId = getNumberOfDifferntId();
 
     }
