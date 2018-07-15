@@ -363,6 +363,7 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
                 mapsMarkers.add(new MapsMarker(myService.getLatitude(),myService.getLongitude(),true));
                 CircleOptions circleOptions =null;
                 currentPolyLine++;
+                latLngArray.add(new LatLngArray());
                 points =latLngArray.get(currentPolyLine).getLatLngsArrayList();
                 circleOptions = new CircleOptions().center(new LatLng(myService.getLatitude(),myService.getLongitude())).radius(3).fillColor( Color.argb(255,255,82,82)).strokeColor(Color.argb(100,67,1,1)).strokeWidth(4).zIndex(2.0f);
 
@@ -379,6 +380,8 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
                 discardBtn.setVisibility(View.VISIBLE);
                 //mapsMarkers.add(new MapsMarker(myService.getLatitude(),myService.getLongitude(),false));
                 currentPolyLine++;
+                latLngArray.add(new LatLngArray());
+
 
                 myService.setPaused(true);
                 break;
