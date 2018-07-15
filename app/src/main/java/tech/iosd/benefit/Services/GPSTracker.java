@@ -48,6 +48,7 @@ public class GPSTracker extends Service implements
     private Context mContext;
 
     private double latitude, longitude;
+    private LatLng latLng;
 
     private ArrayList<LatLng> points;
     private ArrayList<LatLng> pointsForLastDistance;
@@ -57,7 +58,7 @@ public class GPSTracker extends Service implements
     public boolean isGoogleAPIConnected = false;
 
 
-    private static final long INTERVAL = 1500;
+    private static final long INTERVAL = 1000;
     private static final long FASTEST_INTERVAL = 1000;
     LocationRequest mLocationRequest;
     GoogleApiClient mGoogleApiClient;
@@ -77,6 +78,13 @@ public class GPSTracker extends Service implements
     private float mAccelLast;
     boolean isMovement = false;
 
+    public LatLng getLatLng() {
+        return latLng;
+    }
+
+    public void setLatLng(LatLng latLng) {
+        this.latLng = latLng;
+    }
 
     private final IBinder mBinder = new LocalBinder();
 
@@ -169,6 +177,7 @@ public class GPSTracker extends Service implements
 
             latitude = location.getLatitude();
             longitude = location.getLongitude();
+            latLng =  new LatLng(latitude,longitude);
             isGoogleAPIConnected = true;
 
             Intent broadcastIntent = new Intent();
@@ -257,24 +266,25 @@ public class GPSTracker extends Service implements
 
         latitude = mCurrentLocation.getLatitude();
         longitude = mCurrentLocation.getLongitude();
+        latLng = new LatLng(latitude, longitude);
       //  Toast.makeText(this, "Location accuracy: "+String.valueOf(mCurrentLocation.getAccuracy()), Toast.LENGTH_SHORT).show();
 
 
         if(isPaused){
             //progressDialog.hide();
         }
-        if(mCurrentLocation.getAccuracy()<20){
+        if(mCurrentLocation.getAccuracy()<30){
             progressDialog.hide();
             pointsForLastDistance.clear();
             pointsForLastDistance.add(new LatLng(latitude,longitude));
             pointsForLastDistance.add(new LatLng(lastLatitude,lastLongitude));
 
             double dist = SphericalUtil.computeLength(pointsForLastDistance);
-            if(Math.abs(dist - lastDistance) <1){
+            if(Math.abs(dist - lastDistance) <0.5){
                 Toast.makeText(this, "speed too slow have run..", Toast.LENGTH_SHORT).show();
-                lastDistance = dist;
+                /*lastDistance = dist;
                 lastLatitude =  latitude;
-                lastLongitude =  longitude;
+                lastLongitude =  longitude;*/
 
                 return;
             }
