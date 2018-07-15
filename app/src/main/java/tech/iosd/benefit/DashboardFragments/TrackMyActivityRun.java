@@ -86,7 +86,7 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
     private ArrayList<MapsMarker> mapsMarkers;
     private double currentLatitude, currentLongitude;
     int currentPolyLine =-1;
-    private LatLngArray latLngArray;
+    private ArrayList<LatLngArray> latLngArray;
 
     private class LatLngArray{
         ArrayList <LatLng> latLngsArrayList;
@@ -222,7 +222,7 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
         View rootView = inflater.inflate(R.layout.dashboard_track_my_activity_run, container, false);
 
         //polylineArrays =  new ArrayList<>();
-        latLngArray = new LatLngArray();
+        latLngArray = new ArrayList<>();
         ctx = rootView.getContext();
         distance = rootView.findViewById(R.id.dashboard_track_my_activity_distance_textview);
 
@@ -363,7 +363,7 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
                 mapsMarkers.add(new MapsMarker(myService.getLatitude(),myService.getLongitude(),true));
                 CircleOptions circleOptions =null;
                 currentPolyLine++;
-                points =latLngArray.latLngsArrayList;
+                points =latLngArray.get(currentPolyLine).getLatLngsArrayList();
                 circleOptions = new CircleOptions().center(new LatLng(myService.getLatitude(),myService.getLongitude())).radius(3).fillColor( Color.argb(255,255,82,82)).strokeColor(Color.argb(100,67,1,1)).strokeWidth(4).zIndex(2.0f);
 
                 googleMap.addCircle(circleOptions);
@@ -378,6 +378,7 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
                 stopLayout.setVisibility(View.VISIBLE);
                 discardBtn.setVisibility(View.VISIBLE);
                 //mapsMarkers.add(new MapsMarker(myService.getLatitude(),myService.getLongitude(),false));
+                currentPolyLine++;
 
                 myService.setPaused(true);
                 break;
@@ -579,24 +580,32 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
             googleMap.moveCamera(center);
 
             //distance.setText(String.format("%.2f", gpsTracker.getDistance()));
-
-
-            PolylineOptions options = new PolylineOptions().width(8).color(getResources().getColor(R.color.polyline_fill)).geodesic(true).zIndex(1.5f);
-            for (int i = 0; i < points.size(); i++) {
-                LatLng point = points.get(i);
-                options.add(point);
-            }
-
-
             if(!fistPuase){
                 distace_paused = distace_paused + (distance_number - distaceBeforePause);
 
             }
             fistPuase =true;
+            for (int i = 0 ;i <=currentPolyLine; i++){
+                PolylineOptions options = new PolylineOptions().width(8).color(getResources().getColor(R.color.polyline_fill)).geodesic(true).zIndex(1.5f);
+           /* for (int i = 0; i < points.size(); i++) {
+                LatLng point = points.get(i);
+                options.add(point);
+            }*/
 
-            polyline = googleMap.addPolyline(options); //add Polyline
-            options.color(R.color.polyline_stroke).width(12).zIndex(1.4f);
-            googleMap.addPolyline(options);
+                latLngArray.get(i).getLatLngsArrayList().add(myService.getLatLng());
+                options.addAll(latLngArray.get(currentPolyLine).getLatLngsArrayList());
+
+
+
+
+                polyline = googleMap.addPolyline(options); //add Polyline
+                options.color(R.color.polyline_stroke).width(12).zIndex(1.4f);
+                googleMap.addPolyline(options);
+
+
+            }
+
+
 
             updateMarkers();
             CircleOptions circleOptions =null;
