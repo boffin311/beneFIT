@@ -25,7 +25,7 @@ public class Constants {
     public static final String GPS_UPDATE = "tech.ios.benefit.android.action.broadcast";
     public static final String GPS_CONNECTED = "gpsconnected";
     public static final String GPS_IS_UPDATED = "gpsisupdated";
-    public static final String GPS_ONLY_LOCATION_CHANGE = "gpsisupdated";
+    public static final String GPS_ONLY_LOCATION_CHANGE = "gpsonlylocationchange";
 
 
 

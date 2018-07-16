@@ -52,7 +52,7 @@ public class GPSTracker extends Service implements
     private ArrayList<LatLng> points;
     private ArrayList<LatLng> pointsForLastDistance;
 
-    private boolean isPaused = false;
+    private boolean isPaused = true;
     ProgressDialog progressDialog;
     public boolean isGoogleAPIConnected = false;
 
@@ -103,15 +103,7 @@ public class GPSTracker extends Service implements
         points = new ArrayList<>();
         pointsForLastDistance = new ArrayList<>();
 
-        sensorMan = (SensorManager) getSystemService(SENSOR_SERVICE);
-        if (sensorMan == null) {
-            //Toast.makeText(this,"null sensor man",Toast.LENGTH_LONG).show();
 
-        }
-        accelerometer = sensorMan.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        mAccel = 0.00f;
-        mAccelCurrent = SensorManager.GRAVITY_EARTH;
-        mAccelLast = SensorManager.GRAVITY_EARTH;
 
 
     }
@@ -178,8 +170,8 @@ public class GPSTracker extends Service implements
             isGoogleAPIConnected = true;
 
             Intent broadcastIntent = new Intent();
-            broadcastIntent.putExtra("key", Constants.GPS_CONNECTED);
             broadcastIntent.setAction(Constants.GPS_UPDATE);
+            broadcastIntent.putExtra("key", Constants.GPS_CONNECTED);
             sendBroadcast(broadcastIntent);
 
         } else {
@@ -273,6 +265,7 @@ public class GPSTracker extends Service implements
 
                 sendBroadcast(broadcastIntent);
                 speed = 0;
+                return;
             }else {
                 points.add(new LatLng(mCurrentLocation.getLatitude(),mCurrentLocation.getLongitude()));
 

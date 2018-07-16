@@ -118,6 +118,7 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
             locationManager = (LocationManager) getContext().getSystemService(LOCATION_SERVICE);
 
             isServiceConnected = true;
+            myService.setPaused(true);
 
             if(isgoogleMap){
 
@@ -132,6 +133,8 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
                     //googleMap.setMyLocationEnabled(true);
                     progressDialog.hide();
                     //gpsTracker.showSettingsAlert();
+
+
 
 
             }
@@ -303,6 +306,58 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
             }
         });
 
+
+        IntentFilter intentFilter = new IntentFilter(Constants.GPS_UPDATE);
+
+        BroadcastReceiver mReceiver = new BroadcastReceiver() {
+
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                //     Toast.makeText(context,"activity",Toast.LENGTH_LONG).show();
+
+            /*
+
+            Intent stopIntent = new Intent(MainActivity.this,
+                        BroadcastService.class);
+                stopService(stopIntent);
+                */
+                Bundle bundle =  intent.getExtras();
+                String key =  bundle.getString("key");
+                //Toast.makeText(getContext(),"broadccastint "+key,Toast.LENGTH_SHORT).show();
+
+                if (intent.getAction().equals(Constants.GPS_UPDATE)) {
+                    //intent.getExtras();
+                    if(key.equalsIgnoreCase(Constants.GPS_IS_UPDATED)){
+                        currentLatitude=myService.getLatitude();
+                        currentLongitude=myService.getLongitude();
+                        redrawLine();
+                    }else if(key.equalsIgnoreCase(Constants.GPS_CONNECTED)){
+                        currentLatitude=myService.getLatitude();
+                        currentLongitude=myService.getLongitude();
+                        LatLng myLocation = new LatLng(currentLatitude, currentLongitude);
+
+                        CameraUpdate center=
+                                CameraUpdateFactory.newLatLng(myLocation);
+                        CameraUpdate zoom=CameraUpdateFactory.zoomTo(18);
+                        googleMap.moveCamera(center);
+                        googleMap.animateCamera(zoom);
+                    }else if(key.equalsIgnoreCase(Constants.GPS_ONLY_LOCATION_CHANGE)){
+                        currentLatitude=myService.getLatitude();
+                        currentLongitude=myService.getLongitude();
+                        LatLng myLocation = new LatLng(currentLatitude, currentLongitude);
+
+                        CameraUpdate center=
+                                CameraUpdateFactory.newLatLng(myLocation);
+                        CameraUpdate zoom=CameraUpdateFactory.zoomTo(18);
+                        googleMap.moveCamera(center);
+                        googleMap.animateCamera(zoom);
+                    }
+                    //Toast.makeText(getContext(),"activity",Toast.LENGTH_LONG).show();
+
+                }
+            }
+        };
+        getActivity().getApplicationContext().registerReceiver(mReceiver, intentFilter);
 
 
 
@@ -481,57 +536,6 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
             googleMap.moveCamera(center);
             googleMap.animateCamera(zoom);
         }
-        IntentFilter intentFilter = new IntentFilter(Constants.GPS_UPDATE);
-
-        BroadcastReceiver mReceiver = new BroadcastReceiver() {
-
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                //     Toast.makeText(context,"activity",Toast.LENGTH_LONG).show();
-
-            /*
-
-            Intent stopIntent = new Intent(MainActivity.this,
-                        BroadcastService.class);
-                stopService(stopIntent);
-                */
-            Bundle bundle =  intent.getExtras();
-            String key =  bundle.getString("key");
-            //Toast.makeText(getContext(),"broadccastint "+key,Toast.LENGTH_SHORT).show();
-
-                if (intent.getAction().equals(Constants.GPS_UPDATE)) {
-                    //intent.getExtras();
-                    if(key.equalsIgnoreCase(Constants.GPS_IS_UPDATED)){
-                        currentLatitude=myService.getLatitude();
-                        currentLongitude=myService.getLongitude();
-                        redrawLine();
-                    }else if(key.equalsIgnoreCase(Constants.GPS_CONNECTED)){
-                        currentLatitude=myService.getLatitude();
-                        currentLongitude=myService.getLongitude();
-                        LatLng myLocation = new LatLng(currentLatitude, currentLongitude);
-
-                        CameraUpdate center=
-                                CameraUpdateFactory.newLatLng(myLocation);
-                        CameraUpdate zoom=CameraUpdateFactory.zoomTo(18);
-                        googleMap.moveCamera(center);
-                        googleMap.animateCamera(zoom);
-                    }else if(key.equalsIgnoreCase(Constants.GPS_ONLY_LOCATION_CHANGE)){
-                        currentLatitude=myService.getLatitude();
-                        currentLongitude=myService.getLongitude();
-                        LatLng myLocation = new LatLng(currentLatitude, currentLongitude);
-
-                        CameraUpdate center=
-                                CameraUpdateFactory.newLatLng(myLocation);
-                        CameraUpdate zoom=CameraUpdateFactory.zoomTo(18);
-                        googleMap.moveCamera(center);
-                        googleMap.animateCamera(zoom);
-                    }
-                    //Toast.makeText(getContext(),"activity",Toast.LENGTH_LONG).show();
-
-                }
-            }
-        };
-        getActivity().getApplicationContext().registerReceiver(mReceiver, intentFilter);
 
 
         String stringLongitude = String.valueOf(myService.getLongitude());
