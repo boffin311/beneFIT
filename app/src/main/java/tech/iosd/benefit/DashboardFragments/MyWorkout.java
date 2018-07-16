@@ -1,6 +1,5 @@
 package tech.iosd.benefit.DashboardFragments;
 
-import android.app.Presentation;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
@@ -17,7 +16,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -32,7 +30,6 @@ import com.thin.downloadmanager.ThinDownloadManager;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.PipedReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -308,14 +305,9 @@ public class MyWorkout extends Fragment
         if (currentPosition>=exercises.size()){
             downloadDialog.hide();
             if(allVideoDownloaded){
-                Gson gson = new GsonBuilder().create();
-                ArrayList<String> videoPlayerItemList = new ArrayList<>();
-                for(int i =0 ; i<exercises.size();i++){
-                    videoPlayerItemList.add(gson.toJson(new VideoPlayerItem(exercises.get(i))));
-                }
-                Intent intent = new Intent(getContext(), VideoPlayerActivity.class);
-                intent.putExtra("videoItemList",videoPlayerItemList);
-                startActivity(intent);
+                startWorkout.setText("START WORKOUT");
+                startWorkout.setOnClickListener(startClickListener);
+
             }else {
                 showSnackBarMessage("All files not downloaded.\nPlease try again.");
             }
@@ -390,6 +382,55 @@ public class MyWorkout extends Fragment
            // getExcercise(exercises.get(currentPosition).getExercise().get_id(),type);
         }
     }
+
+    private void checkFiles(){
+        Boolean comp = true;
+        for(Exercise e:exercises) {
+            Boolean exComp = true;
+            //get all exercise names
+            File file ,filea ,fileb;
+            file = new File(getActivity().getFilesDir().toString()+"/videos/"+exercises.get(currentPosition).getExercise().get_id()+".mp4");
+            filea = new File(getActivity().getFilesDir().toString()+"/videos/"+exercises.get(currentPosition).getExercise().get_id()+"_a.mp4");
+            fileb = new File(getActivity().getFilesDir().toString()+"/videos/"+exercises.get(currentPosition).getExercise().get_id()+"_b.mp4");
+
+            //check if files exist and put tick on those present
+            if(!file.exists()){
+                comp = false;
+                exComp = false;
+            } else if(e.getExercise().isVideoA() && !filea.exists()){
+                comp = false;
+                exComp = false;
+            } else if(e.getExercise().isVideoB() && !fileb.exists()){
+                comp = false;
+                exComp = false;
+            }
+            if(exComp){
+                //show tick on exercise
+                adapter.notifyItemChanged(exercises.indexOf(e));
+            }
+        }
+        if(comp){
+            startWorkout.setText("START WORKOUT");
+            startWorkout.setOnClickListener(startClickListener);
+        }
+
+
+    }
+
+    private View.OnClickListener startClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Gson gson = new GsonBuilder().create();
+            ArrayList<String> videoPlayerItemList = new ArrayList<>();
+            for(int i =0 ; i<exercises.size();i++){
+                videoPlayerItemList.add(gson.toJson(new VideoPlayerItem(exercises.get(i))));
+            }
+            Intent intent = new Intent(getContext(), VideoPlayerActivity.class);
+            intent.putExtra("videoItemList",videoPlayerItemList);
+            startActivity(intent);
+        }
+    };
+
     public void getVideo(String data) {
         noOfCurrentVideUser++;
         boolean firtVideo =true;
