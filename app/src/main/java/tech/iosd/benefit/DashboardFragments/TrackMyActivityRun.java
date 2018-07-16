@@ -613,8 +613,11 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
                 options.add(point);
             }*/
 
-                latLngArray.get(i).getLatLngsArrayList().add(myService.getLatLng());
-                options.addAll(latLngArray.get(currentPolyLine).getLatLngsArrayList());
+           if (i==currentPolyLine){
+               latLngArray.get(i).getLatLngsArrayList().add(myService.getLatLng());
+           }
+
+                options.addAll(latLngArray.get(i).getLatLngsArrayList());
 
 
 
