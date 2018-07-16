@@ -51,7 +51,7 @@ public class SetupProfile extends Fragment implements View.OnClickListener
     FloatingActionButton genderSelector;
     int weightPickerPos = 35;
     int heightPickerPos = 27;
-    int agePickerPos = 13;
+    int agePickerPos = 4;
     List<String> heightsCM;
     List<String> heightsFT;
     List<String> weightsKG;
