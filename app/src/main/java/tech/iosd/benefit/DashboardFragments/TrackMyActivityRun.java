@@ -429,6 +429,9 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
                         myService.stoptacking();
                         points.clear();
                         distance.setText(String.valueOf(0));
+                        currentPolyLine=-1;
+                        latLngArray = new ArrayList<>();
+                        googleMap.clear();
 
                     }
                 });
