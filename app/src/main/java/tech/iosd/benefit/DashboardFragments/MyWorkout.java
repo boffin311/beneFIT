@@ -36,6 +36,7 @@ import java.io.PipedReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Locale;
 
 import devs.mulham.horizontalcalendar.HorizontalCalendar;
 import devs.mulham.horizontalcalendar.utils.HorizontalCalendarListener;
@@ -139,7 +140,7 @@ public class MyWorkout extends Fragment
                 .datesNumberOnScreen(7)
                 .mode(HorizontalCalendar.Mode.DAYS)
                 .configure()
-                .formatMiddleText("EEE\n").sizeMiddleText(12)
+                .formatMiddleText("EEEEE\n").sizeMiddleText(12)
                 .formatBottomText("dd").sizeBottomText(26)
                 .showTopText(false)
                 .end()
@@ -147,7 +148,7 @@ public class MyWorkout extends Fragment
 
         final TextView lbl_year = rootView.findViewById(R.id.my_workout_calendar_year);
         final TextView lbl_month = rootView.findViewById(R.id.my_workout_calendar_month);
-        dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
 
         selectedDate = dateFormat.format(Calendar.getInstance().getTime());
 
@@ -233,7 +234,6 @@ public class MyWorkout extends Fragment
         adapter.setExercises(exercises);
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
-        recyclerView.getLayoutParams().height = 140*exercises.size() ;
         noOfDiffId = getNumberOfDifferntId();
 
     }

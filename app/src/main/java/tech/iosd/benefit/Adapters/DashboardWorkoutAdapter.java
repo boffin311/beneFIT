@@ -78,6 +78,7 @@ public class DashboardWorkoutAdapter extends RecyclerView.Adapter<DashboardWorko
         if (exercises.get(position).getExercise() != null)
         holder.name.setText(exercises.get(position).getExercise().getName());
         holder.details.setText(exercises.get(position).getReps() + " reps");
+        holder.note.setText(exercises.get(position).get_id());
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -93,6 +94,7 @@ public class DashboardWorkoutAdapter extends RecyclerView.Adapter<DashboardWorko
             }
         });
 
+
     }
 
     @Override
@@ -102,7 +104,7 @@ public class DashboardWorkoutAdapter extends RecyclerView.Adapter<DashboardWorko
 
 
     public class ViewHolder extends RecyclerView.ViewHolder{
-        public TextView name, details;
+        public TextView name, details, note;
         public View view;
 
         public ViewHolder(View itemView) {
@@ -110,6 +112,7 @@ public class DashboardWorkoutAdapter extends RecyclerView.Adapter<DashboardWorko
             name = (TextView) itemView.findViewById(R.id.dashboard_my_workouts_list_item_name);
             details = (TextView) itemView.findViewById(R.id.dashboard_my_workouts_list_item_sets_reps);
             view =  itemView.findViewById(R.id.dashboard_my_workouts_list_item_full_view);
+            note =  (TextView) itemView.findViewById(R.id.dashboard_my_workouts_list_item_note);
 
         }
     }
