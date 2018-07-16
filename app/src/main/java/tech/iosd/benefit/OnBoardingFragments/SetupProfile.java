@@ -77,7 +77,7 @@ public class SetupProfile extends Fragment implements View.OnClickListener
         heightfeet =  new ArrayList<>();
         heightinches =  new ArrayList<>();
         ageList = new ArrayList<>();
-        for (int i = 5;i<100;i++){
+        for (int i = 14;i<90;i++){
             ageList.add(String.valueOf(i));
         }
         for (int i = 3 ; i<=7;i++){
@@ -382,6 +382,8 @@ public class SetupProfile extends Fragment implements View.OnClickListener
             {
                 AlertDialog.Builder mBuilder = new AlertDialog.Builder(getActivity());
                 View mView = getActivity().getLayoutInflater().inflate(R.layout.dialog_picker_height, null);
+                TextView t = mView.findViewById(R.id.title);
+                t.setText("Age");
                 Button dialogDone = mView.findViewById(R.id.dialog_done);
                 final WheelPicker wheelPickerHeight = mView.findViewById(R.id.dialog_picker_height);
                 mBuilder.setView(mView);
