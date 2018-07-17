@@ -121,7 +121,7 @@ public class MyWorkout extends Fragment
             @Override
             public void onClick(View view) {
                 downloadDialog.show();
-                downloadDialog.setCancelable(false);
+               // downloadDialog.setCancelable(false);
                 downloadFiles();
             }
         });
@@ -223,6 +223,7 @@ public class MyWorkout extends Fragment
             return;
             //Download completes here
         }
+
         Log.d("error77"," " +responseForWorkoutForDate.getData().getWorkout().getExercises().size());
         exercises = responseForWorkoutForDate.getData().getWorkout().getExercises();
         for (int i =0 ; i<exercises.size();i++){
@@ -232,6 +233,7 @@ public class MyWorkout extends Fragment
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
         noOfDiffId = getNumberOfDifferntId();
+        checkFiles();
 
     }
 
@@ -303,7 +305,7 @@ public class MyWorkout extends Fragment
     private void downloadFiles() {
         Log.d("download","type: "+ type+"position: "+currentPosition);
         if (currentPosition>=exercises.size()){
-            downloadDialog.hide();
+          //  downloadDialog.hide();
             if(allVideoDownloaded){
                 startWorkout.setText("START WORKOUT");
                 startWorkout.setOnClickListener(startClickListener);
@@ -404,8 +406,10 @@ public class MyWorkout extends Fragment
                 comp = false;
                 exComp = false;
             }
+
             if(exComp){
                 //show tick on exercise
+                e.getExercise().isDownloaded =true;
                 adapter.notifyItemChanged(exercises.indexOf(e));
             }
         }
@@ -470,8 +474,12 @@ public class MyWorkout extends Fragment
                             type="tutorial";
                             downloadFiles();
                             currentPosition++;
+                            exercises.get(currentPosition-1).getExercise().isDownloaded =  true;
+                            adapter.notifyItemChanged(currentPosition-1);
 
                         }
+
+
 
 
                     }
@@ -494,6 +502,10 @@ public class MyWorkout extends Fragment
                         progressBar.setProgress((int)p);
                         progressTV.setText(String.format("%.2f", (float)p));
                         numberOfCurrentVideo.setText(String.valueOf(noOfCurrentVideUser)+"/"+noOfDiffId);
+                        exercises.get(currentPosition).getExercise().isDownloading = true;
+                        exercises.get(currentPosition).getExercise().progess = (int)p;
+                        adapter.notifyItemChanged(currentPosition);
+
                     }
                 });
         int downloadId = downloadManager.add(downloadRequest);

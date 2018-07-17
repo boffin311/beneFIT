@@ -70,6 +70,9 @@ public class Exercise {
         private boolean videoB;
         private int __v;
         private String flow;
+        public boolean isDownloaded =false;
+        public boolean isDownloading = false;
+        public Integer progess;
 
         public String getFlow() {
             return flow;

@@ -83,13 +83,15 @@ public class DashboardWorkoutAdapter extends RecyclerView.Adapter<DashboardWorko
                     //getExcercise(exercises.get(position).getExercise().get_id());
                 }
             });
-//            if(e.visibility_done){
-//                holder.progress.setVisibility(View.GONE);
-//                holder.tick.setVisibility(View.VISIBLE);
-//            }
-//            if(e.visibility_done){
-//                holder.progress.setVisibility(View.VISIBLE);
-//            }
+            if(e.getExercise().isDownloaded){
+                holder.progress.setVisibility(View.GONE);
+                holder.tick.setVisibility(View.VISIBLE);
+            }
+            if (e.getExercise().isDownloading){
+                holder.tick.setVisibility(View.GONE);
+                holder.progress.setVisibility(View.VISIBLE);
+                holder.progress.setProgress(e.getExercise().progess);
+            }
         }
 
 
@@ -113,7 +115,7 @@ public class DashboardWorkoutAdapter extends RecyclerView.Adapter<DashboardWorko
             details = (TextView) itemView.findViewById(R.id.dashboard_my_workouts_list_item_sets_reps);
             view =  itemView.findViewById(R.id.dashboard_my_workouts_list_item_full_view);
             note =  (TextView) itemView.findViewById(R.id.dashboard_my_workouts_list_item_note);
-            progress = (ProgressBar)itemView.findViewById(R.id.progress);
+            progress = itemView.findViewById(R.id.progress);
             tick = (ImageButton) itemView.findViewById(R.id.tick);
         }
     }
