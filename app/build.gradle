@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 27
-    buildToolsVersion "27.0.2"
+    buildToolsVersion '27.0.3'
     defaultConfig {
         applicationId "tech.iosd.benefit"
         minSdkVersion 19
@@ -72,7 +72,7 @@ dependencies {
     implementation 'com.github.developer-shivam:Diagonalify:1.1'
 
     implementation 'com.sdsmdg.harjot:rotatingtext:1.0.2'
-    implementation 'com.github.stfalcon:chatkit:0.2.2'
+    implementation 'com.github.stfalcon:chatkit:0.3.0'
     implementation 'com.gelitenight.waveview:waveview:1.0.0'
     implementation 'cn.aigestudio.wheelpicker:WheelPicker:1.1.2'
 
