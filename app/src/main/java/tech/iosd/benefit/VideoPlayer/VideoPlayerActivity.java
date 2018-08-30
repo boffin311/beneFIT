@@ -45,6 +45,8 @@ public class VideoPlayerActivity extends Activity implements SurfaceHolder.Callb
     SurfaceView videoSurface;
     MediaPlayer player;
     VideoControllerView controller;
+
+    VideoFormView videoFormView;
     TextView dura2, setsCounter, middleCount, restCounter, repsCounter;
     int screenTime;
     CountDownTimer countDownTimer;
@@ -118,7 +120,7 @@ public class VideoPlayerActivity extends Activity implements SurfaceHolder.Callb
         });
 
         controller = new VideoControllerView(this);
-
+        videoFormView=new VideoFormView(this);
         //player is initialised after surface is created (onSurfaceCreated method)
 
     }
@@ -144,6 +146,7 @@ public class VideoPlayerActivity extends Activity implements SurfaceHolder.Callb
     }
 
     private void setVideoItem(){
+        if(videoPlayerItemList.size()>currentItem)
         videoItem = gson.fromJson(videoPlayerItemList.get(currentItem),VideoPlayerItem.class);
     }
 
@@ -243,6 +246,32 @@ public class VideoPlayerActivity extends Activity implements SurfaceHolder.Callb
                 startVideo();
             }
         }.start();
+    }
+    boolean displaySets=true;
+    boolean result=false;
+    private void showFormScreen()
+    {
+        controller.setEnabled(false);
+        if (player != null) {
+            player.stop();
+        }
+        if(displaySets && videoItem.getSets()>1)
+        {
+            videoFormView.setAnchorView((FrameLayout) findViewById(R.id.videoSurfaceContainer), videoItem.getSets(), videoItem.getVideoName(), videoItem.getTotalReps(), displaySets);
+            displaySets=false;
+        }
+        else if(videoItem.getTotalReps()>0)
+        {
+            videoFormView.setAnchorView((FrameLayout) findViewById(R.id.videoSurfaceContainer), videoItem.getSets(), videoItem.getVideoName(), videoItem.getTotalReps(), displaySets);
+        }
+        videoFormView.submitForm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                videoFormView.hide();
+                startNextInList();
+            }
+        });
+        videoFormView.show();
     }
 
     private void hideAllViews() {
@@ -354,7 +383,7 @@ public class VideoPlayerActivity extends Activity implements SurfaceHolder.Callb
                     dura2.setText("Total Time Remaining : \n" + f.format(hour) + ":" + f.format(min) + ":" + f.format(sec));
                 } else if (videoItem.getType() == VideoPlayerItem.TYPE_REPETITIVE) {
                     if (videoItem.getIntroComp()) {//if intro is completed
-                        repsCounter.setText("Reps: " + String.valueOf(videoItem.getCurrentRep()) + "/" + String.valueOf(videoItem.getTotalReps()));
+                        //TODO some problem in videoItem.getItroCmp time is ot displayed properly so changed the reps counter textview position
                         dura2.setText("Total Time Remaining : \n" + f.format(hour) + ":" + f.format(min) + ":" + f.format(sec));
                     } else {//for intro video
                         dura2.setText(videoItem.getVideoName() + "\n" + "Starts in " + f.format(hour) + ":" + f.format(min) + ":" + f.format(sec));
@@ -461,7 +490,7 @@ public class VideoPlayerActivity extends Activity implements SurfaceHolder.Callb
                     dura2.setText("Total Time Remaining : \n" + f.format(hour) + ":" + f.format(min) + ":" + f.format(sec));
                 } else if (videoItem.getType() == VideoPlayerItem.TYPE_REPETITIVE) {
                     if (videoItem.getIntroComp()) {//if intro is completed
-                        repsCounter.setText(String.valueOf(videoItem.getCurrentRep()) + "/" + String.valueOf(videoItem.getTotalReps()));
+                        repsCounter.setText("Reps:"+String.valueOf(videoItem.getCurrentRep()) + "/" + String.valueOf(videoItem.getTotalReps()));
                         dura2.setText("Total Time Remaining : \n" + f.format(hour) + ":" + f.format(min) + ":" + f.format(sec));
                     } else {//for intro video
                         dura2.setText(videoItem.getVideoName() + "\n" + "Starts in " + f.format(hour) + ":" + f.format(min) + ":" + f.format(sec));
@@ -589,8 +618,13 @@ public class VideoPlayerActivity extends Activity implements SurfaceHolder.Callb
 //                    player.setDataSource(this, video);
                     String path = VideoPlayerActivity.this.getFilesDir().toString()+"/videos/" + videoItem.getSingleRepVideo();
                     player.setDataSource(path);
-
-                    player.prepareAsync();
+                    try {
+                        player.prepareAsync();
+                    }
+                    catch (Exception e)
+                    {
+                        Log.d("videoPlayerError",e.getMessage());
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -621,15 +655,19 @@ public class VideoPlayerActivity extends Activity implements SurfaceHolder.Callb
                 //show rest screen
                 showRestScreen();
             } else {
-                startNextInList();
+                mediaPlayer.pause();
+                showFormScreen();
                 //Toast.makeText(VideoPlayerActivity.this, "End of sets", Toast.LENGTH_SHORT).show();
             }
         } else if (videoItem.getType() == VideoPlayerItem.TYPE_REPETITIVE) {
-            if (videoItem.getIntroComp()) {//if intro is complete
-                if (videoItem.incrementCurrentRep() < videoItem.getTotalReps()) {
+            if (videoItem.getIntroComp())
+            {//if intro is complete
+                if (videoItem.incrementCurrentRep() <videoItem.getTotalReps())
+                {
                     player.seekTo(0);
                     player.start();
-
+                    repsCounter.setText("Reps:"+videoItem.getCurrentRep()+"/"+videoItem.getTotalReps());
+                    repsCounter.setVisibility(View.VISIBLE);
                     middleCount.setVisibility(View.VISIBLE);
                     middleCount.setText(String.valueOf(videoItem.getCurrentRep()));
                     if (isSoundOn) {
@@ -650,7 +688,8 @@ public class VideoPlayerActivity extends Activity implements SurfaceHolder.Callb
                     if (videoItem.incrementCurrentSet() < videoItem.getSets()) {
                         showRestScreen();
                     } else {
-                        startNextInList();
+                        mediaPlayer.pause();
+                        showFormScreen();
                         //Toast.makeText(VideoPlayerActivity.this, "sets finished", Toast.LENGTH_SHORT).show();
                     }
                 }

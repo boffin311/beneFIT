@@ -24,8 +24,8 @@ import tech.iosd.benefit.R;
  * Created by SAM33R on 28-06-2018.
  */
 
-public class DashboardWorkoutAdapter extends RecyclerView.Adapter<DashboardWorkoutAdapter.ViewHolder> {
-
+public class DashboardWorkoutAdapter extends RecyclerView.Adapter<DashboardWorkoutAdapter.ViewHolder>
+{
     ArrayList<Exercise> exercises;
     Activity activity;
     CompositeSubscription compositeSubscription;
@@ -34,6 +34,11 @@ public class DashboardWorkoutAdapter extends RecyclerView.Adapter<DashboardWorko
     private Object video;
     private ThinDownloadManager downloadManager;
 
+    public interface onItemClickListener
+    {
+        void onClick(int position);
+    }
+    onItemClickListener listener;
     public DashboardWorkoutAdapter(ArrayList<Exercise> exercises, Activity activity) {
         this.exercises = exercises;
         this.activity = activity;
@@ -69,20 +74,24 @@ public class DashboardWorkoutAdapter extends RecyclerView.Adapter<DashboardWorko
                 holder.name.setText(exercises.get(position).getExercise().getName());
 
             holder.details.setText(e.getReps() + " reps");
-            holder.view.setOnClickListener(new View.OnClickListener() {
+            holder.view.setOnClickListener(
+                    new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Toast.makeText(activity.getApplicationContext(), "starting download", Toast.LENGTH_SHORT).show();
-                /*File file = new File(activity.getCacheDir().toString());
-                if(file.exists()){
-
+                    listener.onClick(position);
                 }
-                else{
-
-                }*/
-                    //getExcercise(exercises.get(position).getExercise().get_id());
-                }
-            });
+//                    Toast.makeText(activity.getApplicationContext(), "starting download", Toast.LENGTH_SHORT).show();
+//                /*File file = new File(activity.getCacheDir().toString());
+//                if(file.exists()){
+//
+//                }
+//                else{
+//
+//                }*/
+//                    //getExcercise(exercises.get(position).getExercise().get_id());
+//                }
+            }
+            );
             if(e.getExercise().isDownloaded){
                 holder.progress.setVisibility(View.GONE);
                 holder.tick.setVisibility(View.VISIBLE);
@@ -115,7 +124,7 @@ public class DashboardWorkoutAdapter extends RecyclerView.Adapter<DashboardWorko
             details = (TextView) itemView.findViewById(R.id.dashboard_my_workouts_list_item_sets_reps);
             view =  itemView.findViewById(R.id.dashboard_my_workouts_list_item_full_view);
             note =  (TextView) itemView.findViewById(R.id.dashboard_my_workouts_list_item_note);
-            progress = itemView.findViewById(R.id.progress);
+            progress = itemView.findViewById(R.id.progress2);
             tick = (ImageButton) itemView.findViewById(R.id.tick);
         }
     }

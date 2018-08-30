@@ -27,7 +27,11 @@ public class Constants {
     public static final String GPS_IS_UPDATED = "gpsisupdated";
     public static final String GPS_ONLY_LOCATION_CHANGE = "gpsonlylocationchange";
 
-
+    public static final int START_TIMER = 0;
+    public static final int STOP_TIMER = 1;
+    public static final int UPDATE_TIMER = 2;
+    public static final int PAUSE_TIMER = 3;
+    public static final int RESUME_TIMER = 4;
 
 
 

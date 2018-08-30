@@ -34,7 +34,6 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
     private SharedPreferences mSharedPreferences;
     private DatabaseHandler db;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {

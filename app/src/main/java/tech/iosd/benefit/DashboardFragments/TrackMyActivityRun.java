@@ -1,6 +1,7 @@
 package tech.iosd.benefit.DashboardFragments;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -12,7 +13,10 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ScaleDrawable;
 import android.location.LocationManager;
+import android.os.CountDownTimer;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.content.Context;
@@ -45,20 +49,28 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.maps.android.SphericalUtil;
 
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
+import tech.iosd.benefit.Model.DatabaseHandler;
 import tech.iosd.benefit.Model.MapsMarker;
+import tech.iosd.benefit.Model.Stopwatch;
 import tech.iosd.benefit.R;
 import tech.iosd.benefit.Services.GPSTracker;
 import tech.iosd.benefit.Utils.Constants;
 
 import static android.content.Context.LOCATION_SERVICE;
+import static tech.iosd.benefit.Utils.Constants.PAUSE_TIMER;
+import static tech.iosd.benefit.Utils.Constants.RESUME_TIMER;
+import static tech.iosd.benefit.Utils.Constants.START_TIMER;
+import static tech.iosd.benefit.Utils.Constants.STOP_TIMER;
+import static tech.iosd.benefit.Utils.Constants.UPDATE_TIMER;
 
 public class TrackMyActivityRun extends Fragment implements View.OnClickListener
 {
     private Context ctx;
     private FragmentManager fm;
     private MapView mMapView;
-
+    CountDownTimer countDownTimer;
     private GoogleMap googleMap;
     private View startLayout;
     private View pauseLayout;
@@ -67,6 +79,7 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
     private View resumeBtn;
     private View doneBtn;
 
+    public static TextView calorie_burnt;
     private GPSTracker myService;
     private ArrayList<LatLng> points;
     private Polyline polyline;
@@ -88,6 +101,7 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
     int currentPolyLine =-1;
     private ArrayList<LatLngArray> latLngArray;
 
+    TextView duration,avgPace;
     private class LatLngArray{
         ArrayList <LatLng> latLngsArrayList;
 
@@ -134,9 +148,6 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
                     progressDialog.hide();
                     //gpsTracker.showSettingsAlert();
 
-
-
-
             }
 
         }
@@ -165,9 +176,7 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
 
         t.start();
 
-
     }
-
     void unbindService() {
         if (isServiceConnected == false)
            return;
@@ -211,9 +220,20 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
         AlertDialog alert = alertDialogBuilder.create();
         alert.show();
     }
-
-
-
+    public static String trackType;
+    @Override
+    public void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        Bundle args = getArguments();
+        if (args != null) {
+            trackType = getArguments().getString("TRACK_TYPE");
+        } else {
+            Toast.makeText(getActivity(), "arguments is null " , Toast.LENGTH_LONG).show();
+        }
+    }
+    private DatabaseHandler db;
+    public static int userWeight;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState)
@@ -226,12 +246,15 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
 
         //polylineArrays =  new ArrayList<>();
         latLngArray = new ArrayList<>();
+        db = new DatabaseHandler(getContext());
         ctx = rootView.getContext();
         distance = rootView.findViewById(R.id.dashboard_track_my_activity_distance_textview);
-
+        calorie_burnt=rootView.findViewById(R.id.calories_track_my_activity);
+        duration=rootView.findViewById(R.id.track_activity_duration);
+        avgPace=rootView.findViewById(R.id.track_activity_avg_pace);
         bindService();
         mapsMarkers = new ArrayList<>();
-
+        userWeight=db.getUserWeight();
         fm = getFragmentManager();
 
         startLayout = rootView.findViewById(R.id.dashboard_track_my_activity_running_start);
@@ -309,7 +332,7 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
 
         IntentFilter intentFilter = new IntentFilter(Constants.GPS_UPDATE);
 
-        BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        BroadcastReceiver mReceiver = new BroadcastReceiver(){
 
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -400,6 +423,7 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
         mMapView.onLowMemory();
     }
 
+
     @Override
     public void onClick(View view)
     {
@@ -411,6 +435,7 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
                 break;
             case R.id.dashboard_track_my_activity_running_start:
             {
+                mHandler.sendEmptyMessage(START_TIMER);
                 startLayout.setVisibility(View.GONE);
                 pauseLayout.setVisibility(View.VISIBLE);
                 stopLayout.setVisibility(View.GONE);
@@ -431,6 +456,7 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
             }
             case R.id.dashboard_track_my_activity_running_pause:
             {
+                mHandler.sendEmptyMessage(PAUSE_TIMER);
                 startLayout.setVisibility(View.GONE);
                 pauseLayout.setVisibility(View.GONE);
                 stopLayout.setVisibility(View.VISIBLE);
@@ -445,6 +471,7 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
             }
             case R.id.dashboard_track_my_activity_running_resume:
             {
+                mHandler.sendEmptyMessage(RESUME_TIMER);
                 //gpsTracker.setPaused(false);
                 Toast.makeText(getActivity().getApplicationContext(),"rrere",Toast.LENGTH_LONG).show();
                 startLayout.setVisibility(View.GONE);
@@ -460,7 +487,7 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
 
             case R.id.dashboard_track_my_activity_running_discard:
             {
-
+                mHandler.sendEmptyMessage(STOP_TIMER);
                 AlertDialog.Builder mBuilder = new AlertDialog.Builder(getActivity());
                 View mView = getActivity().getLayoutInflater().inflate(R.layout.dialog_accept, null);
                 TextView dialogMsg = mView.findViewById(R.id.dialog_message);
@@ -503,9 +530,68 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
             }
         }
     }
+    double avgSpeed=0.0;
+    Stopwatch timer = new Stopwatch();
+    final int REFRESH_RATE = 1000;
+    private String durationBeforePause="00:00";
+    @SuppressLint("HandlerLeak")
+    Handler mHandler = new Handler()
+    {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case START_TIMER:
+                    timer.start(); //start timer
+                    mHandler.sendEmptyMessage(UPDATE_TIMER);
+                    break;
 
-    private void calculateAndShowDistace(){
+                case UPDATE_TIMER:
+                    duration.setText(timer.toString());
+                    double distaceTravelled=Double.parseDouble(distance.getText().toString());
+                    long timeWorkout=timer.getElapsedTimeHour();
+                    if(timeWorkout!=0)
+                        avgSpeed=(double)distaceTravelled/timeWorkout;
+                    if(avgSpeed!=0)
+                    avgPace.setText(String.format("%.1f",avgSpeed));
+                    else
+                        avgPace.setText("0");
+                    mHandler.sendEmptyMessageDelayed(UPDATE_TIMER,REFRESH_RATE);
+                    break;
+                case PAUSE_TIMER:
+                    timer.pause();
+                    duration.setText(timer.toString());
+                    break;
+                case RESUME_TIMER:
+                    timer.resume();
+                    duration.setText(timer.toString());
+                    break;
+                case STOP_TIMER:
+                    mHandler.removeMessages(UPDATE_TIMER);
+                    timer.stop();//stop timer
+                    duration.setText(timer.toString());
+                    break;
 
+                default:
+                    break;
+            }
+        }
+    };
+
+    long curr_time,prev_time=0;
+    int totalCaloriesBurnt=0;
+    private void calculateAndShowDistace()
+    {
+        if(curr_time!=0)
+        {
+            prev_time=curr_time;
+            curr_time=System.currentTimeMillis();
+        }
+        else
+        {
+            prev_time=System.currentTimeMillis();
+            curr_time=System.currentTimeMillis();
+        }
         Double disLocal = 0.0;
 
         for (int i = 0 ;i <=currentPolyLine; i++) {
@@ -513,14 +599,118 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
 
             disLocal = disLocal + SphericalUtil.computeLength(latLngArray.get(i).getLatLngsArrayList());
         }
-
-
         distance.setText(String.format("%.1f",(disLocal)/1000));
+        if((disLocal/1000)!=0 && (curr_time-prev_time)!=0)
+        {
 
+            double totalDistance=disLocal/1000;
+            long timeDiff=curr_time-prev_time;
+            double timeInHrs= ((double)timeDiff)/(1000*60*60);
+            double speed=(totalDistance/timeInHrs)*(0.621371);
+            double mets=0.0;
+            switch (trackType)
+            {
+                case "RUNNING":
+                    mets=getMetsRunning(speed);
+                    break;
+                case "WALKING":
+                    mets=getMetsWalk(speed);
+                    break;
+                case "RIDE":
+                    mets=getMetsRide(speed);
+                    break;
+            }
+            totalCaloriesBurnt=(int)(totalCaloriesBurnt+(timeInHrs*mets*userWeight));
+        }
+        calorie_burnt.setText(totalCaloriesBurnt+"");
 
     }
 
+    private double getMetsRunning(double speed)
+    {
+        double metsRun=0.0;
+        if(speed>2 && speed<5.4)
+            metsRun=2.8;
+        else if(speed>=2 && speed<5.5)
+            metsRun=2.8;
+        else if(speed==5.5)
+            metsRun=3.5;
+        else if(speed>5.5 && speed<=9.3)
+            metsRun=4.5;
+        else if(speed>9.3 && speed<=9.9)
+            metsRun=5.8;
+        else if(speed>9.9 && speed<=11.9)
+            metsRun=6.8;
+        else if(speed>11.9 && speed<=13.9)
+            metsRun=8;
+        else if(speed>13.9 && speed<=15.9)
+            metsRun=10;
+        else if(speed>15.9 && speed<=19)
+            metsRun=12;
+        else if(speed>19)
+            metsRun=16;
+        return metsRun;
+    }
 
+    private double getMetsWalk(double speed)
+    {
+        double metsRun=0.0;
+        if(speed<=2)
+            metsRun=2;
+        else if(speed>2 && speed<2.5)
+            metsRun=2.8;
+        else if(speed==2.5)
+            metsRun=3;
+        else if(speed>2.5 && speed<=3.4)
+            metsRun=3.5;
+        else if(speed>3.4 && speed<=3.9)
+            metsRun=4.3;
+        else if(speed>3.9 && speed<=4.4)
+            metsRun=5;
+        else if(speed>4.4 && speed<5)
+            metsRun=7;
+        else if(speed>5)
+            metsRun=8.3;
+        return metsRun;
+    }
+
+    private double getMetsRide(double speed)
+    {
+        double metsRun=0.0;
+        if(speed<4)
+            metsRun=6;
+        else if(speed>=4.1 && speed<=4.6)
+            metsRun=7;
+        else if(speed>4.6 && speed<=5.1)
+            metsRun=8.3;
+        else if(speed>5.1 && speed<=5.9)
+            metsRun=9;
+        else if(speed>5.9 && speed<=6.5)
+            metsRun=9.8;
+        else if(speed>6.5 && speed<=6.9)
+            metsRun=10.5;
+        else if(speed>6.9 && speed<=7.4)
+            metsRun=11;
+        else if(speed>7.4 && speed<=7.9)
+            metsRun=11.5;
+        else if(speed>7.9 && speed<=8.5)
+            metsRun=11.8;
+        else if(speed>8.5 && speed<=8.9)
+            metsRun=12.3;
+        else if(speed>8.9 && speed<=9.9)
+            metsRun=12.8;
+        else if(speed>9.9 && speed<=10.9)
+            metsRun=14.5;
+        else if(speed>10.9 && speed<=11.9)
+            metsRun=16;
+        else if(speed>11.9 && speed<=12.9)
+            metsRun=19;
+        else if(speed>12.9 && speed<14)
+            metsRun=19.8;
+        else if(speed>=14)
+            metsRun=23;
+        return metsRun;
+    }
 
 
     private void startRunning() {
