@@ -38,7 +38,6 @@ public class VideoFormView extends FrameLayout
         mRoot = null;
         mContext = context;
         mFromXml = true;
-
     }
 
     @Override
@@ -52,13 +51,15 @@ public class VideoFormView extends FrameLayout
     private String vidName="";
     private int noOfSets=0;
     boolean displaySets=false;
+    boolean isWeight=false;
 
-    public void setAnchorView(ViewGroup view, int NoOfSets,String namek,int noOfReps,boolean displaySet) {
+    public void setAnchorView(ViewGroup view, int NoOfSets,String namek,int noOfReps,boolean displaySet,boolean isWeight) {
         mAnchor = view;
         noOfSets = NoOfSets;
         vidName = namek;
         noOfRep=noOfReps;
         displaySets=displaySet;
+        this.isWeight=isWeight;
         LayoutParams frameParams = new LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT
@@ -107,6 +108,15 @@ public class VideoFormView extends FrameLayout
             numberPicker.setMinValue(0);
             numberPicker.setEnabled(true);
         }
+        else if(isWeight)
+        {
+            formName.setText(vidName);
+            questionForm.setText("How much Weight (in kg) were you able to pick");
+            numberPicker.setMaxValue(120);
+            numberPicker.setMinValue(2);
+            numberPicker.setValue(15);
+            numberPicker.setEnabled(true);
+        }
         else if(noOfRep>0)
         {
             formName.setText(vidName);
@@ -116,8 +126,10 @@ public class VideoFormView extends FrameLayout
             numberPicker.setEnabled(true);
         }
     }
-    public void show() {
-        if (!mShowing&&mAnchor != null) {
+    public void show()
+    {
+        if (!mShowing&&mAnchor != null)
+        {
             LayoutParams tlp = new LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.MATCH_PARENT,

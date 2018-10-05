@@ -4,7 +4,7 @@ public class VideoPlayerItem {
 
     public static final int TYPE_FOLLOW=1000;//sets
     public static final int TYPE_REPETITIVE =1001;//sets+reps
-
+    private String typeExercise;
     //type = repetitive workflow
     // Tutorial ----> singleVideo (repeated for total reps) ----> Rest --\
     //                         ^----(looped for number of sets)----------/
@@ -42,7 +42,7 @@ public class VideoPlayerItem {
         this.videoName = exercise.getExercise().getName();
         this.restTimeSec = exercise.getRest();
         this.totalReps = exercise.getReps();
-
+        this.typeExercise=exercise.getExercise().getType();
 
         this.introVideo = exercise.getExercise().get_id()+".mp4";
         this.singleRepVideo = exercise.getExercise().get_id()+"_a.mp4";
@@ -157,5 +157,13 @@ public class VideoPlayerItem {
 
     public void setTotalReps(int totalReps) {
         this.totalReps = totalReps;
+    }
+
+    public String getTypeExercise() {
+        return typeExercise;
+    }
+
+    public void setTypeExercise(String typeExercise) {
+        this.typeExercise = typeExercise;
     }
 }

@@ -39,9 +39,10 @@ public class DashboardWorkoutAdapter extends RecyclerView.Adapter<DashboardWorko
         void onClick(int position);
     }
     onItemClickListener listener;
-    public DashboardWorkoutAdapter(ArrayList<Exercise> exercises, Activity activity) {
+    public DashboardWorkoutAdapter(ArrayList<Exercise> exercises, Activity activity,onItemClickListener listener) {
         this.exercises = exercises;
         this.activity = activity;
+        this.listener=listener;
         compositeSubscription =  new CompositeSubscription();
         db = new DatabaseHandler(activity.getApplicationContext());
         downloadManager =  new ThinDownloadManager();
@@ -95,8 +96,9 @@ public class DashboardWorkoutAdapter extends RecyclerView.Adapter<DashboardWorko
             if(e.getExercise().isDownloaded){
                 holder.progress.setVisibility(View.GONE);
                 holder.tick.setVisibility(View.VISIBLE);
+              //  holder.videoDownload.setText(e.getExercise().getTotalNoVideo()+"/"+e.getExercise().getTotalNoVideo());
             }
-            if (e.getExercise().isDownloading){
+            else if (e.getExercise().isDownloading){
                 holder.tick.setVisibility(View.GONE);
                 holder.progress.setVisibility(View.VISIBLE);
                 holder.progress.setProgress(e.getExercise().progess);
@@ -117,7 +119,7 @@ public class DashboardWorkoutAdapter extends RecyclerView.Adapter<DashboardWorko
         public View view;
         public ImageButton tick;
         public ProgressBar progress;
-
+       // public TextView videoDownload;
         public ViewHolder(View itemView) {
             super(itemView);
             name = (TextView) itemView.findViewById(R.id.dashboard_my_workouts_list_item_name);
@@ -126,6 +128,7 @@ public class DashboardWorkoutAdapter extends RecyclerView.Adapter<DashboardWorko
             note =  (TextView) itemView.findViewById(R.id.dashboard_my_workouts_list_item_note);
             progress = itemView.findViewById(R.id.progress2);
             tick = (ImageButton) itemView.findViewById(R.id.tick);
+            //videoDownload=itemView.findViewById(R.id.video_downloaded);
         }
     }
 

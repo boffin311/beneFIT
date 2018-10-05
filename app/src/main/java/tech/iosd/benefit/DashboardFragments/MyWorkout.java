@@ -58,7 +58,7 @@ public class MyWorkout extends Fragment implements DashboardWorkoutAdapter.onIte
     String[] months = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
     Context ctx;
     FragmentManager fm;
-
+    private int totalVideos;
     private String selectedDate;
     private SimpleDateFormat dateFormat;
     private ProgressDialog progressDialog;
@@ -109,7 +109,7 @@ public class MyWorkout extends Fragment implements DashboardWorkoutAdapter.onIte
         recyclerView =  rootView.findViewById(R.id.dashboard_my_workouts_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        adapter = new DashboardWorkoutAdapter(exercises,getActivity());
+        adapter = new DashboardWorkoutAdapter(exercises,getActivity(),this);
 
         mBuilder = new AlertDialog.Builder(getActivity());
         mView = getActivity().getLayoutInflater().inflate(R.layout.dialog_download, null);
@@ -164,6 +164,15 @@ public class MyWorkout extends Fragment implements DashboardWorkoutAdapter.onIte
                 lbl_year.setText(String.valueOf(date.get(Calendar.YEAR)));
                 lbl_month.setText(months[date.get(Calendar.MONTH)]);
                 progressDialog.show();
+                startWorkout.setText("Download Workout");
+                startWorkout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        downloadDialog.show();
+                        // downloadDialog.setCancelable(false);
+                        downloadFiles();
+                    }
+                });
                 getWorkoutData(selectedDate);
             }
         });
@@ -214,11 +223,13 @@ public class MyWorkout extends Fragment implements DashboardWorkoutAdapter.onIte
 
     private void handleResponseGetMeal(ResponseForWorkoutForDate responseForWorkoutForDate) {
             progressDialog.hide();
-        if (!responseForWorkoutForDate.isSuccess()){
+        if (!responseForWorkoutForDate.isSuccess())
+        {
+            adapter.notifyDataSetChanged();
             return;
             //Download completes here
         }
-
+        totalVideos=responseForWorkoutForDate.getData().getVideoCount();
         Log.d("error77"," " +responseForWorkoutForDate.getData().getWorkout().getExercises().size());
         exercises = responseForWorkoutForDate.getData().getWorkout().getExercises();
         for (int i =0 ; i<exercises.size();i++){
@@ -300,6 +311,12 @@ public class MyWorkout extends Fragment implements DashboardWorkoutAdapter.onIte
     }
     private void downloadFiles() {
         Log.d("download","type: "+ type+"position: "+currentPosition);
+        if(exercises.size()==0 || exercises==null)
+        {
+            downloadDialog.dismiss();
+            Toast.makeText(ctx, "Workout Not Available", Toast.LENGTH_SHORT).show();
+            return;
+        }
         if (currentPosition>=exercises.size()){
           //  downloadDialog.hide();
             if(allVideoDownloaded){
@@ -336,6 +353,7 @@ public class MyWorkout extends Fragment implements DashboardWorkoutAdapter.onIte
 
         }
         if(file.exists()){
+            adapter.notifyDataSetChanged();
             Toast.makeText(getContext(),"file arleady presenet "+type+(currentPosition+1),Toast.LENGTH_SHORT).show();
             Log.d("files",getActivity().getFilesDir().toString()+"/videos/");
             if (type.equals("tutorial")){
@@ -475,9 +493,6 @@ public class MyWorkout extends Fragment implements DashboardWorkoutAdapter.onIte
 
                         }
 
-
-
-
                     }
 
                     @Override
@@ -490,14 +505,12 @@ public class MyWorkout extends Fragment implements DashboardWorkoutAdapter.onIte
                         downloadFiles();
 
                     }
-
                     @Override
                     public void onProgress(int id, long totalBytes, long downlaodedBytes, int progress) {
                         double p = (double)downlaodedBytes/totalBytes*100;
-                        //Toast.makeText(getActivity().getApplicationContext(),"total"+ totalBytes+"dnld "+downlaodedBytes+"progress "+p,Toast.LENGTH_SHORT).show();
                         progressBar.setProgress((int)p);
                         progressTV.setText(String.format("%.2f", (float)p));
-                        numberOfCurrentVideo.setText(String.valueOf(noOfCurrentVideUser)+"/"+noOfDiffId);
+                        numberOfCurrentVideo.setText(String.valueOf(noOfCurrentVideUser)+"/"+totalVideos);
                         exercises.get(currentPosition).getExercise().isDownloading = true;
                         exercises.get(currentPosition).getExercise().progess = (int)p;
                         adapter.notifyItemChanged(currentPosition);
@@ -513,5 +526,18 @@ public class MyWorkout extends Fragment implements DashboardWorkoutAdapter.onIte
     public void onClick(int position)
     {
 
+        if(exercises.get(position).getExercise().isDownloaded)
+        {
+            Gson gson = new GsonBuilder().create();
+            ArrayList<String> videoPlayerItemList = new ArrayList<>();
+            videoPlayerItemList.add(gson.toJson(new VideoPlayerItem(exercises.get(position))));
+            Intent intent = new Intent(getContext(), VideoPlayerActivity.class);
+            intent.putExtra("videoItemList", videoPlayerItemList);
+            startActivity(intent);
+        }
+        else
+        {
+            Toast.makeText(ctx, "Download the Workout", Toast.LENGTH_SHORT).show();
+        }
     }
 }

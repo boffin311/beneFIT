@@ -57,6 +57,7 @@ public class Exercise {
         this.exercise = exercise;
     }
 
+
     public class ExerciseWithoutID{
         private String _id;
         private int sno;
@@ -70,6 +71,7 @@ public class Exercise {
         private boolean videoB;
         private int __v;
         private String flow;
+        private int totalNoVideo=1;
         public boolean isDownloaded =false;
         public boolean isDownloading = false;
         public Integer progess;
@@ -168,6 +170,19 @@ public class Exercise {
 
         public void set__v(int __v) {
             this.__v = __v;
+        }
+
+        public int getTotalNoVideo()
+        {
+            if(videoA&&videoB)
+                totalNoVideo=3;
+            else if(videoB||videoA)
+                totalNoVideo=2;
+            return totalNoVideo;
+        }
+
+        public void setTotalNoVideo(int totalNoVideo) {
+            this.totalNoVideo = totalNoVideo;
         }
     }
 

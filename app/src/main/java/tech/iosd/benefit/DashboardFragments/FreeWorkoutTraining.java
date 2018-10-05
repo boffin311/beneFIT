@@ -48,7 +48,7 @@ import tech.iosd.benefit.Network.NetworkUtil;
 import tech.iosd.benefit.R;
 import tech.iosd.benefit.VideoPlayer.VideoPlayerActivity;
 
-public class FreeWorkoutTraining extends Fragment
+public class FreeWorkoutTraining extends Fragment implements DashboardWorkoutAdapter.onItemClickListener
 {
     Context ctx;
     FragmentManager fm;
@@ -91,6 +91,7 @@ public class FreeWorkoutTraining extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState)
     {
+
         View rootView = inflater.inflate(R.layout.free_workout_training, container, false);
         ctx = rootView.getContext();
         fm = getFragmentManager();
@@ -106,11 +107,11 @@ public class FreeWorkoutTraining extends Fragment
         downloadManager =  new ThinDownloadManager();
 
         db = new DatabaseHandler(getContext());
-
+        Log.d("token1",db.getUserToken());
         recyclerView =  rootView.findViewById(R.id.free_workout_list_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        adapter = new DashboardWorkoutAdapter(exercises,getActivity());
+        adapter = new DashboardWorkoutAdapter(exercises,getActivity(),this);
 
         mBuilder = new AlertDialog.Builder(getActivity());
         mView = getActivity().getLayoutInflater().inflate(R.layout.dialog_download, null);
@@ -172,15 +173,17 @@ public class FreeWorkoutTraining extends Fragment
                 .subscribeOn(Schedulers.io())
                 .subscribe(this::handleResponseGetMeal,this::handleErrorGetMeal));
     }
-
+    int videoCount;
     private void handleResponseGetMeal(ResponseWorkoutFree responseWorkoutFree)
     {
         progressDialog.hide();
         if (!responseWorkoutFree.isSuccess())
         {
+            adapter.notifyDataSetChanged();
             return;
             //Download completes here
         }
+        videoCount = responseWorkoutFree.getData().get(position).getVideoCount();
         description_free_workouts.setText(responseWorkoutFree.getData().get(position).getDescription());
         Log.d("error77"," " +responseWorkoutFree.getData().get(position).getExercises().size());
         exercises = responseWorkoutFree.getData().get(position).getExercises();
@@ -230,7 +233,8 @@ public class FreeWorkoutTraining extends Fragment
                 .subscribe(this::handleResponseSendMealLog,this::handleError));
     }
 
-    private void handleResponseSendMealLog(ResponseForGetExcerciseVideoUrl reponse) {
+    private void handleResponseSendMealLog(ResponseForGetExcerciseVideoUrl reponse)
+    {
         String url = reponse.getData();
         Toast.makeText(getActivity().getApplicationContext(),"url fetch success",Toast.LENGTH_SHORT).show();
         getVideo(url);
@@ -261,6 +265,12 @@ public class FreeWorkoutTraining extends Fragment
     }
     private void downloadFiles() {
         Log.d("download","type: "+ type+"position: "+currentPosition);
+        if(exercises.size()==0 || exercises==null)
+        {
+            downloadDialog.dismiss();
+            Toast.makeText(ctx, "Workout Not Available", Toast.LENGTH_SHORT).show();
+            return;
+        }
         if (currentPosition>=exercises.size() && exercises.size()!=0){
             //  downloadDialog.hide();
             if(allVideoDownloaded){
@@ -304,6 +314,7 @@ public class FreeWorkoutTraining extends Fragment
 
         }
         if(file.exists()){
+            adapter.notifyDataSetChanged();
             Toast.makeText(getContext(),"file arleady presenet "+type+(currentPosition+1),Toast.LENGTH_SHORT).show();
             Log.d("files",getActivity().getFilesDir().toString()+"/videos/");
             if (type.equals("tutorial")){
@@ -315,11 +326,13 @@ public class FreeWorkoutTraining extends Fragment
                 downloadFiles();
 
 
-            }else if (type.equals("b")){
+            }else if (type.equals("b"))
+            {
+                exercises.get(currentPosition).getExercise().isDownloaded=true;
+                adapter.notifyItemChanged(currentPosition);
                 type="tutorial";
                 currentPosition++;
                 downloadFiles();
-
             }
             //currentPosition++;
            /* if(currentPosition<exercises.size()){
@@ -437,8 +450,8 @@ public class FreeWorkoutTraining extends Fragment
                         }else  if (type.equals("b")){
                             type="tutorial";
                             downloadFiles();
-                            currentPosition++;
                             exercises.get(currentPosition-1).getExercise().isDownloaded =  true;
+                            currentPosition++;
                             adapter.notifyItemChanged(currentPosition-1);
 
                         }
@@ -465,14 +478,31 @@ public class FreeWorkoutTraining extends Fragment
                         //Toast.makeText(getActivity().getApplicationContext(),"total"+ totalBytes+"dnld "+downlaodedBytes+"progress "+p,Toast.LENGTH_SHORT).show();
                         progressBar.setProgress((int)p);
                         progressTV.setText(String.format("%.2f", (float)p));
-                        numberOfCurrentVideo.setText(String.valueOf(noOfCurrentVideUser)+"/"+noOfDiffId);
+                        numberOfCurrentVideo.setText(String.valueOf(noOfCurrentVideUser)+"/"+videoCount);
                         exercises.get(currentPosition).getExercise().isDownloading = true;
                         exercises.get(currentPosition).getExercise().progess = (int)p;
-                        adapter.notifyItemChanged(currentPosition);
 
                     }
                 });
         int downloadId = downloadManager.add(downloadRequest);
 
+    }
+
+    @Override
+    public void onClick(int position)
+    {
+        if(exercises.get(position).getExercise().isDownloaded)
+        {
+            Gson gson = new GsonBuilder().create();
+            ArrayList<String> videoPlayerItemList = new ArrayList<>();
+            videoPlayerItemList.add(gson.toJson(new VideoPlayerItem(exercises.get(position))));
+            Intent intent = new Intent(getContext(), VideoPlayerActivity.class);
+            intent.putExtra("videoItemList", videoPlayerItemList);
+            startActivity(intent);
+        }
+        else
+        {
+            Toast.makeText(ctx, "Download the Workout", Toast.LENGTH_SHORT).show();
+        }
     }
 }

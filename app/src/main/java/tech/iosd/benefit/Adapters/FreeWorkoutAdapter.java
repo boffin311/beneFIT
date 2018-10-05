@@ -31,7 +31,6 @@ public class FreeWorkoutAdapter extends RecyclerView.Adapter<FreeWorkoutAdapter.
     @Override
     public FreeWorkoutViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
     {
-
         LayoutInflater inflater = activity.getLayoutInflater();
         View view =inflater.inflate(R.layout.row_layout_free_workout, parent, false);
         RecyclerView.LayoutParams lp = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);

@@ -92,7 +92,7 @@ public class GPSTracker extends Service implements
 
 
     public void stopLocationUpdates() {
-        Toast.makeText(this, "stopeed", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "stopped", Toast.LENGTH_LONG).show();
 
         LocationServices.FusedLocationApi.removeLocationUpdates(
                 mGoogleApiClient, this);
@@ -246,7 +246,7 @@ public class GPSTracker extends Service implements
 
             double dist = SphericalUtil.computeLength(pointsForLastDistance);
             if(Math.abs(dist - lastDistance) <0.5){
-                Toast.makeText(this, "speed too slow have run..", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, "speed too slow have run..", Toast.LENGTH_SHORT).show();
                 /*lastDistance = dist;
                 lastLatitude =  latitude;
                 lastLongitude =  longitude;*/
@@ -281,7 +281,7 @@ public class GPSTracker extends Service implements
             }
         }else {
              //progressDialog.show();
-            Toast.makeText(this, "low accuracy", Toast.LENGTH_SHORT).show();
+           // Toast.makeText(this, "low accuracy", Toast.LENGTH_SHORT).show();
 
         }
 

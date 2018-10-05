@@ -348,6 +348,12 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
                     breakfastAdapter.notifyDataSetChanged();
 
                 }
+                if(progressDialog.isShowing()){
+                    progressDialog.dismiss();
+
+                    progressDialog.hide();
+
+                }
             }else if(response.getData().getType().equalsIgnoreCase(Constants.MID_MORNING)){
                 for (int i = 0; i< response.getData().getFood().size(); i++) {
                     midMorningIngredients.add(response.getData().getFood().get(i).getQuantity() + " " +response.getData().getFood().get(i).getUnit()+" "+ response.getData().getFood().get(i).getItem().getName());
@@ -356,6 +362,12 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
                     midMorningAdapter.notifyDataSetChanged();
                     updateUI(Constants.MID_MORNING);
                     //uploadMealLogToServer(Constants.MID_MORNING);
+
+                }
+                if(progressDialog.isShowing()){
+                    progressDialog.dismiss();
+
+                    progressDialog.hide();
 
                 }
 
@@ -369,6 +381,12 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
                     //uploadMealLogToServer(Constants.LUNCH);
 
                 }
+                if(progressDialog.isShowing()){
+                    progressDialog.dismiss();
+
+                    progressDialog.hide();
+
+                }
 
             }else if(response.getData().getType().equalsIgnoreCase(Constants.SNACKS)){
                 for (int i = 0; i< response.getData().getFood().size(); i++) {
@@ -377,6 +395,12 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
                     snacksAdapter.notifyDataSetChanged();
                     updateUI(Constants.SNACKS);
                    // uploadMealLogToServer(Constants.SNACKS);
+
+                }
+                if(progressDialog.isShowing()){
+                    progressDialog.dismiss();
+
+                    progressDialog.hide();
 
                 }
 
@@ -707,7 +731,6 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
                     {
                         int quantity = wheelPickerQty.getCurrentItemPosition()+ 1;
                         String unit = ingredientTyp.get(wheelPickerTyp.getCurrentItemPosition());
-
                         dinnerIngredients.set(pos,""+quantity + " " +unit+" "+ mealLogdinner.getMeal().get(pos).getItem().getName());
                         mealLogdinner.updateMealAt(mealLogdinner.getMeal().get(pos),quantity,unit,pos);
 
@@ -958,6 +981,12 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
 
     private void handleError(Throwable error) {
 
+        if(progressDialog.isShowing()){
+            progressDialog.dismiss();
+
+            progressDialog.hide();
+
+        }
 
         if (error instanceof HttpException) {
 
@@ -1016,56 +1045,135 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
                 String gson = data.getExtras().getString("meal");
                 MealLogFood newFood = (new Gson()).fromJson(gson,MealLogFood.class);
                 String mealType = data.getExtras().getString("mealType");
-
-                if(mealType.equalsIgnoreCase(Constants.BREAKFAST)){
-                    breakfastIngredients.add("1" + " " +newFood.getUnit()+" "+ newFood.getName());
-                    mealLogBreakfast.addMeal(new ResponseForGetMeal.Food( 1,newFood),+1,newFood.getUnit());
-
-                    breakfastAdapter.notifyDataSetChanged();
-
-                    updateUI(Constants.BREAKFAST);
-                    uploadMealLogToServer(Constants.BREAKFAST);
-                }else if(mealType.equalsIgnoreCase(Constants.MID_MORNING)){
-                    midMorningIngredients.add("1" + " " +newFood.getUnit()+" "+ newFood.getName());
-                    mealLogMidmorning.addMeal(new ResponseForGetMeal.Food( 1,newFood),+1,newFood.getUnit());
-
-                    midMorningAdapter.notifyDataSetChanged();
-
-                    updateUI(Constants.MID_MORNING);
-                    uploadMealLogToServer(Constants.MID_MORNING);
-                }else if(mealType.equalsIgnoreCase(Constants.LUNCH)){
-                    lunchIngredients.add("1" + " " +newFood.getUnit()+" "+ newFood.getName());
-                    mealLogLunch.addMeal(new ResponseForGetMeal.Food( 1,newFood),+1,newFood.getUnit());
-
-                    lunchAdapter.notifyDataSetChanged();
-
-                    updateUI(Constants.LUNCH);
-                    uploadMealLogToServer(Constants.LUNCH);
-                }else if(mealType.equalsIgnoreCase(Constants.SNACKS)){
-                    snacksIngredients.add("1" + " " +newFood.getUnit()+" "+ newFood.getName());
-                    mealLogSnacks.addMeal(new ResponseForGetMeal.Food( 1,newFood),+1,newFood.getUnit());
-
-                    snacksAdapter.notifyDataSetChanged();
-
-                    updateUI(Constants.SNACKS);
-                    uploadMealLogToServer(Constants.SNACKS);
-                }else if(mealType.equalsIgnoreCase(Constants.DINNER)){
-                    dinnerIngredients.add("1" + " " +newFood.getUnit()+" "+ newFood.getName());
-                    mealLogdinner.addMeal(new ResponseForGetMeal.Food( 1,newFood),+1,newFood.getUnit());
-
-                    dinnerAdapter.notifyDataSetChanged();
-
-                    updateUI(Constants.DINNER);
-                    uploadMealLogToServer(Constants.DINNER);
+                newUnit=newFood.getUnit();newQuantity=1;
+                flagNewFood=true;
+                getItemQuatity(newFood.getUnit(),newFood.getName(),mealType,newFood);
+                if(!flagNewFood)
+                {
+                    return;
                 }
-
-
-
-
-
             }
         }
     }
+    public void addNewItem(String mealType, MealLogFood newFood)
+    {
+        if(mealType.equalsIgnoreCase(Constants.BREAKFAST))
+        {
+            Toast.makeText(ctx, "newQuantity"+newQuantity, Toast.LENGTH_SHORT).show();
+            Toast.makeText(ctx, "newUnit"+newUnit, Toast.LENGTH_SHORT).show();
+            breakfastIngredients.add(newQuantity + " " + newUnit + " " + newFood.getName());
+            mealLogBreakfast.addMeal(new ResponseForGetMeal.Food(newQuantity, newFood), newQuantity, newUnit);
+            breakfastAdapter.notifyDataSetChanged();
 
+            updateUI(Constants.BREAKFAST);
+            uploadMealLogToServer(Constants.BREAKFAST);
+
+        }else if(mealType.equalsIgnoreCase(Constants.MID_MORNING))
+        {
+            midMorningIngredients.add(newQuantity + " " + newUnit + " " + newFood.getName());
+            mealLogMidmorning.addMeal(new ResponseForGetMeal.Food(newQuantity, newFood), newQuantity, newUnit);
+
+            midMorningAdapter.notifyDataSetChanged();
+
+            updateUI(Constants.MID_MORNING);
+            uploadMealLogToServer(Constants.MID_MORNING);
+        }else if(mealType.equalsIgnoreCase(Constants.LUNCH))
+        {
+            lunchIngredients.add(newQuantity + " " + newUnit + " " + newFood.getName());
+            mealLogLunch.addMeal(new ResponseForGetMeal.Food(newQuantity, newFood), newQuantity, newUnit);
+
+            lunchAdapter.notifyDataSetChanged();
+
+            updateUI(Constants.LUNCH);
+            uploadMealLogToServer(Constants.LUNCH);
+        }else if(mealType.equalsIgnoreCase(Constants.SNACKS))
+        {
+            snacksIngredients.add(newQuantity + " " + newUnit + " " + newFood.getName());
+            mealLogSnacks.addMeal(new ResponseForGetMeal.Food(newQuantity, newFood), newQuantity, newUnit);
+
+            snacksAdapter.notifyDataSetChanged();
+
+            updateUI(Constants.SNACKS);
+            uploadMealLogToServer(Constants.SNACKS);
+        }else if(mealType.equalsIgnoreCase(Constants.DINNER))
+        {
+            dinnerIngredients.add(newQuantity + " " + newUnit + " " + newFood.getName());
+            mealLogdinner.addMeal(new ResponseForGetMeal.Food(newQuantity, newFood), newQuantity, newUnit);
+            dinnerAdapter.notifyDataSetChanged();
+
+            updateUI(Constants.DINNER);
+            uploadMealLogToServer(Constants.DINNER);
+        }
+        if(progressDialog.isShowing()){
+            progressDialog.dismiss();
+
+            progressDialog.hide();
+
+        }
+
+    }
+    int newQuantity=5;String newUnit;boolean flagNewFood=true;
+    public void getItemQuatity(String unit, String name,String newFoodUnit,MealLogFood newFood)
+    {
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(getActivity());
+        View mView = getActivity().getLayoutInflater().inflate(R.layout.dialog_picker_ingredient, null);
+        TextView dialogTitle = mView.findViewById(R.id.dialog_picker_ingredient_title);
+        Button dialogModify = mView.findViewById(R.id.dialog_modify);
+        Button dialogRemove = mView.findViewById(R.id.dialog_remove);
+        final WheelPicker wheelPickerQty = mView.findViewById(R.id.dialog_picker_ingredient_qty);
+        final WheelPicker wheelPickerTyp = mView.findViewById(R.id.dialog_picker_ingredient_type);
+        dialogTitle.setText("1 "+unit+" "+name);
+        mBuilder.setView(mView);
+        final AlertDialog dialog = mBuilder.create();
+        dialog.show();
+        wheelPickerQty.setData(ingredientsQty);
+        wheelPickerTyp.setData(ingredientTyp);
+        wheelPickerTyp.setSelectedItemPosition(1);
+        if(unit.equalsIgnoreCase("gram")){
+
+            wheelPickerTyp.setSelectedItemPosition(0);
+
+        }else if(unit.equalsIgnoreCase("piece")){
+
+            wheelPickerTyp.setSelectedItemPosition(1);
+
+        }else if(unit.equalsIgnoreCase("bowl")){
+
+            wheelPickerTyp.setSelectedItemPosition(2);
+
+        }else if(unit.equalsIgnoreCase("katori")){
+
+            wheelPickerTyp.setSelectedItemPosition(3);
+
+        }else {
+
+            wheelPickerTyp.setSelectedItemPosition(4);
+
+        }
+        wheelPickerQty.setSelectedItemPosition(0);
+
+        dialogModify.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+
+                newQuantity = wheelPickerQty.getCurrentItemPosition()+ 1;
+                newUnit = ingredientTyp.get(wheelPickerTyp.getCurrentItemPosition());
+                addNewItem(newFoodUnit,newFood);
+                dialog.dismiss();
+            }
+        });
+        dialogRemove.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                flagNewFood=false;
+                dialog.dismiss();
+            }
+        });
+
+    }
 
 }

@@ -50,7 +50,7 @@ public class MeasurementData extends Fragment implements View.OnClickListener
     public Boolean isWaistCmSelected = true;
     public Boolean isNeckCmSelected = true;
     public Boolean isHipCmSelected = true;
-
+    public Boolean isKgSelected = true;
     Context ctx;
     FragmentManager fm;
     Button heightFt;
@@ -62,7 +62,10 @@ public class MeasurementData extends Fragment implements View.OnClickListener
     Button hipIn;
     Button hipCm;
     Button saveBtn;
+    Button weightKg;
+    Button weightLbs;
     EditText ageField;
+    TextView weightField;
     TextView heightField;
     TextView waistField;
     TextView neckField;
@@ -74,6 +77,7 @@ public class MeasurementData extends Fragment implements View.OnClickListener
     int waistPickerPos = 0;
     int neckPickerPos = 0;
     int hipPickerPos = 0;
+    int weightPickerPos=0;
     List<String> heightsCM;
     List<String> heightsFT;
     List<String> waistIN;
@@ -82,6 +86,8 @@ public class MeasurementData extends Fragment implements View.OnClickListener
     List<String> neckCM;
     List<String> hipIN;
     List<String> hipCM;
+    List<String> weightsKG;
+    List<String> weightsLBS;
 
     private String gender;
     private int height;
@@ -106,9 +112,18 @@ public class MeasurementData extends Fragment implements View.OnClickListener
         db = new DatabaseHandler(getContext());
 
         mSubscriptions = new CompositeSubscription();
+        weightsKG = new ArrayList<>();
+        weightsLBS = new ArrayList<>();
+        for (int i = 20; i <= 200; i++)
+        {
+            weightsKG.add(Integer.toString(i));
+            double lbs = round( i * 2.20462262185, 1);
+            weightsLBS.add(Double.toString(lbs));
+        }
 
-
-
+        weightKg = rootView.findViewById(R.id.dashboard_measurement_setup_weight_kg);
+        weightLbs = rootView.findViewById(R.id.dashboard_measurement_setup_weight_lbs);
+        weightField = rootView.findViewById(R.id.dashboard_measurement_setup_weight);
 
         heightsCM = new ArrayList<>();
         heightsFT = new ArrayList<>();
@@ -170,12 +185,15 @@ public class MeasurementData extends Fragment implements View.OnClickListener
         hipField = rootView.findViewById(R.id.dashboard_measurement_setup_hip);
         heightFt.setOnClickListener(this);
         heightCm.setOnClickListener(this);
+        weightKg.setOnClickListener(this);
+        weightLbs.setOnClickListener(this);
         waistCm.setOnClickListener(this);
         waistIn.setOnClickListener(this);
         neckCm.setOnClickListener(this);
         neckIn.setOnClickListener(this);
         hipCm.setOnClickListener(this);
         hipIn.setOnClickListener(this);
+
         btnMale = rootView.findViewById(R.id.dashboard_measurement_setup_male);
         btnFemale = rootView.findViewById(R.id.dashboard_measurement_setup_female);
         genderSelector = rootView.findViewById(R.id.dashboard_measurement_setup_gender);
@@ -192,7 +210,7 @@ public class MeasurementData extends Fragment implements View.OnClickListener
         waistField.setOnClickListener(this);
         neckField.setOnClickListener(this);
         hipField.setOnClickListener(this);
-
+        weightField.setOnClickListener(this);
         ageField.addTextChangedListener(new TextWatcher()
         {
             @Override
@@ -263,8 +281,20 @@ public class MeasurementData extends Fragment implements View.OnClickListener
             @Override
             public void afterTextChanged(Editable editable) { }
         });
+        weightField.addTextChangedListener(new TextWatcher()
+        {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
 
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2)
+            {
+                checkFields();
+            }
 
+            @Override
+            public void afterTextChanged(Editable editable) { }
+        });
         height = db.getUserHeight();
         weight = db.getUserWeight();
 
@@ -291,11 +321,11 @@ public class MeasurementData extends Fragment implements View.OnClickListener
         heightCm.setBackground(getResources().getDrawable(R.drawable.button_style_on));
         heightCm.setTextColor(getResources().getColor(R.color.white));
         heightField.setText(heightsCM.get(heightPickerPos));
-
+        weightField.setText(weightsKG.get(weightPickerPos));
 
         ageField.setText(String.valueOf(age));
         heightField.setText(String.valueOf(height));
-
+        weightField.setText(String.valueOf(weight));
 
         return rootView;
     }
@@ -303,11 +333,12 @@ public class MeasurementData extends Fragment implements View.OnClickListener
     void checkFields()
     {
         String height = heightField.getText().toString();
+        String weight = weightField.getText().toString();
         String waist = waistField.getText().toString();
         String neck = neckField.getText().toString();
         String hip = hipField.getText().toString();
         String age = ageField.getText().toString();
-        if(!age.equals("") && !height.equals("") && !waist.equals("") && !neck.equals("") && !hip.equals(""))
+        if(!age.equals("") && !height.equals("") && !waist.equals("") && !neck.equals("") && !hip.equals("")&& !weight.equals(""))
         {
             saveBtn.setAlpha(1.0f);
             saveBtn.setEnabled(true);
@@ -352,13 +383,19 @@ public class MeasurementData extends Fragment implements View.OnClickListener
                 hipIn.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
                 hipField.setText(hipCM.get(hipPickerPos));
 
+                isHipCmSelected = true;
+                weightKg.setBackground(getResources().getDrawable(R.drawable.button_style_on));
+                weightKg.setTextColor(getResources().getColor(R.color.white));
+                weightLbs.setBackground(getResources().getDrawable(R.drawable.button_style_off));
+                weightLbs.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+                weightField.setText(weightsKG.get(weightPickerPos));
                 Measurements measurements =  new Measurements(
                         Integer.valueOf(ageField.getText().toString()),
                         Integer.valueOf(heightField.getText().toString()),
                         Integer.valueOf(waistField.getText().toString()),
                         Integer.valueOf(neckField.getText().toString()),
                         Integer.valueOf(hipField.getText().toString()),
-                        db.getUserWeight()
+                        Integer.valueOf(weightField.getText().toString())
                         );
 
                 updateUser(measurements,db.getUserToken());
@@ -429,6 +466,26 @@ public class MeasurementData extends Fragment implements View.OnClickListener
                 waistIn.setBackground(getResources().getDrawable(R.drawable.button_style_off));
                 waistIn.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
                 waistField.setText(waistCM.get(waistPickerPos));
+                break;
+            }
+            case R.id.dashboard_measurement_setup_weight_lbs:
+            {
+                isKgSelected = false;
+                weightKg.setBackground(getResources().getDrawable(R.drawable.button_style_off));
+                weightKg.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+                weightLbs.setBackground(getResources().getDrawable(R.drawable.button_style_on));
+                weightLbs.setTextColor(getResources().getColor(R.color.white));
+                weightField.setText(weightsLBS.get(weightPickerPos));
+                break;
+            }
+            case R.id.dashboard_measurement_setup_weight_kg:
+            {
+                isKgSelected = true;
+                weightKg.setBackground(getResources().getDrawable(R.drawable.button_style_on));
+                weightKg.setTextColor(getResources().getColor(R.color.white));
+                weightLbs.setBackground(getResources().getDrawable(R.drawable.button_style_off));
+                weightLbs.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+                weightField.setText(weightsKG.get(weightPickerPos));
                 break;
             }
             case R.id.dashboard_measurement_setup_neck_in:
@@ -539,6 +596,30 @@ public class MeasurementData extends Fragment implements View.OnClickListener
                         dialog.dismiss();
                         neckPickerPos = wheelPickerNeck.getCurrentItemPosition();
                         neckField.setText(wheelPickerNeck.getData().get(neckPickerPos).toString());
+                    }
+                });
+                break;
+            }
+            case R.id.dashboard_measurement_setup_weight:
+            {
+                AlertDialog.Builder mBuilder = new AlertDialog.Builder(getActivity());
+                View mView = getActivity().getLayoutInflater().inflate(R.layout.dialog_picker_weight, null);
+                Button dialogDone = mView.findViewById(R.id.dialog_done);
+                final WheelPicker wheelPickerWeight = mView.findViewById(R.id.dialog_picker_weight);
+                mBuilder.setView(mView);
+                final AlertDialog dialog = mBuilder.create();
+                dialog.show();
+                wheelPickerWeight.setData(isKgSelected ? weightsKG : weightsLBS);
+                wheelPickerWeight.setSelectedItemPosition(weightPickerPos);
+
+                dialogDone.setOnClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View view)
+                    {
+                        dialog.dismiss();
+                        weightPickerPos = wheelPickerWeight.getCurrentItemPosition();
+                        weightField.setText(wheelPickerWeight.getData().get(weightPickerPos).toString());
                     }
                 });
                 break;

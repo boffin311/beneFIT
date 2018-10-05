@@ -528,6 +528,24 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
                 });
                 break;
             }
+            case R.id.dashboard_track_my_activity_running_done:
+            {
+                mHandler.sendEmptyMessage(STOP_TIMER);
+                myService.stoptacking();
+                points.clear();
+                distance.setText(String.valueOf(0));
+                currentPolyLine=-1;
+                latLngArray = new ArrayList<>();
+                googleMap.clear();
+                TrackActivityCompleted trackActivityCompleted=new TrackActivityCompleted();
+                Bundle args=new Bundle();
+                args.putString("DISTANCE",distance.getText().toString());
+                args.putString("CALORIE",calorie_burnt.getText().toString());
+                args.putString("DURATION",duration.getText().toString());
+                args.putString("AVG_PACE",avgPace.getText().toString());
+                trackActivityCompleted.setArguments(args);
+                fm.beginTransaction().replace(R.id.dashboard_content, trackActivityCompleted).addToBackStack(null).commit();
+            }
         }
     }
     double avgSpeed=0.0;
@@ -549,13 +567,17 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
                 case UPDATE_TIMER:
                     duration.setText(timer.toString());
                     double distaceTravelled=Double.parseDouble(distance.getText().toString());
-                    long timeWorkout=timer.getElapsedTimeHour();
+                    double timeWorkout=((timer.getTotalElapsedTimeSecs())/(60.0*60.0));
                     if(timeWorkout!=0)
                         avgSpeed=(double)distaceTravelled/timeWorkout;
                     if(avgSpeed!=0)
-                    avgPace.setText(String.format("%.1f",avgSpeed));
+                    {
+                        avgPace.setText(String.format("%.1f", avgSpeed));
+                    }
                     else
+                        {
                         avgPace.setText("0");
+                    }
                     mHandler.sendEmptyMessageDelayed(UPDATE_TIMER,REFRESH_RATE);
                     break;
                 case PAUSE_TIMER:
@@ -731,7 +753,6 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
         String stringLongitude = String.valueOf(myService.getLongitude());
             myService.setPaused(false);
 
-            Toast.makeText(getActivity().getApplicationContext(),"Lat:"+stringLongitude+"\nLong"+stringLongitude,Toast.LENGTH_LONG).show();
 
             LatLng sydney = new LatLng(myService.getLatitude(), myService.getLongitude());
         Drawable drawable = getResources().getDrawable(R.drawable.marker_green);

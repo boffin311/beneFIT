@@ -34,13 +34,15 @@ public class ResponseWorkoutFree
         private String name;
         private String search_name;
         private String description;
+        private int videoCount;
         private ArrayList<Exercise> exercises;
 
-        public Data(String _id, String name, String search_name, String description, ArrayList<Exercise> exercises) {
+        public Data(String _id, String name, String search_name, String description, int videoCount, ArrayList<Exercise> exercises) {
             this._id = _id;
             this.name = name;
             this.search_name = search_name;
             this.description = description;
+            this.videoCount = videoCount;
             this.exercises = exercises;
         }
 
@@ -82,6 +84,14 @@ public class ResponseWorkoutFree
 
         public void setExercises(ArrayList<Exercise> exercises) {
             this.exercises = exercises;
+        }
+
+        public int getVideoCount() {
+            return videoCount;
+        }
+
+        public void setVideoCount(int videoCount) {
+            this.videoCount = videoCount;
         }
     }
 }

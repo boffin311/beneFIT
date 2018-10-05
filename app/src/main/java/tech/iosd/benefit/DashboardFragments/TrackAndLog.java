@@ -1,11 +1,16 @@
 package tech.iosd.benefit.DashboardFragments;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.renderscript.Element;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +23,16 @@ import com.gelitenight.waveview.library.WaveView;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.fitness.Fitness;
+import com.google.android.gms.fitness.FitnessOptions;
+import com.google.android.gms.fitness.data.DataSet;
+import com.google.android.gms.fitness.data.DataType;
+import com.google.android.gms.fitness.data.Field;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import lecho.lib.hellocharts.model.Axis;
 import lecho.lib.hellocharts.model.Column;
 import lecho.lib.hellocharts.model.ColumnChartData;
@@ -31,7 +46,7 @@ public class TrackAndLog extends Fragment implements View.OnClickListener
 {
     public int waterConsumed = 5;
     public int waterTarget = 8;
-
+    public static final String TAG = "StepCounter";
     private WaveHelper mWaveHelper;
     private boolean stepsTab = true;
     private View stepsTabView;
@@ -46,8 +61,9 @@ public class TrackAndLog extends Fragment implements View.OnClickListener
     private TextView waterConsumedTxt;
     private TextView waterTargetTxt;
 
-    Context ctx;
+    static Context ctx;
     FragmentManager fm;
+    private static final int REQUEST_OAUTH_REQUEST_CODE = 0x1001;
 
     @Nullable
     @Override
@@ -86,6 +102,7 @@ public class TrackAndLog extends Fragment implements View.OnClickListener
         rootView.findViewById(R.id.dashboard_track_water_add).setOnClickListener(this);
         rootView.findViewById(R.id.dashboard_track_water_subtract).setOnClickListener(this);
 
+        readData();
         ColumnChartView steps_chart = rootView.findViewById(R.id.dashboard_track_steps_graph);
         ColumnChartView water_chart = rootView.findViewById(R.id.dashboard_track_water_graph);
 
@@ -134,6 +151,46 @@ public class TrackAndLog extends Fragment implements View.OnClickListener
         return rootView;
     }
 
+
+    long total;
+    private void readData() {
+        Fitness.getHistoryClient(ctx, GoogleSignIn.getLastSignedInAccount(ctx))
+                .readDailyTotal(DataType.TYPE_STEP_COUNT_DELTA)
+                .addOnSuccessListener(
+                        new OnSuccessListener<DataSet>() {
+                            @Override
+                            public void onSuccess(DataSet dataSet) {
+                                total =
+                                        dataSet.isEmpty()
+                                                ? 0
+                                                : dataSet.getDataPoints().get(0).getValue(Field.FIELD_STEPS).asInt();
+                                stepsText.setText(String.format("%d", total));
+                            }
+                        })
+                .addOnFailureListener(
+                        new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.w(TAG, "There was a problem getting the step count.", e);
+                            }
+                        });
+    }
+    public static void subscribe(Context context)
+    {
+        Fitness.getRecordingClient(context, GoogleSignIn.getLastSignedInAccount(context))
+                .subscribe(DataType.TYPE_STEP_COUNT_CUMULATIVE)
+                .addOnCompleteListener(
+                        new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    Log.i(TAG, "Successfully subscribed!");
+                                } else {
+                                    Log.w(TAG, "There was a problem subscribing.", task.getException());
+                                }
+                            }
+                        });
+    }
     @Override
     public void onClick(View view)
     {
@@ -147,6 +204,7 @@ public class TrackAndLog extends Fragment implements View.OnClickListener
                     stepsTabViewIndicator.setVisibility(View.VISIBLE);
                     stepsWaterView.setVisibility(View.GONE);
                     stepsWaterViewIndicator.setVisibility(View.INVISIBLE);
+                    readData();
                     stepsText.setTextColor(getResources().getColor(R.color.black));
                     stepsIcon.setBackgroundResource(R.drawable.ic_steps_on_24dp);
                     waterText.setTextColor(getResources().getColor(R.color.warm_grey));
@@ -202,4 +260,5 @@ public class TrackAndLog extends Fragment implements View.OnClickListener
             }
         }
     }
+
 }

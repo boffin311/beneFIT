@@ -44,6 +44,17 @@ public class Stopwatch
             return elapsed;
         }
 
+    public double getTotalElapsedTimeSecs() {
+        long elapsed = 0;double totalElapsed=0;
+        if (running) {
+            elapsed = ((System.currentTimeMillis() - startTime) / 1000);
+        }
+        else
+            elapsed=((currentTime / 1000));
+        totalElapsed=(double)elapsed;
+        return totalElapsed;
+    }
+
         public long getElapsedTimeMin() {
             long elapsed = 0;
             if (running) {
