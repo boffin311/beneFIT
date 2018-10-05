@@ -27,6 +27,8 @@ import tech.iosd.benefit.Model.ResponseForMesurementsHistory;
 import tech.iosd.benefit.Model.ResponseForSuccess;
 import tech.iosd.benefit.Model.ResponseForUpdate;
 import tech.iosd.benefit.Model.ResponseForWorkoutForDate;
+import tech.iosd.benefit.Model.ResponseNutritionPlanForDate;
+import tech.iosd.benefit.Model.ResponseWorkoutFree;
 import tech.iosd.benefit.Model.User;
 import tech.iosd.benefit.Model.UserDetails;
 import tech.iosd.benefit.Model.UserFacebookLogin;
@@ -91,4 +93,10 @@ public interface RetrofitInterface {
 
     @POST("users/{email}/password")
     Observable<Response> resetPasswordFinish(@Path("email") String email, @Body User user);
+
+    @GET("nutrition/plan/get")
+    Observable<ResponseNutritionPlanForDate> getNutritionPlanForDate(@Query("date") String date, @Header("Authorization") String token);
+
+    @GET("workout/free")
+    Observable<ResponseWorkoutFree> getWorkoutFree(@Header("Authorization") String token);
 }

@@ -126,6 +126,8 @@ public class Measurement extends Fragment
         for(int i=0; i<10; i++) basal_entries.add((new PointValue(i, rand.nextInt(30))));
         Line basal_line = new Line(basal_entries).setColor(Color.BLUE).setCubic(true);
         List<Line> basal_lines = new ArrayList<>();
+        basal_line.setHasPoints(false);
+        basal_line.setFilled(true);
         basal_lines.add(basal_line);
         LineChartData basal_data = new LineChartData();
         Axis basal_axisX = new Axis().setHasLines(true).setName("Axis X");
@@ -198,6 +200,8 @@ public class Measurement extends Fragment
         }
         Line fat_line = new Line(fat_entries).setColor(Color.BLUE).setCubic(true);
         List<Line> fat_lines = new ArrayList<>();
+        fat_line.setHasPoints(false);
+        fat_line.setFilled(true);
         fat_lines.add(fat_line);
         LineChartData fat_data = new LineChartData();
         Axis fat_axisX = new Axis().setHasLines(true).setName("Axis X");
@@ -221,6 +225,8 @@ public class Measurement extends Fragment
         }
         Line bmi_line = new Line(bmi_entries).setColor(Color.BLUE).setCubic(true);
         List<Line> bmi_lines = new ArrayList<>();
+        bmi_line.setHasPoints(false);
+        bmi_line.setFilled(true);
         bmi_lines.add(bmi_line);
         LineChartData bmi_data = new LineChartData();
         Axis bmi_axisX = new Axis().setHasLines(true).setName("Axis X");
