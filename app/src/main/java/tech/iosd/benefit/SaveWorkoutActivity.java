@@ -2,6 +2,7 @@ package tech.iosd.benefit;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -24,10 +25,13 @@ import java.util.ArrayList;
 import tech.iosd.benefit.Adapters.WorkoutSaveActivityAdapter;
 import tech.iosd.benefit.DashboardFragments.SaveWorkout;
 
+import static android.content.Context.MODE_PRIVATE;
+
 
 public class SaveWorkoutActivity extends AppCompatActivity implements View.OnClickListener {
     Button saveActivity;TextView workoutName;
     Button happy,neutral,sad;
+    TextView caloriesBurntTextView,timeTaken,totalExercises;
     private ArrayList<String> exercises = new ArrayList<>();
     private WorkoutSaveActivityAdapter adapter;
     private RecyclerView recyclerView;
@@ -43,10 +47,19 @@ public class SaveWorkoutActivity extends AppCompatActivity implements View.OnCli
         recyclerView.setAdapter(adapter);
         saveActivity=findViewById(R.id.complete_save_activity);
         workoutName=findViewById(R.id.workout_name);
+        caloriesBurntTextView=findViewById(R.id.calories_burnt_save_activity);
+        timeTaken=findViewById(R.id.time_taken_save_activity);
+        totalExercises=findViewById(R.id.total_exercises_save_activity);
         workoutName.setText("HIGH INTENSITY INTERVAL TRAINING");
+        SharedPreferences sharedPreferences1 = getSharedPreferences("SAVE_EXERCISE", MODE_PRIVATE);
+        totalExercises.setText(exercises.size()+"");
+        int caloriesBurnt=sharedPreferences1.getInt("CaloriesBurnt",0);
+        caloriesBurntTextView.setText(String.format("%d", caloriesBurnt));
         saveActivity.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
+                sharedPreferences1.edit().putInt("CaloriesBurnt",0).apply();
                 finish();
             }
         });

@@ -16,7 +16,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+import android.widget.Toast;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
 
 import com.gelitenight.waveview.library.WaveView;
 
@@ -39,6 +40,7 @@ import lecho.lib.hellocharts.model.ColumnChartData;
 import lecho.lib.hellocharts.model.SubcolumnValue;
 import lecho.lib.hellocharts.util.ChartUtils;
 import lecho.lib.hellocharts.view.ColumnChartView;
+import tech.iosd.benefit.DashboardActivity;
 import tech.iosd.benefit.R;
 import tech.iosd.benefit.WaveHelper;
 
@@ -152,28 +154,35 @@ public class TrackAndLog extends Fragment implements View.OnClickListener
     }
 
 
-    long total;
+    long total=0;
     private void readData() {
-        Fitness.getHistoryClient(ctx, GoogleSignIn.getLastSignedInAccount(ctx))
-                .readDailyTotal(DataType.TYPE_STEP_COUNT_DELTA)
-                .addOnSuccessListener(
-                        new OnSuccessListener<DataSet>() {
-                            @Override
-                            public void onSuccess(DataSet dataSet) {
-                                total =
-                                        dataSet.isEmpty()
-                                                ? 0
-                                                : dataSet.getDataPoints().get(0).getValue(Field.FIELD_STEPS).asInt();
-                                stepsText.setText(String.format("%d", total));
-                            }
-                        })
-                .addOnFailureListener(
-                        new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.w(TAG, "There was a problem getting the step count.", e);
-                            }
-                        });
+        try {
+            Fitness.getHistoryClient(ctx, GoogleSignIn.getLastSignedInAccount(ctx))
+                    .readDailyTotal(DataType.TYPE_STEP_COUNT_DELTA)
+                    .addOnSuccessListener(
+                            new OnSuccessListener<DataSet>() {
+                                @Override
+                                public void onSuccess(DataSet dataSet) {
+                                    total =
+                                            dataSet.isEmpty()
+                                                    ? 0
+                                                    : dataSet.getDataPoints().get(0).getValue(Field.FIELD_STEPS).asInt();
+                                    stepsText.setText(String.format("%d", total));
+                                }
+                            })
+                    .addOnFailureListener(
+                            new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.w(TAG, "There was a problem getting the step count.", e);
+                                }
+                            });
+        }
+        catch (Exception exception)
+        {
+            Toast.makeText(ctx, "Please Provide Permissions", Toast.LENGTH_SHORT).show();
+        }
+
     }
     public static void subscribe(Context context)
     {

@@ -2,6 +2,7 @@ package tech.iosd.benefit.DashboardFragments;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -48,10 +49,13 @@ import tech.iosd.benefit.Network.NetworkUtil;
 import tech.iosd.benefit.R;
 import tech.iosd.benefit.VideoPlayer.VideoPlayerActivity;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class FreeWorkoutTraining extends Fragment implements DashboardWorkoutAdapter.onItemClickListener
 {
     Context ctx;
     FragmentManager fm;
+    SharedPreferences sharedPreferences1;
     private ProgressDialog progressDialog;
     private CompositeSubscription compositeSubscription, mcompositeSubscription;
     private DatabaseHandler db;
@@ -98,6 +102,7 @@ public class FreeWorkoutTraining extends Fragment implements DashboardWorkoutAda
         progressDialog =  new ProgressDialog(getContext());
         progressDialog.setCancelable(false);
         progressDialog.setMessage("working..");
+        sharedPreferences1 = getContext().getSharedPreferences("SAVE_EXERCISE", MODE_PRIVATE);
 
         type = "tutorial";
 
@@ -127,6 +132,8 @@ public class FreeWorkoutTraining extends Fragment implements DashboardWorkoutAda
             @Override
             public void onClick(View view) {
                 downloadDialog.show();
+                sharedPreferences1.edit().putInt("CaloriesBurnt",0).apply();
+
                 // downloadDialog.setCancelable(false);
                 downloadFiles();
             }
@@ -408,6 +415,7 @@ public class FreeWorkoutTraining extends Fragment implements DashboardWorkoutAda
             }
             Intent intent = new Intent(getContext(), VideoPlayerActivity.class);
             intent.putExtra("videoItemList",videoPlayerItemList);
+            sharedPreferences1.edit().putInt("CaloriesBurnt",0).apply();
             startActivity(intent);
         }
     };
@@ -498,6 +506,7 @@ public class FreeWorkoutTraining extends Fragment implements DashboardWorkoutAda
             videoPlayerItemList.add(gson.toJson(new VideoPlayerItem(exercises.get(position))));
             Intent intent = new Intent(getContext(), VideoPlayerActivity.class);
             intent.putExtra("videoItemList", videoPlayerItemList);
+            sharedPreferences1.edit().putInt("CaloriesBurnt",0).apply();
             startActivity(intent);
         }
         else

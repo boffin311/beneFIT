@@ -116,6 +116,7 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/calories_burnt_save_activity"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
@@ -152,6 +153,7 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/time_taken_save_activity"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
@@ -188,6 +190,7 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/total_exercises_save_activity"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
