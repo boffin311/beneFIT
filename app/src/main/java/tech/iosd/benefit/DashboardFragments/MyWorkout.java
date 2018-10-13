@@ -1,5 +1,6 @@
 package tech.iosd.benefit.DashboardFragments;
 
+import android.content.SharedPreferences;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.app.ProgressDialog;
@@ -51,6 +52,8 @@ import tech.iosd.benefit.Network.NetworkUtil;
 import tech.iosd.benefit.R;
 import tech.iosd.benefit.VideoPlayer.VideoPlayerActivity;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class MyWorkout extends Fragment implements DashboardWorkoutAdapter.onItemClickListener
 {
     public Calendar selDate;
@@ -59,6 +62,7 @@ public class MyWorkout extends Fragment implements DashboardWorkoutAdapter.onIte
     Context ctx;
     FragmentManager fm;
     private int totalVideos;
+    SharedPreferences sharedPreferences1;
     private String selectedDate;
     private SimpleDateFormat dateFormat;
     private ProgressDialog progressDialog;
@@ -103,6 +107,7 @@ public class MyWorkout extends Fragment implements DashboardWorkoutAdapter.onIte
         mcompositeSubscription =  new CompositeSubscription();
 
         downloadManager =  new ThinDownloadManager();
+        sharedPreferences1 = getContext().getSharedPreferences("SAVE_EXERCISE", MODE_PRIVATE);
 
         db = new DatabaseHandler(getContext());
 
@@ -127,6 +132,8 @@ public class MyWorkout extends Fragment implements DashboardWorkoutAdapter.onIte
             public void onClick(View view) {
                 downloadDialog.show();
                // downloadDialog.setCancelable(false);
+                SharedPreferences sharedPreferences1 = getContext().getSharedPreferences("SAVE_EXERCISE", MODE_PRIVATE);
+                sharedPreferences1.edit().putInt("CaloriesBurnt",0).apply();
                 downloadFiles();
             }
         });
@@ -169,6 +176,7 @@ public class MyWorkout extends Fragment implements DashboardWorkoutAdapter.onIte
                     @Override
                     public void onClick(View view) {
                         downloadDialog.show();
+                        sharedPreferences1.edit().putInt("CaloriesBurnt",0).apply();
                         // downloadDialog.setCancelable(false);
                         downloadFiles();
                     }
@@ -445,6 +453,7 @@ public class MyWorkout extends Fragment implements DashboardWorkoutAdapter.onIte
             }
             Intent intent = new Intent(getContext(), VideoPlayerActivity.class);
             intent.putExtra("videoItemList",videoPlayerItemList);
+            sharedPreferences1.edit().putInt("CaloriesBurnt",0).apply();
             startActivity(intent);
         }
     };
@@ -533,6 +542,7 @@ public class MyWorkout extends Fragment implements DashboardWorkoutAdapter.onIte
             videoPlayerItemList.add(gson.toJson(new VideoPlayerItem(exercises.get(position))));
             Intent intent = new Intent(getContext(), VideoPlayerActivity.class);
             intent.putExtra("videoItemList", videoPlayerItemList);
+            sharedPreferences1.edit().putInt("CaloriesBurnt",0).apply();
             startActivity(intent);
         }
         else

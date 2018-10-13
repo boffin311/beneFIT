@@ -52,6 +52,7 @@ import tech.iosd.benefit.Model.Response;
 import tech.iosd.benefit.Model.ResponseForFoodSearch;
 import tech.iosd.benefit.Model.ResponseForGetMeal;
 import tech.iosd.benefit.Model.ResponseForSuccess;
+import tech.iosd.benefit.Model.ResponseTrackingDetails;
 import tech.iosd.benefit.Network.NetworkUtil;
 import tech.iosd.benefit.R;
 import tech.iosd.benefit.Model.ResponseForGetMeal.Food;
@@ -86,7 +87,7 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
     TextView lunchCarbs, lunchProtien,lunchCalorie, lunchFats;
     TextView snacksCarbs, snacksProtien,snacksCalorie, snacksFats;
     TextView dinnerCarbs, dinnerProtien,dinnerCalorie, dinnerFats;
-
+    TextView goalCalories,foodCalories,activityCalories,remainingCalories;
 
 
 
@@ -107,8 +108,7 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
     MealLogForOneMeal mealLogdinner;
     private String selectedDate;
 
-
-
+    float foodCaloriesIntake=0;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState)
@@ -124,16 +124,19 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
 
         mSubscriptions = new CompositeSubscription();
         mSubscriptionsSearch = new CompositeSubscription();
-
+        foodCaloriesIntake=0;
         mealLogBreakfast = new MealLogForOneMeal(getContext());
         mealLogMidmorning = new MealLogForOneMeal(getContext());
         mealLogLunch = new MealLogForOneMeal(getContext());
         mealLogSnacks = new MealLogForOneMeal(getContext());
         mealLogdinner = new MealLogForOneMeal(getContext());
-
+        goalCalories=rootView.findViewById(R.id.goal_meal_log);
+        foodCalories=rootView.findViewById(R.id.food_meal_log);
+        activityCalories=rootView.findViewById(R.id.activity_meal_log);
+        remainingCalories=rootView.findViewById(R.id.remainingCalories);
         db = new DatabaseHandler(getContext());
 
-
+        activityCaloriesBurnt=0;
         listItems = new ArrayList<>();
         MealLogFood mealLogFood =  new MealLogFood();
         mealLogFood.setName("Please search a Food item");
@@ -189,7 +192,7 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
 
         midMorningListView = rootView.findViewById(R.id.my_nutrition_mid_morning);
         midMorningIngredients = new ArrayList<>();
-        final ArrayAdapter<String> midMorningAdapter = new ArrayAdapter<>(ctx, R.layout.listview_text, midMorningIngredients);
+        midMorningAdapter = new ArrayAdapter<>(ctx, R.layout.listview_text, midMorningIngredients);
         midMorningListView.setAdapter(midMorningAdapter);
         midMorningListView.setOnItemClickListener(this);
         midMorningListView.setExpanded(true);
@@ -197,7 +200,7 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
 
         lunchListView = rootView.findViewById(R.id.my_nutrition_lunch);
         lunchIngredients = new ArrayList<>();
-        final ArrayAdapter<String> lunchAdapter = new ArrayAdapter<>(ctx, R.layout.listview_text, lunchIngredients);
+        lunchAdapter = new ArrayAdapter<>(ctx, R.layout.listview_text, lunchIngredients);
         lunchListView.setAdapter(lunchAdapter);
         lunchListView.setOnItemClickListener(this);
         lunchListView.setExpanded(true);
@@ -205,7 +208,7 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
 
         snackListView = rootView.findViewById(R.id.my_nutrition_snacks);
         snacksIngredients = new ArrayList<>();
-        final ArrayAdapter<String> snacksAdapter = new ArrayAdapter<>(ctx, R.layout.listview_text, snacksIngredients);
+        snacksAdapter = new ArrayAdapter<>(ctx, R.layout.listview_text, snacksIngredients);
         snackListView.setAdapter(snacksAdapter);
         snackListView.setOnItemClickListener(this);
         snackListView.setExpanded(true);
@@ -213,7 +216,7 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
 
         dinnerListView = rootView.findViewById(R.id.my_nutrition_dinner);
         dinnerIngredients = new ArrayList<>();
-        final ArrayAdapter<String> dinnerAdapter = new ArrayAdapter<>(ctx, R.layout.listview_text, dinnerIngredients);
+        dinnerAdapter = new ArrayAdapter<>(ctx, R.layout.listview_text, dinnerIngredients);
         dinnerListView.setAdapter(dinnerAdapter);
         dinnerListView.setOnItemClickListener(this);
         dinnerListView.setExpanded(true);
@@ -830,36 +833,99 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
         progressDialog.setMessage("working..");
         progressDialog.setCancelable(false);
         progressDialog.show();*/
-
+       foodCaloriesIntake=0;
+       activityCaloriesBurnt=0;
         if(meal.equalsIgnoreCase(Constants.BREAKFAST)){
             breakfastCalorie.setText(String.valueOf(mealLogBreakfast.getMealCalorie()));
+            foodCaloriesIntake=foodCaloriesIntake+mealLogBreakfast.getMealCalorie();
             breakfastProtien.setText(String.valueOf(mealLogBreakfast.getMealProtien()));
             breakfastFats.setText(String.valueOf(mealLogBreakfast.getMealFat()));
             breakfastCarbs.setText(String.valueOf(mealLogBreakfast.getMealCarbs()));
         }else  if(meal.equalsIgnoreCase(Constants.MID_MORNING)){
             midmorningCalorie.setText(String.valueOf(mealLogMidmorning.getMealCalorie()));
+            foodCaloriesIntake=foodCaloriesIntake+mealLogMidmorning.getMealCalorie();
             midmorningProtien.setText(String.valueOf(mealLogMidmorning.getMealProtien()));
             midmorningFats.setText(String.valueOf(mealLogMidmorning.getMealFat()));
             midmorningCarbs.setText(String.valueOf(mealLogMidmorning.getMealCarbs()));
         }else  if(meal.equalsIgnoreCase(Constants.LUNCH)){
             lunchCalorie.setText(String.valueOf(mealLogLunch.getMealCalorie()));
+            foodCaloriesIntake=foodCaloriesIntake+mealLogLunch.getMealCalorie();
             lunchProtien.setText(String.valueOf(mealLogLunch.getMealProtien()));
             lunchFats.setText(String.valueOf(mealLogLunch.getMealFat()));
             lunchCarbs.setText(String.valueOf(mealLogLunch.getMealCarbs()));
         }else  if(meal.equalsIgnoreCase(Constants.SNACKS)){
             snacksCalorie.setText(String.valueOf(mealLogSnacks.getMealCalorie()));
+            foodCaloriesIntake=foodCaloriesIntake+mealLogSnacks.getMealCalorie();
             snacksProtien.setText(String.valueOf(mealLogSnacks.getMealProtien()));
             snacksFats.setText(String.valueOf(mealLogSnacks.getMealFat()));
             snacksCarbs.setText(String.valueOf(mealLogSnacks.getMealCarbs()));
         }else  if(meal.equalsIgnoreCase(Constants.DINNER)){
             dinnerCalorie.setText(String.valueOf(mealLogdinner.getMealCalorie()));
+            foodCaloriesIntake=foodCaloriesIntake+mealLogdinner.getMealCalorie();
             dinnerProtien.setText(String.valueOf(mealLogdinner.getMealProtien()));
             dinnerFats.setText(String.valueOf(mealLogdinner.getMealFat()));
             dinnerCarbs.setText(String.valueOf(mealLogdinner.getMealCarbs()));
         }
 
+        foodCalories.setText(String.valueOf(foodCaloriesIntake));
+        getTrackActivityDetails();
+    }
+
+    private void getTrackActivityDetails()
+    {
+        mSubscriptions.add(NetworkUtil.getRetrofit(db.getUserToken()).getTrackActivityDetails(db.getUserToken(),selectedDate)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(this::handleResponseGetTrackActivityDetails,this::handleErrorGetTrackActivityDetails));
 
 
+    }
+
+    private void handleErrorGetTrackActivityDetails(Throwable error)
+    {
+        Log.d("error77",error.getMessage());
+
+
+        if (error instanceof HttpException) {
+
+            Gson gson = new GsonBuilder().create();
+
+            try {
+
+                String errorBody = ((HttpException) error).response().errorBody().string();
+                Response response = gson.fromJson(errorBody,Response.class);
+                showSnackBarMessage(response.getMessage());
+                fm.popBackStack();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            Log.d("error77",error.getMessage());
+
+            showSnackBarMessage("Network Error !");
+        }
+    }
+    float activityCaloriesBurnt=0;
+    private void handleResponseGetTrackActivityDetails(ResponseTrackingDetails responseTrackingDetails)
+    {
+        Log.d("cal",(new Gson()).toJson(responseTrackingDetails).toString());
+        activityCaloriesBurnt=0;
+        if (responseTrackingDetails.getSuccess())
+        {
+            ArrayList<ResponseTrackingDetails.Data> data=responseTrackingDetails.getData();
+            for(int x=0;x<data.size();x++)
+            {
+                activityCaloriesBurnt=activityCaloriesBurnt+data.get(x).getCalories();
+                Log.d("cal",data.get(x).getCalories()+" "+data.get(x).getActivity());
+            }
+            activityCalories.setText(activityCaloriesBurnt+"");
+            remainingCalories.setText(""+(2730-foodCaloriesIntake+activityCaloriesBurnt));
+        }
+        else
+        {
+            showSnackBarMessage("Network Error !");
+        }
     }
 
     private void uploadMealLogToServer(String meal){

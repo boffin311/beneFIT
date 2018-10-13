@@ -16,6 +16,7 @@ import rx.Observable;
 import tech.iosd.benefit.Model.BodyForChangePassword;
 import tech.iosd.benefit.Model.BodyForMealLog;
 import tech.iosd.benefit.Model.Measurements;
+import tech.iosd.benefit.Model.PostTrackActivity;
 import tech.iosd.benefit.Model.Response;
 import tech.iosd.benefit.Model.ResponseForChangePassword;
 import tech.iosd.benefit.Model.ResponseForChatMessage;
@@ -28,6 +29,7 @@ import tech.iosd.benefit.Model.ResponseForSuccess;
 import tech.iosd.benefit.Model.ResponseForUpdate;
 import tech.iosd.benefit.Model.ResponseForWorkoutForDate;
 import tech.iosd.benefit.Model.ResponseNutritionPlanForDate;
+import tech.iosd.benefit.Model.ResponseTrackingDetails;
 import tech.iosd.benefit.Model.ResponseWorkoutFree;
 import tech.iosd.benefit.Model.User;
 import tech.iosd.benefit.Model.UserDetails;
@@ -99,4 +101,11 @@ public interface RetrofitInterface {
 
     @GET("workout/free")
     Observable<ResponseWorkoutFree> getWorkoutFree(@Header("Authorization") String token);
+
+    @GET("tracking/details")
+    Observable<ResponseTrackingDetails> getTrackActivityDetails(@Header("Authorization") String token, @Query("date") String date);
+
+    @POST("tracking/details")
+    Observable<ResponseForSuccess> sendActivityDetails(@Body PostTrackActivity postTrackActivity, @Header("Authorization") String token);
+
 }

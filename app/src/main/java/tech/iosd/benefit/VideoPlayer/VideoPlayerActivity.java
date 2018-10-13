@@ -38,6 +38,7 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 import tech.iosd.benefit.DashboardFragments.SaveWorkout;
+import tech.iosd.benefit.Model.DatabaseHandler;
 import tech.iosd.benefit.Model.VideoPlayerItem;
 import tech.iosd.benefit.R;
 import tech.iosd.benefit.SaveWorkoutActivity;
@@ -54,6 +55,7 @@ public class VideoPlayerActivity extends Activity implements SurfaceHolder.Callb
     VideoFormView videoFormView;
     TextView dura2, setsCounter, middleCount, restCounter, repsCounter;
     int screenTime;
+    private DatabaseHandler db;
     CountDownTimer countDownTimer;
     public static final String TAG = "chla";
     ProgressDialog progressDialog;
@@ -72,7 +74,7 @@ public class VideoPlayerActivity extends Activity implements SurfaceHolder.Callb
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_player);
-
+        db = new DatabaseHandler(this);
         videoPlayerItemList = getIntent().getStringArrayListExtra("videoItemList");
         currentItem = 0;
 
@@ -320,6 +322,17 @@ public class VideoPlayerActivity extends Activity implements SurfaceHolder.Callb
         }
         else
         {
+            SharedPreferences sharedPreferences1 = getSharedPreferences("SAVE_EXERCISE", MODE_PRIVATE);
+            int reps=sharedPreferences1.getInt("RepsNo"+videoItem.getVideoName(),10);
+            int caloriesBurnt=sharedPreferences1.getInt("CaloriesBurnt",0);
+            float mets=videoItem.getMets();
+            float timeTaken=videoItem.getTimeTaken();
+            int weightUser=db.getUserWeight();
+            Log.d("timeTaken",timeTaken+"");
+            Log.d("mets",mets+"");
+            caloriesBurnt=(int)(caloriesBurnt+(mets*weightUser*((reps*timeTaken)/3600)));
+            Log.d("caloriesBurnt",""+caloriesBurnt);
+            sharedPreferences.edit().putInt("CaloriesBurnt",caloriesBurnt).apply();
             result=true;
             isWeight=true;
             displaySets=true;
@@ -386,6 +399,19 @@ public class VideoPlayerActivity extends Activity implements SurfaceHolder.Callb
         }
         else
         {
+            Log.d("reahed else","reached else");
+            SharedPreferences sharedPreferences1 = getSharedPreferences("SAVE_EXERCISE", MODE_PRIVATE);
+            int sets=sharedPreferences1.getInt("SetNo"+videoItem.getVideoName(),1);
+            int reps=sharedPreferences1.getInt("RepsNo"+videoItem.getVideoName(),10);
+            int caloriesBurnt=sharedPreferences1.getInt("CaloriesBurnt",0);
+            float mets=videoItem.getMets();
+            float timeTaken=videoItem.getTimeTaken();
+            int weightUser=db.getUserWeight();
+            Log.d("timeTaken",timeTaken+"");
+            Log.d("mets",""+mets);
+            caloriesBurnt=(int)(caloriesBurnt+(mets*weightUser*((sets*reps*timeTaken)/3600))) ;
+            Log.d("caloriesBurnt",""+caloriesBurnt);
+            sharedPreferences.edit().putInt("CaloriesBurnt",caloriesBurnt).apply();
             isWeight=true;
             displaySets=true;
             isReps=true;
