@@ -33,7 +33,10 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 import rx.android.schedulers.AndroidSchedulers;
 import retrofit2.adapter.rxjava.HttpException;
@@ -64,7 +67,8 @@ public class FreeWorkoutTraining extends Fragment implements DashboardWorkoutAda
     private ArrayList<Exercise> exercises = new ArrayList<>();
 
     private ArrayList<Boolean>  secondPresent = new ArrayList<>();
-
+    Calendar c = Calendar.getInstance();
+    SimpleDateFormat df;
     private String type;
     ProgressBar progressBar;
     private Button startWorkout;
@@ -178,10 +182,10 @@ public class FreeWorkoutTraining extends Fragment implements DashboardWorkoutAda
         compositeSubscription.add(NetworkUtil.getRetrofit(db.getUserToken()).getWorkoutFree(db.getUserToken())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(this::handleResponseGetMeal,this::handleErrorGetMeal));
+                .subscribe(this::handleResponseGetWorkoutFree,this::handleErrorGetWorkoutFree));
     }
     int videoCount;
-    private void handleResponseGetMeal(ResponseWorkoutFree responseWorkoutFree)
+    private void handleResponseGetWorkoutFree(ResponseWorkoutFree responseWorkoutFree)
     {
         progressDialog.hide();
         if (!responseWorkoutFree.isSuccess())
@@ -192,6 +196,8 @@ public class FreeWorkoutTraining extends Fragment implements DashboardWorkoutAda
         }
         videoCount = responseWorkoutFree.getData().get(position).getVideoCount();
         description_free_workouts.setText(responseWorkoutFree.getData().get(position).getDescription());
+        sharedPreferences1.edit().putString("WORKOUT_ID",responseWorkoutFree.getData().get(position).get_id()).apply();
+        Toast.makeText(ctx,responseWorkoutFree.getData().get(position).get_id()+"" , Toast.LENGTH_SHORT).show();
         Log.d("error77"," " +responseWorkoutFree.getData().get(position).getExercises().size());
         exercises = responseWorkoutFree.getData().get(position).getExercises();
         for (int i =0 ; i<exercises.size();i++){
@@ -204,7 +210,7 @@ public class FreeWorkoutTraining extends Fragment implements DashboardWorkoutAda
         checkFiles();
     }
 
-    private void handleErrorGetMeal(Throwable error) {
+    private void handleErrorGetWorkoutFree(Throwable error) {
         progressDialog.hide();
 //        pbar.setVisibility(View.GONE);
         Log.d("error77",error.getMessage());
@@ -414,7 +420,17 @@ public class FreeWorkoutTraining extends Fragment implements DashboardWorkoutAda
                 videoPlayerItemList.add(gson.toJson(new VideoPlayerItem(exercises.get(i))));
             }
             Intent intent = new Intent(getContext(), VideoPlayerActivity.class);
+            Bundle bundle=new Bundle();
+            bundle.putBoolean("FREEWORKOUT",true);
+            intent.putExtras(bundle);
             intent.putExtra("videoItemList",videoPlayerItemList);
+            c = Calendar.getInstance();
+            df = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+            String fomattedTime=df.format(c.getTime());
+            Toast.makeText(ctx,fomattedTime, Toast.LENGTH_LONG).show();
+            sharedPreferences1.edit().putString("START_TIME",fomattedTime).apply();
+            long time= System.currentTimeMillis();
+            sharedPreferences1.edit().putFloat("START_TIME_MILLIS",time).apply();
             sharedPreferences1.edit().putInt("CaloriesBurnt",0).apply();
             startActivity(intent);
         }
@@ -506,6 +522,16 @@ public class FreeWorkoutTraining extends Fragment implements DashboardWorkoutAda
             videoPlayerItemList.add(gson.toJson(new VideoPlayerItem(exercises.get(position))));
             Intent intent = new Intent(getContext(), VideoPlayerActivity.class);
             intent.putExtra("videoItemList", videoPlayerItemList);
+            Bundle bundle=new Bundle();
+            bundle.putBoolean("FREEWORKOUT",true);
+            intent.putExtras(bundle);
+            c = Calendar.getInstance();
+            df = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+            String fomattedTime=df.format(c.getTime());
+            Toast.makeText(ctx, fomattedTime, Toast.LENGTH_LONG).show();
+            sharedPreferences1.edit().putString("START_TIME",fomattedTime).apply();
+            long time= System.currentTimeMillis();
+            sharedPreferences1.edit().putFloat("START_TIME_MILLIS",time).apply();
             sharedPreferences1.edit().putInt("CaloriesBurnt",0).apply();
             startActivity(intent);
         }

@@ -57,7 +57,8 @@ import static android.content.Context.MODE_PRIVATE;
 public class MyWorkout extends Fragment implements DashboardWorkoutAdapter.onItemClickListener
 {
     public Calendar selDate;
-
+    Calendar c = Calendar.getInstance();
+    SimpleDateFormat df;
     String[] months = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
     Context ctx;
     FragmentManager fm;
@@ -238,6 +239,7 @@ public class MyWorkout extends Fragment implements DashboardWorkoutAdapter.onIte
             //Download completes here
         }
         totalVideos=responseForWorkoutForDate.getData().getVideoCount();
+        sharedPreferences1.edit().putString("WORKOUT_ID",responseForWorkoutForDate.getData().get_id()).apply();
         Log.d("error77"," " +responseForWorkoutForDate.getData().getWorkout().getExercises().size());
         exercises = responseForWorkoutForDate.getData().getWorkout().getExercises();
         for (int i =0 ; i<exercises.size();i++){
@@ -453,6 +455,16 @@ public class MyWorkout extends Fragment implements DashboardWorkoutAdapter.onIte
             }
             Intent intent = new Intent(getContext(), VideoPlayerActivity.class);
             intent.putExtra("videoItemList",videoPlayerItemList);
+            Bundle bundle=new Bundle();
+            bundle.putBoolean("FREEWORKOUT",false);
+            intent.putExtras(bundle);
+            c = Calendar.getInstance();
+            df = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+            String fomattedTime=df.format(c.getTime());
+            Toast.makeText(ctx, fomattedTime, Toast.LENGTH_LONG).show();
+            sharedPreferences1.edit().putString("START_TIME",fomattedTime).apply();
+            long time= System.currentTimeMillis();
+            sharedPreferences1.edit().putFloat("START_TIME_MILLIS",time).apply();
             sharedPreferences1.edit().putInt("CaloriesBurnt",0).apply();
             startActivity(intent);
         }
@@ -542,6 +554,17 @@ public class MyWorkout extends Fragment implements DashboardWorkoutAdapter.onIte
             videoPlayerItemList.add(gson.toJson(new VideoPlayerItem(exercises.get(position))));
             Intent intent = new Intent(getContext(), VideoPlayerActivity.class);
             intent.putExtra("videoItemList", videoPlayerItemList);
+            Bundle bundle=new Bundle();
+            bundle.putBoolean("FREEWORKOUT",false);
+            intent.putExtras(bundle);
+            c = Calendar.getInstance();
+            df = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+            String fomattedTime=df.format(c.getTime());
+            Toast.makeText(ctx, fomattedTime, Toast.LENGTH_LONG).show();
+            sharedPreferences1.edit().putString("START_TIME",fomattedTime).apply();
+            long time= System.currentTimeMillis();
+            sharedPreferences1.edit().putFloat("START_TIME_MILLIS",time).apply();
+            sharedPreferences1.edit().putInt("CaloriesBurnt",0).apply();
             sharedPreferences1.edit().putInt("CaloriesBurnt",0).apply();
             startActivity(intent);
         }

@@ -43,6 +43,7 @@ public class TrackActivityCompleted extends Fragment
     String calorie,duration,distance,avgPaceText,trackType;
     TextView calorieBurnt,totalDuration,totalDistance,avgPace;
     ImageView backIcon;
+    float durationSec;
     private String selectedDate;
     SimpleDateFormat dateFormat;
     @Override
@@ -56,6 +57,7 @@ public class TrackActivityCompleted extends Fragment
             distance = getArguments().getString("DISTANCE","0.0");
             avgPaceText = getArguments().getString("AVG_PACE","0.0");
             trackType=getArguments().getString("TRACK_TYPE","RUNNING");
+            durationSec=getArguments().getFloat("DURATION_SEC",0);
         } else {
             return;
         }
@@ -103,8 +105,7 @@ public class TrackActivityCompleted extends Fragment
             @Override
             public void onClick(View v)
             {
-                //TODO make duration dynamic
-                PostTrackActivity postTrackActivity=new PostTrackActivity(selectedDate,trackType,100,Float.parseFloat(calorie),Float.parseFloat(distance));
+                PostTrackActivity postTrackActivity=new PostTrackActivity(selectedDate,trackType,durationSec,Float.parseFloat(calorie),Float.parseFloat(distance));
                 mSubscriptions.add(NetworkUtil.getRetrofit(db.getUserToken()).sendActivityDetails(postTrackActivity,db.getUserToken())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribeOn(Schedulers.io())

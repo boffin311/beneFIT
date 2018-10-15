@@ -136,7 +136,7 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
         remainingCalories=rootView.findViewById(R.id.remainingCalories);
         db = new DatabaseHandler(getContext());
 
-        activityCaloriesBurnt=0;
+        //activityCaloriesBurnt=0;
         listItems = new ArrayList<>();
         MealLogFood mealLogFood =  new MealLogFood();
         mealLogFood.setName("Please search a Food item");
@@ -335,12 +335,11 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
 
 
     }
-
+    private int totalCaloriesBurntWorkout;
     private void handleResponseGetMeal(ResponseForGetMeal response) {
 
-
-
         if(response.isSuccess()){
+            totalCaloriesBurntWorkout=response.getCalories().getWorkout()+response.getCalories().getTracking();
             if (response.getData().getType().equalsIgnoreCase(Constants.BREAKFAST)){
                 for (int i = 0; i< response.getData().getFood().size(); i++){
                     breakfastIngredients.add(response.getData().getFood().get(i).getQuantity() + " " +response.getData().getFood().get(i).getUnit()+" "+ response.getData().getFood().get(i).getItem().getName());
@@ -424,7 +423,8 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
                 }
 
             }
-
+            //activityCaloriesBurnt=totalCaloriesBurntWorkout;
+            activityCalories.setText(totalCaloriesBurntWorkout+"");
         }else {
             if(progressDialog.isShowing()){
                 progressDialog.dismiss();
@@ -480,7 +480,6 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
         Button dialogRemove = mView.findViewById(R.id.dialog_remove);
         final WheelPicker wheelPickerQty = mView.findViewById(R.id.dialog_picker_ingredient_qty);
         final WheelPicker wheelPickerTyp = mView.findViewById(R.id.dialog_picker_ingredient_type);
-
         mBuilder.setView(mView);
         final AlertDialog dialog = mBuilder.create();
         dialog.show();
@@ -834,7 +833,7 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
         progressDialog.setCancelable(false);
         progressDialog.show();*/
        foodCaloriesIntake=0;
-       activityCaloriesBurnt=0;
+      // activityCaloriesBurnt=0;
         if(meal.equalsIgnoreCase(Constants.BREAKFAST)){
             breakfastCalorie.setText(String.valueOf(mealLogBreakfast.getMealCalorie()));
             foodCaloriesIntake=foodCaloriesIntake+mealLogBreakfast.getMealCalorie();
@@ -867,66 +866,68 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
             dinnerCarbs.setText(String.valueOf(mealLogdinner.getMealCarbs()));
         }
 
-        foodCalories.setText(String.valueOf(foodCaloriesIntake));
-        getTrackActivityDetails();
+        foodCalories.setText(String.valueOf((int)foodCaloriesIntake));
+        //TODO Make goal dynamic
+        remainingCalories.setText(String.format("%d", (int) (2730 + totalCaloriesBurntWorkout - (int)foodCaloriesIntake)));
+        //getTrackActivityDetails();
     }
 
-    private void getTrackActivityDetails()
-    {
-        mSubscriptions.add(NetworkUtil.getRetrofit(db.getUserToken()).getTrackActivityDetails(db.getUserToken(),selectedDate)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(this::handleResponseGetTrackActivityDetails,this::handleErrorGetTrackActivityDetails));
-
-
-    }
-
-    private void handleErrorGetTrackActivityDetails(Throwable error)
-    {
-        Log.d("error77",error.getMessage());
-
-
-        if (error instanceof HttpException) {
-
-            Gson gson = new GsonBuilder().create();
-
-            try {
-
-                String errorBody = ((HttpException) error).response().errorBody().string();
-                Response response = gson.fromJson(errorBody,Response.class);
-                showSnackBarMessage(response.getMessage());
-                fm.popBackStack();
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else {
-            Log.d("error77",error.getMessage());
-
-            showSnackBarMessage("Network Error !");
-        }
-    }
-    float activityCaloriesBurnt=0;
-    private void handleResponseGetTrackActivityDetails(ResponseTrackingDetails responseTrackingDetails)
-    {
-        Log.d("cal",(new Gson()).toJson(responseTrackingDetails).toString());
-        activityCaloriesBurnt=0;
-        if (responseTrackingDetails.getSuccess())
-        {
-            ArrayList<ResponseTrackingDetails.Data> data=responseTrackingDetails.getData();
-            for(int x=0;x<data.size();x++)
-            {
-                activityCaloriesBurnt=activityCaloriesBurnt+data.get(x).getCalories();
-                Log.d("cal",data.get(x).getCalories()+" "+data.get(x).getActivity());
-            }
-            activityCalories.setText(activityCaloriesBurnt+"");
-            remainingCalories.setText(""+(2730-foodCaloriesIntake+activityCaloriesBurnt));
-        }
-        else
-        {
-            showSnackBarMessage("Network Error !");
-        }
-    }
+//    private void getTrackActivityDetails()
+//    {
+//        mSubscriptions.add(NetworkUtil.getRetrofit(db.getUserToken()).getTrackActivityDetails(db.getUserToken(),selectedDate)
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribeOn(Schedulers.io())
+//                .subscribe(this::handleResponseGetTrackActivityDetails,this::handleErrorGetTrackActivityDetails));
+//
+//
+//    }
+//
+//    private void handleErrorGetTrackActivityDetails(Throwable error)
+//    {
+//        Log.d("error77",error.getMessage());
+//
+//
+//        if (error instanceof HttpException) {
+//
+//            Gson gson = new GsonBuilder().create();
+//
+//            try {
+//
+//                String errorBody = ((HttpException) error).response().errorBody().string();
+//                Response response = gson.fromJson(errorBody,Response.class);
+//                showSnackBarMessage(response.getMessage());
+//                fm.popBackStack();
+//
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        } else {
+//            Log.d("error77",error.getMessage());
+//
+//            showSnackBarMessage("Network Error !");
+//        }
+//    }
+//    float activityCaloriesBurnt=0;
+//    private void handleResponseGetTrackActivityDetails(ResponseTrackingDetails responseTrackingDetails)
+//    {
+//        Log.d("cal",(new Gson()).toJson(responseTrackingDetails).toString());
+//        activityCaloriesBurnt=0;
+//        if (responseTrackingDetails.getSuccess())
+//        {
+//            ArrayList<ResponseTrackingDetails.Data> data=responseTrackingDetails.getData();
+//            for(int x=0;x<data.size();x++)
+//            {
+//                activityCaloriesBurnt=activityCaloriesBurnt+data.get(x).getCalories();
+//                Log.d("cal",data.get(x).getCalories()+" "+data.get(x).getActivity());
+//            }
+//            activityCalories.setText((int)activityCaloriesBurnt+"");
+//            remainingCalories.setText(""+((int)(2730-foodCaloriesIntake+activityCaloriesBurnt)));
+//        }
+//        else
+//        {
+//            showSnackBarMessage("Network Error !");
+//        }
+//    }
 
     private void uploadMealLogToServer(String meal){
         ArrayList<BodyForMealLog.Food> food1 =  new ArrayList<>();
@@ -1058,7 +1059,7 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
 
             Gson gson = new GsonBuilder().create();
             showSnackBarMessage("Network Error !");
-            Log.d("error77",error.getMessage());
+            Log.d("error77sending",error.getMessage());
 
             try {
 
@@ -1070,7 +1071,7 @@ public class MealLog extends Fragment implements AdapterView.OnItemClickListener
                 e.printStackTrace();
             }
         } else {
-            Log.d("error77",error.getMessage());
+            Log.d("error77sending",error.getMessage());
 
             showSnackBarMessage("Network Error !");
         }

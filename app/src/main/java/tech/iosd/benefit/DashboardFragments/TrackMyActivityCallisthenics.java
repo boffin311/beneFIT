@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.aigestudio.wheelpicker.WheelPicker;
 
@@ -22,7 +23,7 @@ public class TrackMyActivityCallisthenics extends Fragment
 {
     Context ctx;
     FragmentManager fm;
-
+    TextView duration;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState)
@@ -30,7 +31,7 @@ public class TrackMyActivityCallisthenics extends Fragment
         View rootView = inflater.inflate(R.layout.dashboard_track_my_activity_callisthenics, container, false);
         ctx = rootView.getContext();
         fm = getFragmentManager();
-
+        duration=rootView.findViewById(R.id.duration_callisthenics);
         rootView.findViewById(R.id.dashboard_track_my_activity_callisthenics_edit_time).setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -64,7 +65,10 @@ public class TrackMyActivityCallisthenics extends Fragment
                     @Override
                     public void onClick(View view)
                     {
+                        if (duration!=null)
+                        duration.setText(data_hour.get(wheelPickerHour.getCurrentItemPosition())+":"+data_minute.get(wheelPickerMinute.getCurrentItemPosition())+":"+data_second.get(wheelPickerSecond.getCurrentItemPosition()));
                         dialog.dismiss();
+
                     }
                 });
             }
