@@ -543,6 +543,7 @@ public class TrackMyActivityRun extends Fragment implements View.OnClickListener
                 args.putString("CALORIE",calorie_burnt.getText().toString());
                 args.putString("DURATION",duration.getText().toString());
                 args.putString("AVG_PACE",avgPace.getText().toString());
+                args.putFloat("DURATION_SEC",(float)timer.getTotalElapsedTimeSecs());
                 args.putString("TRACK_TYPE",trackType);
                 trackActivityCompleted.setArguments(args);
                 fm.beginTransaction().replace(R.id.dashboard_content, trackActivityCompleted).addToBackStack(null).commit();

@@ -34,7 +34,9 @@ import com.google.gson.Gson;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Locale;
 
 import tech.iosd.benefit.DashboardFragments.SaveWorkout;
@@ -48,7 +50,10 @@ import tech.iosd.benefit.SaveWorkoutActivity;
  */
 public class VideoPlayerActivity extends Activity implements SurfaceHolder.Callback, MediaPlayer.OnPreparedListener, VideoControllerView.MediaPlayerControl, MediaPlayer.OnCompletionListener, TextToSpeech.OnInitListener {
 
+    SharedPreferences sharedPreferences1;
     SurfaceView videoSurface;
+    Calendar c = Calendar.getInstance();
+    SimpleDateFormat df;
     MediaPlayer player;
     VideoControllerView controller;
     FragmentManager fm;
@@ -62,6 +67,7 @@ public class VideoPlayerActivity extends Activity implements SurfaceHolder.Callb
     Button skipIntroBtn, skipRestBtn;
     private TextToSpeech tts;
     CheckBox soundOn;
+    boolean isFreeWorkout=true;
     Boolean isSoundOn = true;
     Gson gson = new Gson();
 
@@ -76,8 +82,9 @@ public class VideoPlayerActivity extends Activity implements SurfaceHolder.Callb
         setContentView(R.layout.activity_video_player);
         db = new DatabaseHandler(this);
         videoPlayerItemList = getIntent().getStringArrayListExtra("videoItemList");
+        isFreeWorkout=getIntent().getExtras().getBoolean("FREEWORKOUT",false);
         currentItem = 0;
-
+        sharedPreferences1 = getSharedPreferences("SAVE_EXERCISE", MODE_PRIVATE);
         setVideoItem();
 
         initViews();
@@ -147,6 +154,17 @@ public class VideoPlayerActivity extends Activity implements SurfaceHolder.Callb
         }else {
             Intent intent=new Intent(this, SaveWorkoutActivity.class);
             intent.putExtra("VIDEO_ITEM", videoPlayerItemList);
+            Bundle bundle=new Bundle();
+            bundle.putBoolean("FREEWORKOUT",isFreeWorkout);
+            intent.putExtras(bundle);
+            c = Calendar.getInstance();
+            df = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+            String fomattedTime=df.format(c.getTime());
+            Toast.makeText(this, fomattedTime, Toast.LENGTH_SHORT).show();
+            sharedPreferences1.edit().putString("END_TIME",fomattedTime).apply();
+            long time= System.currentTimeMillis();
+            sharedPreferences1.edit().putFloat("END_TIME_MILLIS",time).apply();
+
             startActivity(intent);
             finish();
         }
