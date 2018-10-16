@@ -136,6 +136,14 @@ public class VideoPlayerActivity extends Activity implements SurfaceHolder.Callb
 
         controller = new VideoControllerView(this);
         videoFormView=new VideoFormView(this);
+
+        //this prevents mediaplayerview to open when form is being displayed
+        videoFormView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return true;
+            }
+        });
         //player is initialised after surface is created (onSurfaceCreated method)
 
     }
@@ -767,6 +775,8 @@ public class VideoPlayerActivity extends Activity implements SurfaceHolder.Callb
                     player.prepareAsync();
                 } catch (IOException e) {
                     e.printStackTrace();
+                    Toast.makeText(this,e.toString(),Toast.LENGTH_LONG).show();
+                    progressDialog.cancel();
                 }
             }
 
@@ -789,6 +799,8 @@ public class VideoPlayerActivity extends Activity implements SurfaceHolder.Callb
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
+                    Toast.makeText(this,e.toString(),Toast.LENGTH_LONG).show();
+                    progressDialog.cancel();
                 }
             } else {//show intro
                 try {
@@ -803,6 +815,9 @@ public class VideoPlayerActivity extends Activity implements SurfaceHolder.Callb
                     player.prepareAsync();
                 } catch (IOException e) {
                     e.printStackTrace();
+
+                    Toast.makeText(this,e.toString(),Toast.LENGTH_LONG).show();
+                    progressDialog.cancel();
                 }
             }
         }
