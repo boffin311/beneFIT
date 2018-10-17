@@ -43,6 +43,7 @@ import retrofit2.adapter.rxjava.HttpException;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 import tech.iosd.benefit.Adapters.DashboardWorkoutAdapter;
+import tech.iosd.benefit.Model.DBDowloadList;
 import tech.iosd.benefit.Model.DatabaseHandler;
 import tech.iosd.benefit.Model.Exercise;
 import tech.iosd.benefit.Model.ResponseForGetExcerciseVideoUrl;
@@ -84,6 +85,9 @@ public class FreeWorkoutTraining extends Fragment implements DashboardWorkoutAda
     private int noOfCurrentVideUser=0;
     boolean allVideoDownloaded = true;
     private int position;
+
+    DBDowloadList dbDowloadList;
+
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
@@ -143,6 +147,7 @@ public class FreeWorkoutTraining extends Fragment implements DashboardWorkoutAda
             }
         });
         getWorkoutData();
+        dbDowloadList = new DBDowloadList(getActivity());
         return rootView;
     }
 
@@ -326,9 +331,14 @@ public class FreeWorkoutTraining extends Fragment implements DashboardWorkoutAda
             file = new File(getActivity().getFilesDir().toString()+"/videos/"+exercises.get(currentPosition).getExercise().get_id()+".mp4");
 
         }
-        if(file.exists()){
+
+        String name = exercises.get(currentPosition).getExercise().get_id();
+        if(type.equals("a") || type.equals("b"))
+            name = exercises.get(currentPosition).getExercise().get_id()+"_"+type;
+
+        if(dbDowloadList.isInDataBase(name)){
             adapter.notifyDataSetChanged();
-            Toast.makeText(getContext(),"file arleady presenet "+type+(currentPosition+1),Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(),"Present in db "+type+(currentPosition+1),Toast.LENGTH_SHORT).show();
             Log.d("files",getActivity().getFilesDir().toString()+"/videos/");
             if (type.equals("tutorial")){
                 type = "a";
@@ -386,13 +396,13 @@ public class FreeWorkoutTraining extends Fragment implements DashboardWorkoutAda
             fileb = new File(getActivity().getFilesDir().toString()+"/videos/"+exercises.get(currentPosition).getExercise().get_id()+"_b.mp4");
 
             //check if files exist and put tick on those present
-            if(!file.exists()){
+            if(!dbDowloadList.isInDataBase(exercises.get(currentPosition).getExercise().get_id()) || !file.exists()){
                 comp = false;
                 exComp = false;
-            } else if(e.getExercise().isVideoA() && !filea.exists()){
+            } else if(e.getExercise().isVideoA() && (!dbDowloadList.isInDataBase(exercises.get(currentPosition).getExercise().get_id()+"_a") || !filea.exists())){
                 comp = false;
                 exComp = false;
-            } else if(e.getExercise().isVideoB() && !fileb.exists()){
+            } else if(e.getExercise().isVideoB() && (!dbDowloadList.isInDataBase(exercises.get(currentPosition).getExercise().get_id()+"_b") || !fileb.exists())){
                 comp = false;
                 exComp = false;
             }
@@ -461,17 +471,23 @@ public class FreeWorkoutTraining extends Fragment implements DashboardWorkoutAda
                     public void onDownloadComplete(int id) {
 
                         //currentPosition++;
+
+                        //add file to database depending on type(done in if-else statements)
+
                         Toast.makeText(getActivity().getApplicationContext(),"completed download"+(currentPosition+1)+"type"+type,Toast.LENGTH_SHORT).show();
                         allVideoDownloaded = allVideoDownloaded && true;
                         if (type.equals("tutorial")){
+                            dbDowloadList.insert(exercises.get(currentPosition).getExercise().get_id());
                             type="a";
                             downloadFiles();
 
                         }else if (type.equals("a")){
+                            dbDowloadList.insert(exercises.get(currentPosition).getExercise().get_id()+"_a");
                             type="b";
                             downloadFiles();
 
                         }else  if (type.equals("b")){
+                            dbDowloadList.insert(exercises.get(currentPosition).getExercise().get_id()+"_b");
                             type="tutorial";
                             downloadFiles();
                             exercises.get(currentPosition-1).getExercise().isDownloaded =  true;
