@@ -17,6 +17,9 @@ import com.google.gson.GsonBuilder;
 import com.thin.downloadmanager.DefaultRetryPolicy;
 import com.thin.downloadmanager.DownloadRequest;
 import com.thin.downloadmanager.DownloadStatusListener;
+import com.thin.downloadmanager.DownloadStatusListenerV1;
+import com.thin.downloadmanager.RetryError;
+import com.thin.downloadmanager.RetryPolicy;
 import com.thin.downloadmanager.ThinDownloadManager;
 
 import android.content.Context;
@@ -74,7 +77,7 @@ public class FreeWorkoutTraining extends Fragment implements DashboardWorkoutAda
     ProgressBar progressBar;
     private Button startWorkout;
     private ThinDownloadManager downloadManager;
-    private int currentPosition =0;
+    private int currentPosition;
     TextView description_free_workouts;
     private  AlertDialog.Builder mBuilder;
     private AlertDialog downloadDialog;
@@ -88,11 +91,15 @@ public class FreeWorkoutTraining extends Fragment implements DashboardWorkoutAda
 
     DBDowloadList dbDowloadList;
 
+    private boolean isDownloading;
+
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         Bundle args = getArguments();
+        currentPosition = 0;
+        isDownloading = false;
         if (args != null) {
             position = getArguments().getInt("POSITION");
         } else {
@@ -141,9 +148,18 @@ public class FreeWorkoutTraining extends Fragment implements DashboardWorkoutAda
             public void onClick(View view) {
                 downloadDialog.show();
                 sharedPreferences1.edit().putInt("CaloriesBurnt",0).apply();
-
-                // downloadDialog.setCancelable(false);
-                downloadFiles();
+                //thindownloadmanager is multi-threaded..
+                // lets say you have 2 same download requests it just might
+                // happen that we download from same url at the same time
+                // which would lead to creation of a file which
+                // is corrupt, so we need to check if its downloading or not
+                // thindownloadmanager has no checks to tell how many requests
+                // are pending.. so we need to implement an 'isDownloading' boolean
+                // to check the same
+                if(!isDownloading) {//so that we dont put 2 requests at the same time..
+                    isDownloading = true;
+                    downloadFiles();
+                }
             }
         });
         getWorkoutData();
@@ -287,50 +303,50 @@ public class FreeWorkoutTraining extends Fragment implements DashboardWorkoutAda
         {
             downloadDialog.dismiss();
             Toast.makeText(ctx, "Workout Not Available", Toast.LENGTH_SHORT).show();
+            isDownloading = false;
             return;
         }
         if (currentPosition>=exercises.size() && exercises.size()!=0){
+            isDownloading = false;
             //  downloadDialog.hide();
             if(allVideoDownloaded){
                 Toast.makeText(ctx, "First", Toast.LENGTH_SHORT).show();
                 startWorkout.setText("START WORKOUT");
                 startWorkout.setOnClickListener(startClickListener);
+                downloadDialog.dismiss();
 
             }else {
+                isDownloading = false;
+                downloadDialog.dismiss();
                 showSnackBarMessage("All files not downloaded.\nPlease try again.");
             }
             return;
         }
-        else if(exercises.size()==0)
-        {
-            Toast.makeText(ctx, "Workout Videos Not Available", Toast.LENGTH_SHORT).show();
-            downloadDialog.dismiss();
-            return;
-        }
-        File file = null ;
-        if (type.equals("a")){
-            if (exercises.get(currentPosition).getExercise().isVideoA()){
-                file = new File(getActivity().getFilesDir().toString()+"/videos/"+exercises.get(currentPosition).getExercise().get_id()+"_a.mp4");
-            }else {
-                type = "b";
-                downloadFiles();
-                return;
-            }
 
-        }else if (type.equals("b")){
-            if (exercises.get(currentPosition).getExercise().isVideoB()){
-                file = new File(getActivity().getFilesDir().toString()+"/videos/"+exercises.get(currentPosition).getExercise().get_id()+"_b.mp4");
-            }else {
-                type = "tutorial";
-                currentPosition++;
-                downloadFiles();
-                return;
-            }
-
-        }else{
-            file = new File(getActivity().getFilesDir().toString()+"/videos/"+exercises.get(currentPosition).getExercise().get_id()+".mp4");
-
-        }
+//        File file = null ;
+//        if (type.equals("a")){
+//            if (exercises.get(currentPosition).getExercise().isVideoA()){
+//                file = new File(getActivity().getFilesDir().toString()+"/videos/"+exercises.get(currentPosition).getExercise().get_id()+"_a.mp4");
+//            }else {
+//                type = "b";
+//                downloadFiles();
+//                return;
+//            }
+//
+//        }else if (type.equals("b")){
+//            if (exercises.get(currentPosition).getExercise().isVideoB()){
+//                file = new File(getActivity().getFilesDir().toString()+"/videos/"+exercises.get(currentPosition).getExercise().get_id()+"_b.mp4");
+//            }else {
+//                type = "tutorial";
+//                currentPosition++;
+//                downloadFiles();
+//                return;
+//            }
+//
+//        }else{
+//            file = new File(getActivity().getFilesDir().toString()+"/videos/"+exercises.get(currentPosition).getExercise().get_id()+".mp4");
+//
+//        }
 
         String name = exercises.get(currentPosition).getExercise().get_id();
         if(type.equals("a") || type.equals("b"))
@@ -365,21 +381,24 @@ public class FreeWorkoutTraining extends Fragment implements DashboardWorkoutAda
         else{
             if (type.equals("tutorial")){
                 getExcercise(exercises.get(currentPosition).getExercise().get_id(),type);
-
-                // type = "a";
             }else if (type.equals("a")){
                 if(exercises.get(currentPosition).getExercise().isVideoA()){
                     getExcercise(exercises.get(currentPosition).getExercise().get_id(),type);
                 }
-                // type="b";
+                else{
+                    type="b";
+                    downloadFiles();
+                }
 
             }else if (type.equals("b")){
                 if(exercises.get(currentPosition).getExercise().isVideoB()){
                     getExcercise(exercises.get(currentPosition).getExercise().get_id(),type);
                 }
-                // type="tutorial";
-
-
+                else {
+                    type ="tutorial";
+                    currentPosition++;
+                    downloadFiles();
+                }
             }
             // getExcercise(exercises.get(currentPosition).getExercise().get_id(),type);
         }
@@ -396,13 +415,15 @@ public class FreeWorkoutTraining extends Fragment implements DashboardWorkoutAda
             fileb = new File(getActivity().getFilesDir().toString()+"/videos/"+exercises.get(currentPosition).getExercise().get_id()+"_b.mp4");
 
             //check if files exist and put tick on those present
-            if(!dbDowloadList.isInDataBase(exercises.get(currentPosition).getExercise().get_id()) || !file.exists()){
+            if(!dbDowloadList.isInDataBase(e.getExercise().get_id())){
                 comp = false;
                 exComp = false;
-            } else if(e.getExercise().isVideoA() && (!dbDowloadList.isInDataBase(exercises.get(currentPosition).getExercise().get_id()+"_a") || !filea.exists())){
+            }
+            if(e.getExercise().isVideoA() && (!dbDowloadList.isInDataBase(e.getExercise().get_id()+"_a"))){
                 comp = false;
                 exComp = false;
-            } else if(e.getExercise().isVideoB() && (!dbDowloadList.isInDataBase(exercises.get(currentPosition).getExercise().get_id()+"_b") || !fileb.exists())){
+            }
+            if(e.getExercise().isVideoB() && (!dbDowloadList.isInDataBase(e.getExercise().get_id()+"_b"))){
                 comp = false;
                 exComp = false;
             }
@@ -448,9 +469,8 @@ public class FreeWorkoutTraining extends Fragment implements DashboardWorkoutAda
 
     public void getVideo(String data) {
         noOfCurrentVideUser++;
-        boolean firtVideo =true;
-        String url = data;
-        Uri downloadUri = Uri.parse(url);
+
+        Uri downloadUri = Uri.parse(data);
         Uri destinationUri =  null;
         if (type.equals("tutorial")){
             destinationUri = Uri.parse(getActivity().getFilesDir().toString()+"/videos/"+exercises.get(currentPosition).getExercise().get_id()+".mp4");
@@ -462,14 +482,16 @@ public class FreeWorkoutTraining extends Fragment implements DashboardWorkoutAda
             destinationUri = Uri.parse(getActivity().getFilesDir().toString()+"/videos/"+exercises.get(currentPosition).getExercise().get_id()+"_b.mp4");
 
         }
+
         DownloadRequest downloadRequest = new DownloadRequest(downloadUri)
                 .setRetryPolicy(new DefaultRetryPolicy())
                 .setDestinationURI(destinationUri).setPriority(DownloadRequest.Priority.HIGH)
-                .setDownloadContext(getActivity().getApplicationContext())//Optional
-                .setDownloadListener(new DownloadStatusListener() {
+                .setDownloadContext(getActivity().getApplicationContext())
+                .setDownloadResumable(false)
+                .setDeleteDestinationFileOnFailure(true)
+                .setStatusListener(new DownloadStatusListenerV1() {
                     @Override
-                    public void onDownloadComplete(int id) {
-
+                    public void onDownloadComplete(DownloadRequest downloadRequest) {
                         //currentPosition++;
 
                         //add file to database depending on type(done in if-else statements)
@@ -489,41 +511,91 @@ public class FreeWorkoutTraining extends Fragment implements DashboardWorkoutAda
                         }else  if (type.equals("b")){
                             dbDowloadList.insert(exercises.get(currentPosition).getExercise().get_id()+"_b");
                             type="tutorial";
-                            downloadFiles();
-                            exercises.get(currentPosition-1).getExercise().isDownloaded =  true;
+                            exercises.get(currentPosition).getExercise().isDownloaded =  true;
+                            adapter.notifyItemChanged(currentPosition);
                             currentPosition++;
-                            adapter.notifyItemChanged(currentPosition-1);
-
+                            downloadFiles();
                         }
-
-
-
-
                     }
 
                     @Override
-                    public void onDownloadFailed(int id, int errorCode, String errorMessage) {
-                        Toast.makeText(getActivity().getApplicationContext(),"failed error in logs TAG error77 ",Toast.LENGTH_SHORT).show();
-                        Log.d("error77",errorMessage+"\n"+"of number"+((int)currentPosition+1)+"\nof id: "+exercises.get(currentPosition).getExercise().get_id());
+                    public void onDownloadFailed(DownloadRequest downloadRequest, int errorCode, String errorMessage) {
+                        if(getActivity()!=null)
+                            Toast.makeText(getActivity().getApplicationContext(),"failed error"+errorMessage,Toast.LENGTH_SHORT).show();
+                        Log.d("error77",errorMessage+"\n"+"of number"+((int)currentPosition)+"\nof id: "+exercises.get(currentPosition).getExercise().get_id());
                         currentPosition++;
+
                         allVideoDownloaded = false;
 
                         downloadFiles();
-
                     }
 
                     @Override
-                    public void onProgress(int id, long totalBytes, long downlaodedBytes, int progress) {
-                        double p = (double)downlaodedBytes/totalBytes*100;
+                    public void onProgress(DownloadRequest downloadRequest, long totalBytes, long downloadedBytes, int progress) {
+                        double p = (double)downloadedBytes/totalBytes*100;
                         //Toast.makeText(getActivity().getApplicationContext(),"total"+ totalBytes+"dnld "+downlaodedBytes+"progress "+p,Toast.LENGTH_SHORT).show();
                         progressBar.setProgress((int)p);
                         progressTV.setText(String.format("%.2f", (float)p));
                         numberOfCurrentVideo.setText(String.valueOf(noOfCurrentVideUser)+"/"+videoCount);
                         exercises.get(currentPosition).getExercise().isDownloading = true;
                         exercises.get(currentPosition).getExercise().progess = (int)p;
-
                     }
                 });
+//                .setDownloadListener(new DownloadStatusListener() {
+//                    @Override
+//                    public void onDownloadComplete(int id) {
+//
+//                        //currentPosition++;
+//
+//                        //add file to database depending on type(done in if-else statements)
+//
+//                        Toast.makeText(getActivity().getApplicationContext(),"completed download"+(currentPosition+1)+"type"+type,Toast.LENGTH_SHORT).show();
+//                        allVideoDownloaded = allVideoDownloaded && true;
+//                        if (type.equals("tutorial")){
+//                            dbDowloadList.insert(exercises.get(currentPosition).getExercise().get_id());
+//                            type="a";
+//                            downloadFiles();
+//
+//                        }else if (type.equals("a")){
+//                            dbDowloadList.insert(exercises.get(currentPosition).getExercise().get_id()+"_a");
+//                            type="b";
+//                            downloadFiles();
+//
+//                        }else  if (type.equals("b")){
+//                            dbDowloadList.insert(exercises.get(currentPosition).getExercise().get_id()+"_b");
+//                            type="tutorial";
+//                            exercises.get(currentPosition).getExercise().isDownloaded =  true;
+//                            adapter.notifyItemChanged(currentPosition);
+//                            currentPosition++;
+//                            downloadFiles();
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onDownloadFailed(int id, int errorCode, String errorMessage) {
+//                        Toast.makeText(getActivity().getApplicationContext(),"failed error"+errorMessage,Toast.LENGTH_SHORT).show();
+//                        Log.d("error77",errorMessage+"\n"+"of number"+((int)currentPosition)+"\nof id: "+exercises.get(currentPosition).getExercise().get_id());
+//                        currentPosition++;
+//
+//                        allVideoDownloaded = false;
+//
+//                        downloadFiles();
+//
+//                    }
+//
+//                    @Override
+//                    public void onProgress(int id, long totalBytes, long downlaodedBytes, int progress) {
+//                        double p = (double)downlaodedBytes/totalBytes*100;
+//                        //Toast.makeText(getActivity().getApplicationContext(),"total"+ totalBytes+"dnld "+downlaodedBytes+"progress "+p,Toast.LENGTH_SHORT).show();
+//                        progressBar.setProgress((int)p);
+//                        progressTV.setText(String.format("%.2f", (float)p));
+//                        numberOfCurrentVideo.setText(String.valueOf(noOfCurrentVideUser)+"/"+videoCount);
+//                        exercises.get(currentPosition).getExercise().isDownloading = true;
+//                        exercises.get(currentPosition).getExercise().progess = (int)p;
+//
+//                    }
+//
+//                });
         int downloadId = downloadManager.add(downloadRequest);
 
     }
@@ -555,5 +627,11 @@ public class FreeWorkoutTraining extends Fragment implements DashboardWorkoutAda
         {
             Toast.makeText(ctx, "Download the Workout", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public void onStop() {
+        downloadManager.cancelAll();
+        super.onStop();
     }
 }

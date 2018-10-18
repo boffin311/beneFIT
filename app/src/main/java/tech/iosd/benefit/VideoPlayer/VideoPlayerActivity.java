@@ -48,7 +48,7 @@ import tech.iosd.benefit.SaveWorkoutActivity;
 /**
  * Created by Prerak Mann on 28/06/18.
  */
-public class VideoPlayerActivity extends Activity implements SurfaceHolder.Callback, MediaPlayer.OnPreparedListener, VideoControllerView.MediaPlayerControl, MediaPlayer.OnCompletionListener, TextToSpeech.OnInitListener {
+public class VideoPlayerActivity extends Activity implements SurfaceHolder.Callback, MediaPlayer.OnPreparedListener, VideoControllerView.MediaPlayerControl, MediaPlayer.OnCompletionListener, MediaPlayer.OnErrorListener, TextToSpeech.OnInitListener {
 
     SharedPreferences sharedPreferences1;
     SurfaceView videoSurface;
@@ -509,6 +509,16 @@ public class VideoPlayerActivity extends Activity implements SurfaceHolder.Callb
     // End SurfaceHolder.Callback
 
     // Implement MediaPlayer.OnPreparedListener
+
+
+    @Override
+    public boolean onError(MediaPlayer mp, int what, int extra) {
+        if(progressDialog!=null)
+            progressDialog.cancel();
+        Toast.makeText(this,"Error Playing, file may be corrupt",Toast.LENGTH_LONG).show();
+        return false;
+    }
+
     @Override
     public void onPrepared(MediaPlayer mp) {
         //show relevant views here
@@ -520,8 +530,9 @@ public class VideoPlayerActivity extends Activity implements SurfaceHolder.Callb
         controller.setMediaPlayer(this);
         controller.setAnchorView((FrameLayout) findViewById(R.id.videoSurfaceContainer), videoItem.getSets(), videoItem.getVideoName());
         player.start();
-        if (progressDialog != null)
+        if (progressDialog != null) {
             progressDialog.dismiss();
+        }
         Log.d(TAG, "onPrepared: " + getDuration());
         int duration = getDuration();
 
@@ -739,7 +750,7 @@ public class VideoPlayerActivity extends Activity implements SurfaceHolder.Callb
         try {
             progressDialog = new ProgressDialog(this);
             progressDialog.setTitle("Please Wait");
-            progressDialog.setMessage("Loading ... ");
+            progressDialog.setMessage("STARTING... ");
 
             progressDialog.setCancelable(false);
             progressDialog.show();
@@ -751,6 +762,7 @@ public class VideoPlayerActivity extends Activity implements SurfaceHolder.Callb
             });
             player.setAudioStreamType(AudioManager.STREAM_MUSIC);
             player.setOnPreparedListener(this);
+            player.setOnErrorListener(this);
             player.setOnCompletionListener(this);
 
         } catch (IllegalArgumentException | SecurityException | IllegalStateException e) {
@@ -758,7 +770,6 @@ public class VideoPlayerActivity extends Activity implements SurfaceHolder.Callb
         }
 
         player.reset();//so that we can re-initialise player
-
         if (videoItem.getType() == VideoPlayerItem.TYPE_FOLLOW) {
             if (videoItem.getIntroComp()) {//show rest screen
                 showRestScreen();
@@ -773,7 +784,7 @@ public class VideoPlayerActivity extends Activity implements SurfaceHolder.Callb
                     player.setDataSource(path);
 
                     player.prepareAsync();
-                } catch (IOException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                     Toast.makeText(this,e.toString(),Toast.LENGTH_LONG).show();
                     progressDialog.cancel();
@@ -790,14 +801,10 @@ public class VideoPlayerActivity extends Activity implements SurfaceHolder.Callb
 //                    player.setDataSource(this, video);
                     String path = VideoPlayerActivity.this.getFilesDir().toString()+"/videos/" + videoItem.getSingleRepVideo();
                     player.setDataSource(path);
-                    try {
-                        player.prepareAsync();
-                    }
-                    catch (Exception e)
-                    {
-                        //Log.d("videoPlayerError",e.getMessage());
-                    }
-                } catch (IOException e) {
+
+                    player.prepareAsync();
+
+                } catch (Exception e) {
                     e.printStackTrace();
                     Toast.makeText(this,e.toString(),Toast.LENGTH_LONG).show();
                     progressDialog.cancel();
@@ -813,7 +820,7 @@ public class VideoPlayerActivity extends Activity implements SurfaceHolder.Callb
                     player.setDataSource(path);
 
                     player.prepareAsync();
-                } catch (IOException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
 
                     Toast.makeText(this,e.toString(),Toast.LENGTH_LONG).show();

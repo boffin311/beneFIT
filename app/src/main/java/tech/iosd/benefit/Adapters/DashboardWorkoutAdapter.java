@@ -69,7 +69,7 @@ public class DashboardWorkoutAdapter extends RecyclerView.Adapter<DashboardWorko
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Exercise e = exercises.get(position);
+        Exercise e = exercises.get(holder.getAdapterPosition());
         if(e!=null) {
             if (exercises.get(position).getExercise() != null)
                 holder.name.setText(exercises.get(position).getExercise().getName());
