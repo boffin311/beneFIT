@@ -18,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,6 +46,7 @@ import rx.subscriptions.CompositeSubscription;
 import tech.iosd.benefit.Adapters.DashboardWorkoutAdapter;
 import tech.iosd.benefit.Model.DatabaseHandler;
 import tech.iosd.benefit.Model.Exercise;
+import tech.iosd.benefit.Model.MealLogFullDay;
 import tech.iosd.benefit.Model.ResponseForGetExcerciseVideoUrl;
 import tech.iosd.benefit.Model.ResponseForWorkoutForDate;
 import tech.iosd.benefit.Model.VideoPlayerItem;
@@ -90,6 +92,11 @@ public class MyWorkout extends Fragment implements DashboardWorkoutAdapter.onIte
     private int noOfDiffId =0;
     private int noOfCurrentVideUser=0;
     boolean allVideoDownloaded = true;
+    public TextView tcal2, texc2, tmin2;
+    int time =0;
+    float calory = 0;
+    public ImageView i1;
+    public  TextView t1,t2,t3,t4, t5;
 
     @Nullable
     @Override
@@ -128,6 +135,14 @@ public class MyWorkout extends Fragment implements DashboardWorkoutAdapter.onIte
         downloadDialog = mBuilder.create();
 
         startWorkout = rootView.findViewById(R.id.dashboard_my_workouts_start_workout);
+        t1 = rootView.findViewById(R.id.tvdes1);
+        t2 = rootView.findViewById(R.id.tvdes2);
+        t3 = rootView.findViewById(R.id.tvmain);
+        t4 = rootView.findViewById(R.id.tvinten);
+        t5 = rootView.findViewById(R.id.tvintenmode);
+
+
+
         startWorkout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -158,6 +173,9 @@ public class MyWorkout extends Fragment implements DashboardWorkoutAdapter.onIte
 
         final TextView lbl_year = rootView.findViewById(R.id.my_workout_calendar_year);
         final TextView lbl_month = rootView.findViewById(R.id.my_workout_calendar_month);
+        tcal2 = rootView.findViewById(R.id.tvcalory1);
+        texc2 = rootView.findViewById(R.id.tvexc1);
+        tmin2= rootView.findViewById(R.id.tvmin1);
         dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
 
         selectedDate = dateFormat.format(Calendar.getInstance().getTime());
@@ -232,9 +250,26 @@ public class MyWorkout extends Fragment implements DashboardWorkoutAdapter.onIte
 
     private void handleResponseGetMeal(ResponseForWorkoutForDate responseForWorkoutForDate) {
             progressDialog.hide();
-        if (!responseForWorkoutForDate.isSuccess())
-        {
-            adapter.notifyDataSetChanged();
+        if (!responseForWorkoutForDate.isSuccess()){
+            Log.d("error77", "handleResponseGetMeal: " + "eroor");
+            // Ye Tab Call Hota Hai Jab Server Pe Workout Nahi Hota.
+            // Yaha Pe Rest Day Wala Aayega. Cool?
+           exercises.clear();
+       //    adapter.notifyDataSetChanged();
+           recyclerView.getAdapter().notifyDataSetChanged();;
+            tcal2.setText("0");
+            tmin2.setText("0");
+            texc2.setText("0");
+            startWorkout.setText(" ");
+            //i1.setImageResource(R.drawable.nowork);
+
+            t1.setText(" ");
+            t2.setText(" ");
+            t3.setText("Today is a rest day.\nNo workout!!");
+            t4.setText(" ");
+            t5.setText(" ");
+
+
             return;
             //Download completes here
         }
@@ -244,13 +279,54 @@ public class MyWorkout extends Fragment implements DashboardWorkoutAdapter.onIte
         exercises = responseForWorkoutForDate.getData().getWorkout().getExercises();
         for (int i =0 ; i<exercises.size();i++){
 
+            time = calculateTime(exercises.get(i).getReps(), exercises.get(i).getTimeTaken(),
+                    exercises.get(i).getRest(), exercises.get(i).getSets());
+
+
+            calory = calculateCalory(exercises.get(i).getReps(), exercises.get(i).getExercise().getTimeTaken(),
+                    exercises.get(i).getExercise().getMets(), exercises.get(i).getSets());
         }
         adapter.setExercises(exercises);
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
         noOfDiffId = getNumberOfDifferntId();
+
+
+
+        tcal2.setText(String.valueOf((int)calory));
+        tmin2.setText(String.valueOf(time));
+        texc2.setText(String.valueOf(exercises.size()));
+
+
         checkFiles();
 
+    }
+
+    int calculateTime(int reps,  int timeTaken, int rest, int sets){
+        int t = 0;
+        t += ((reps*timeTaken) +rest) * sets;
+        return  t;
+    }
+
+    float calculateCalory(int reps, float timeTaken, float mets, int sets){
+        float cal = 0;
+        int personWeight=0;
+        Log.d("CAL", "calculateCalory: Reps " + String.valueOf(mets));
+        Log.d("CAL", "calculateCalory: Reps " + String.valueOf(sets));
+        Log.d("CAL", "calculateCalory: Reps " + String.valueOf(timeTaken));
+        Log.d("CAL", "calculateCalory: Reps " + String.valueOf(reps));
+
+        cal += (reps*timeTaken*mets*sets);
+        personWeight = db.getUserWeight();
+        Log.d("CAL", "calculateCalory: " + String.valueOf(personWeight));
+        // Log.d("CAL", "calculateCalory: " + String.valueOf(cal));
+
+        cal = cal*personWeight;
+        //  Log.d("CAL", "calculateCalory: " + String.valueOf(cal));
+
+        cal = cal/36;
+        Log.d("CAL", "calculateCalory: " + String.valueOf(cal));
+        return cal;
     }
 
     private void handleErrorGetMeal(Throwable error) {
